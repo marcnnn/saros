@@ -46,10 +46,25 @@ class ContactPopMenu extends JPopupMenu {
 
   private final ContactTreeRootNode.ContactInfo contactInfo;
 
-  ContactPopMenu(ContactTreeRootNode.ContactInfo contactInfo) {
+  ContactPopMenu(
+      ContactTreeRootNode.ContactInfo contactInfo, boolean isNoSessionRunning, boolean isHost) {
+
     this.contactInfo = contactInfo;
 
-    JMenu menuShareProject = new JMenu(Messages.ContactPopMenu_root_popup_text);
+    if (isNoSessionRunning) {
+      createMenuStartSession();
+
+    } else if (isHost) {
+      createMenuAddUserToSession();
+    }
+  }
+
+  /**
+   * Creates and displays a menu entry to start a session with the selected user. This dialog must
+   * only be displayed if there is not running session.
+   */
+  private void createMenuStartSession() {
+    JMenu menuShareProject = new JMenu(Messages.ContactPopMenu_start_session_popup_text);
     menuShareProject.setIcon(IconManager.SESSIONS_ICON);
 
     for (Project project : ProjectManager.getInstance().getOpenProjects()) {
@@ -57,6 +72,23 @@ class ContactPopMenu extends JPopupMenu {
     }
 
     add(menuShareProject);
+  }
+
+  /**
+   * Creates and displays a menu entry to add the selected user to the current session. This dialog
+   * must only be displayed if there is a running session and the local user is the host.
+   */
+  private void createMenuAddUserToSession() {
+    JMenuItem addToSession =
+        new JMenuItem(
+            Messages.ContactPopMenu_add_to_session_popup_text, IconManager.ADD_USER_TO_SESSION);
+
+    addToSession.addActionListener(
+        l ->
+            CollaborationUtils.addContactsToSession(
+                Collections.singletonList(contactInfo.getJid())));
+
+    add(addToSession);
   }
 
   /**

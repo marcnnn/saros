@@ -153,7 +153,8 @@ public class Messages {
 
   public static String Contact_saros_message_conditional;
 
-  public static String ContactPopMenu_root_popup_text;
+  public static String ContactPopMenu_add_to_session_popup_text;
+  public static String ContactPopMenu_start_session_popup_text;
   public static String ContactPopMenu_menu_tooltip_share_module;
   public static String ContactPopMenu_menu_tooltip_invalid_module;
   public static String ContactPopMenu_menu_entry_error_processing_project;
