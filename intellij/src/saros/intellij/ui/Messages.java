@@ -153,6 +153,9 @@ public class Messages {
 
   public static String Contact_saros_message_conditional;
 
+  public static String SessionPopMenu_follow_user;
+  public static String SessionPopMenu_kick_user;
+
   public static String ContactPopMenu_add_to_session_popup_text;
   public static String ContactPopMenu_start_session_popup_text;
   public static String ContactPopMenu_menu_tooltip_share_module;
