@@ -55,6 +55,10 @@ import saros.net.ITransmitter;
 import saros.net.xmpp.JID;
 import saros.preferences.IPreferenceStore;
 import saros.preferences.PreferenceStore;
+import saros.repackaged.picocontainer.MutablePicoContainer;
+import saros.repackaged.picocontainer.PicoContainer;
+import saros.repackaged.picocontainer.injectors.AnnotatedFieldInjection;
+import saros.repackaged.picocontainer.injectors.Reinjector;
 import saros.session.internal.SarosSession;
 import saros.util.StackTrace;
 import saros.util.ThreadUtils;
@@ -253,6 +257,7 @@ public class SarosSessionManager implements ISarosSessionManager {
 
       negotiationPacketLister.setRejectSessionNegotiationRequests(true);
 
+
       JID localUserJID = connectionHandler.getLocalJID();
 
       IPreferenceStore hostProperties = new PreferenceStore();
@@ -261,8 +266,45 @@ public class SarosSessionManager implements ISarosSessionManager {
           hook.setInitialHostPreferences(hostProperties);
         }
       }
+      IContainerContext sessionMenagentContext = new IContainerContext() {
+        MutablePicoContainer container = context.createChildContainer();
+        @Override
+        public void initComponent(Object component) {
+          /*
+           * it is unlikely that this method is called while creating or disposing
+           * the context so this is sufficient for now
+           */
 
+
+          final MutablePicoContainer reinjectionContainer = container.makeChildContainer();
+
+          try {
+            reinjectionContainer.addComponent(component.getClass(), component);
+            new Reinjector(reinjectionContainer)
+                .reinject(component.getClass(), new AnnotatedFieldInjection());
+          } finally {
+            container.removeChildContainer(reinjectionContainer);
+          }
+        }
+
+        @Override
+        public MutablePicoContainer createChildContainer() {
+          return container.makeChildContainer();
+        }
+
+        @Override
+        public boolean removeChildContainer(PicoContainer picoContainer) {
+          return container.removeChildContainer(picoContainer);
+        }
+
+        @Override
+        public <T> T getComponent(Class<T> componentType) {
+          return container.getComponent(componentType);
+        }
+      };
       session = new SarosSession(sessionID, localUserJID, hostProperties, context);
+
+      //session = new SarosSession(sessionID, localUserJID, hostProperties, sessionMenagentContext);
 
       sessionStarting(session);
       session.start();
