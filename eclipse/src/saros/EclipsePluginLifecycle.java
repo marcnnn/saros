@@ -8,7 +8,7 @@ import saros.context.AbstractContextLifecycle;
 import saros.context.ContainerContext;
 import saros.context.IContextFactory;
 import saros.context.SarosEclipseContextFactory;
-import saros.session.SarosSessionManager;
+import saros.session.ISarosSessionManager;
 import saros.session.SessionEndReason;
 
 /**
@@ -50,7 +50,7 @@ public class EclipsePluginLifecycle extends AbstractContextLifecycle {
   @Override
   protected void finalizeContext(final ContainerContext containerContext) {
     containerContext
-        .getComponent(SarosSessionManager.class)
+        .getComponent(ISarosSessionManager.class)
         .stopSession(SessionEndReason.LOCAL_USER_LEFT);
     containerContext.getComponent(ConnectionHandler.class).disconnect();
   }
