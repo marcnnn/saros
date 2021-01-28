@@ -24,14 +24,14 @@ import saros.net.xmpp.JID;
  * <p><b>Restriction:</b> This class must only instantiated by the <code>SarosSessionManager</code>
  * itself.
  */
-final class NegotiationPacketListener {
+public final class NegotiationPacketListener {
 
   private static final Logger log = Logger.getLogger(NegotiationPacketListener.class);
 
   private final ITransmitter transmitter;
   private final IReceiver receiver;
 
-  private final SarosSessionManager sessionManager;
+  private final ISarosSessionManager sessionManager;
 
   private final SessionNegotiationObservable sessionNegotiations;
   private final ResourceNegotiationObservable resourceNegotiations;
@@ -149,7 +149,7 @@ final class NegotiationPacketListener {
    */
 
   NegotiationPacketListener(
-      final SarosSessionManager sessionManager,
+      final ISarosSessionManager sessionManager,
       final SessionNegotiationObservable sessionNegotiations,
       final ResourceNegotiationObservable resourceNegotiations,
       final ITransmitter transmitter,
