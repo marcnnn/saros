@@ -45,7 +45,7 @@ import saros.util.ThreadUtils;
  * invitations. The user can be only part of one session at most.
  */
 @Component(module = "core")
-public class SarosSessionManager implements ISarosSessionManager {
+public class SarosSessionHolder implements ISarosSessionManager {
 
   /**
    * @JTourBusStop 6, Architecture Overview, Invitation Management:
@@ -60,7 +60,7 @@ public class SarosSessionManager implements ISarosSessionManager {
    *
    * <p>For more information about the Invitation Process see the "Invitation Process"-Tour.
    */
-  private static final Logger log = Logger.getLogger(SarosSessionManager.class.getName());
+  private static final Logger log = Logger.getLogger(SarosSessionHolder.class.getName());
 
   private static final Random SESSION_ID_GENERATOR = new Random();
 
@@ -146,7 +146,7 @@ public class SarosSessionManager implements ISarosSessionManager {
         }
       };
 
-  public SarosSessionManager(
+  public SarosSessionHolder(
       IContainerContext context,
       SessionNegotiationFactory sessionNegotiationFactory,
       SessionNegotiationHookManager hookManager,
@@ -266,18 +266,9 @@ public class SarosSessionManager implements ISarosSessionManager {
   @Override
   public ISarosSession joinSession(
       String id, JID host, IPreferenceStore hostProperties, IPreferenceStore localProperties) {
-
-    assert session == null;
-
-    JID localUserJID = connectionHandler.getLocalJID();
-
-    session = new SarosSession(id, localUserJID, host, localProperties, hostProperties, context);
-
-    resourceNegotiationFactory = session.getComponent(ResourceNegotiationFactory.class);
-
-    log.info("joined uninitialized Saros session");
-
-    return session;
+    
+    log.error("should not have been call in Session Context aka SarosSessionHolder");
+    return null;
   }
 
   /** @nonSWT */

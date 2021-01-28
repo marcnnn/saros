@@ -1,8 +1,10 @@
 package saros.session;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import saros.filesystem.IReferencePoint;
+import saros.negotiation.ResourceNegotiationData;
 import saros.net.xmpp.JID;
 import saros.preferences.IPreferenceStore;
 
@@ -15,6 +17,17 @@ public interface ISarosSessionManager {
   /** @return the active session or <code>null</code> if there is no active session. */
   ISarosSession getSession();
 
+  void sessionNegotiationRequestReceived(
+      JID remoteAddress,
+      String sessionID,
+      String negotiationID,
+      String version,
+      String description);
+
+  void resourceNegotiationRequestReceived(
+      JID remoteAddress,
+      List<ResourceNegotiationData> resourceNegotiationData,
+      String negotiationID);
   /**
    * Starts a new Saros session with the local user as the only participant.
    *

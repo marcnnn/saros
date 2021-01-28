@@ -24,7 +24,7 @@ public class NetworkingUtils {
    * attempting their IPv6 equivalents when iterating the List).
    *
    * @param includeIPv6Addresses flag if IPv6 addresses are added to the result
-   * @return List<{@link String}> of all retrieved IP addresses
+   * @return List ..<{@link String}> of all retrieved IP addresses
    */
   public static List<InetAddress> getAllNonLoopbackLocalIPAddresses(boolean includeIPv6Addresses) {
 

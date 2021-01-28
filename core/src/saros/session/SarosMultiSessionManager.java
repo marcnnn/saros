@@ -43,9 +43,10 @@ import saros.util.ThreadUtils;
 /**
  * The SessionManager is responsible for initiating new Saros sessions and for reacting to
  * invitations. The user can be only part of one session at most.
+ * This is a new version of the
  */
 @Component(module = "core")
-public class SarosSessionManager implements ISarosSessionManager {
+public class SarosMultiSessionManager implements ISarosSessionManager {
 
   /**
    * @JTourBusStop 6, Architecture Overview, Invitation Management:
@@ -60,7 +61,7 @@ public class SarosSessionManager implements ISarosSessionManager {
    *
    * <p>For more information about the Invitation Process see the "Invitation Process"-Tour.
    */
-  private static final Logger log = Logger.getLogger(SarosSessionManager.class.getName());
+  private static final Logger log = Logger.getLogger(SarosMultiSessionManager.class.getName());
 
   private static final Random SESSION_ID_GENERATOR = new Random();
 
@@ -68,7 +69,9 @@ public class SarosSessionManager implements ISarosSessionManager {
 
   private static final long NEGOTIATION_TIMEOUT = 10000L;
 
-  private volatile SarosSession session;
+  private volatile SarosSession session; // change to list
+  private volatile Set<SarosSession> sessions;
+
   private volatile ResourceNegotiationFactory resourceNegotiationFactory;
 
   private final IContainerContext context;
@@ -146,7 +149,7 @@ public class SarosSessionManager implements ISarosSessionManager {
         }
       };
 
-  public SarosSessionManager(
+  public SarosMultiSessionManager(
       IContainerContext context,
       SessionNegotiationFactory sessionNegotiationFactory,
       SessionNegotiationHookManager hookManager,
