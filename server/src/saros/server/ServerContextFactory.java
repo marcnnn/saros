@@ -28,6 +28,7 @@ import saros.server.session.NegotiationHandler;
 import saros.server.session.ServerSessionContextFactory;
 import saros.server.synchronize.ServerUISynchronizerImpl;
 import saros.session.ISarosSessionContextFactory;
+import saros.session.SarosSessionManager;
 import saros.synchronize.UISynchronizer;
 
 /**
@@ -74,6 +75,7 @@ public class ServerContextFactory extends AbstractContextFactory {
     c.addComponent(NegotiationHandler.class);
     c.addComponent(JoinSessionRequestHandler.class);
     c.addComponent(ServerFeatureAdvertiser.class);
+    c.addComponent(SarosSessionManager.class); // Refactoring 2
     if (ServerConfig.isInteractive()) {
       c.addComponent(new ServerConsole(System.in, System.out));
       c.addComponent(InviteCommand.class);

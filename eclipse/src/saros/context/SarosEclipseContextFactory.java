@@ -29,6 +29,7 @@ import saros.ui.eventhandler.SessionViewOpener;
 import saros.ui.eventhandler.UserStatusChangeHandler;
 import saros.ui.eventhandler.XMPPAuthorizationHandler;
 import saros.ui.util.XMPPConnectionSupport;
+import saros.session.SarosSessionManager;
 
 /** Factory used for creating the Saros context when running as Eclipse plugin. */
 public class SarosEclipseContextFactory extends AbstractContextFactory {
@@ -71,7 +72,10 @@ public class SarosEclipseContextFactory extends AbstractContextFactory {
       Component.create(SkypeManager.class),
       Component.create(AwarenessInformationCollector.class),
       // Central connect/disconnect access point for the UI
-      Component.create(XMPPConnectionSupport.class)
+      Component.create(XMPPConnectionSupport.class),
+
+      // Refactoring 2
+      Component.create(SarosSessionManager.class),
     };
   }
 

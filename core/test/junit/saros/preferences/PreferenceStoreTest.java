@@ -113,7 +113,7 @@ public class PreferenceStoreTest {
 
   @Test
   public void testSetValueNonASCIICharacters() {
-    final String data = new String("<&ハローキティ&>");
+    final String data = new String("");
 
     store.setValue("hello.kitty.with.xml.control.characters", data);
 
