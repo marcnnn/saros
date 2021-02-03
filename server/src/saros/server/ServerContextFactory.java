@@ -15,6 +15,7 @@ import saros.preferences.Preferences;
 import saros.repackaged.picocontainer.BindKey;
 import saros.repackaged.picocontainer.MutablePicoContainer;
 import saros.server.console.InviteCommand;
+import saros.server.console.ListSessionsCommand;
 import saros.server.console.ServerConsole;
 import saros.server.console.ShareCommand;
 import saros.server.dummies.NullRemoteProgressIndicatorFactory;
@@ -82,6 +83,7 @@ public class ServerContextFactory extends AbstractContextFactory {
       c.addComponent(new ServerConsole(System.in, System.out));
       c.addComponent(InviteCommand.class);
       c.addComponent(ShareCommand.class);
+      c.addComponent(ListSessionsCommand.class);
     }
   }
 
