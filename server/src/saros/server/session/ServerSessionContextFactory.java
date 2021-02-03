@@ -7,6 +7,7 @@ import saros.server.editor.ServerEditorManager;
 import saros.session.ISarosSession;
 import saros.session.ISarosSessionContextFactory;
 import saros.session.SarosCoreSessionContextFactory;
+import saros.session.SarosSessionHolder;
 
 /** Server implementation of the {@link ISarosSessionContextFactory} interface. */
 public class ServerSessionContextFactory extends SarosCoreSessionContextFactory {
@@ -17,6 +18,7 @@ public class ServerSessionContextFactory extends SarosCoreSessionContextFactory 
     container.addComponent(FileActivityExecutor.class);
     container.addComponent(FolderActivityExecutor.class);
     container.addComponent(TextEditActivityExecutor.class);
+    container.addComponent(SarosSessionHolder.class);
 
     // Checksum cache support
     container.addComponent(IChecksumCache.class, NullChecksumCache.class);

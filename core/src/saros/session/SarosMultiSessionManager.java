@@ -2,7 +2,10 @@ package saros.session;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -70,7 +73,8 @@ public class SarosMultiSessionManager implements ISarosSessionManager {
   private static final long NEGOTIATION_TIMEOUT = 10000L;
 
   private volatile SarosSession session; // change to list
-  private volatile Set<SarosSession> sessions;
+  private volatile Set<ISarosSession> sessions = new HashSet<ISarosSession>();
+  private volatile Map<String, SarosSessionHolder> holderHashMap = new HashMap<>();
 
   private volatile ResourceNegotiationFactory resourceNegotiationFactory;
 
@@ -209,24 +213,13 @@ public class SarosMultiSessionManager implements ISarosSessionManager {
 
     try {
 
-      if (sessionShutdown)
-        throw new IllegalStateException(
-            "cannot start the session from the same thread context that is currently about to stop the session: "
-                + Thread.currentThread().getName());
-
       if (sessionStartup) {
         log.warn("recursive execution detected, ignoring session start request", new StackTrace());
         return;
       }
 
-      if (session != null) {
-        log.warn("could not start a new session because a session has already been started");
-        return;
-      }
-
       if (negotiationPacketLister.isRejectingSessionNegotiationsRequests()) {
-        log.warn("cannot start a session while a session invitation is pending");
-        return;
+        log.warn("starting session while another session invitation is pending");
       }
 
       sessionStartup = true;
@@ -245,6 +238,8 @@ public class SarosMultiSessionManager implements ISarosSessionManager {
       }
 
       session = new SarosSession(sessionID, localUserJID, hostProperties, context);
+      sessions.add(session);
+
 
       sessionStarting(session);
       session.start();
@@ -275,7 +270,7 @@ public class SarosMultiSessionManager implements ISarosSessionManager {
     JID localUserJID = connectionHandler.getLocalJID();
 
     session = new SarosSession(id, localUserJID, host, localProperties, hostProperties, context);
-
+    sessions.add(session);
     resourceNegotiationFactory = session.getComponent(ResourceNegotiationFactory.class);
 
     log.info("joined uninitialized Saros session");
@@ -286,63 +281,8 @@ public class SarosMultiSessionManager implements ISarosSessionManager {
   /** @nonSWT */
   @Override
   public void stopSession(SessionEndReason reason) {
-
-    try {
-      if (!startStopSessionLock.tryLock(LOCK_TIMEOUT, TimeUnit.MILLISECONDS)) {
-        log.warn(
-            "could not stop the current session because another operation still tries to start or stop a session");
-        return;
-      }
-    } catch (InterruptedException e) {
-      Thread.currentThread().interrupt();
-      return;
-    }
-
-    try {
-
-      if (sessionStartup)
-        throw new IllegalStateException(
-            "cannot stop the session from the same thread context that is currently about to start the session: "
-                + Thread.currentThread().getName());
-
-      if (sessionShutdown) {
-        log.warn("recursive execution detected, ignoring session stop request", new StackTrace());
-        return;
-      }
-
-      if (session == null) return;
-
-      sessionShutdown = true;
-
-      log.debug("terminating all running negotiations");
-
-      if (!terminateNegotiations()) log.warn("there are still running negotiations");
-
-      sessionEnding(session);
-
-      try {
-        session.stop(reason);
-        log.info("session stopped");
-      } catch (RuntimeException e) {
-        log.error("failed to stop the session", e);
-      }
-
-      /*
-       * FIXME check the behavior if getSession should already return null
-       * at this point
-       */
-
-      ISarosSession currentSession = session;
-      session = null;
-      resourceNegotiationFactory = null;
-
-      sessionEnded(currentSession, reason);
-
-    } finally {
-      sessionShutdown = false;
-      negotiationPacketLister.setRejectSessionNegotiationRequests(false);
-      startStopSessionLock.unlock();
-    }
+    log.error("StopSession() should not be called in Multi-Session-Manager. Reason of request: "
+        + reason.toString(), new StackTrace());
   }
 
   /**
@@ -357,7 +297,8 @@ public class SarosMultiSessionManager implements ISarosSessionManager {
   @Override
   @Deprecated
   public ISarosSession getSession() {
-    return session;
+    log.warn("getSession is deprecated and should not be called in MultiSessionManager");
+    return null;
   }
 
   public void sessionNegotiationRequestReceived(
@@ -406,97 +347,47 @@ public class SarosMultiSessionManager implements ISarosSessionManager {
     handler.handleIncomingSessionNegotiation(negotiation);
   }
 
+  public ISarosSession getSessionByID(String sessionID){
+    for (ISarosSession s : sessions){
+      if(s.getID().equals(sessionID))
+        return s;
+    }
+    return null;
+  }
+
+  public Set<ISarosSession> getSessions(){
+    return sessions;
+  }
+
   public void resourceNegotiationRequestReceived(
       JID remoteAddress,
       List<ResourceNegotiationData> resourceNegotiationData,
       String negotiationID) {
-
-    INegotiationHandler handler = negotiationHandler;
-
-    if (handler == null) {
-      log.warn("could not accept resource negotiation because no handler is installed");
-      return;
-    }
-
-    AbstractIncomingResourceNegotiation negotiation;
-    synchronized (this) {
-      if (!startStopSessionLock.tryLock()) {
-        log.warn(
-            "could not accept resource negotiation because the current session is about to stop");
-        return;
-      }
-
-      ResourceNegotiationFactory currentResourceNegotiationFactory = resourceNegotiationFactory;
-
-      if (currentResourceNegotiationFactory == null) {
-        log.warn("could not accept resource negotiation as no session is running");
-
-        return;
-      }
-
-      try {
-        negotiation =
-            currentResourceNegotiationFactory.newIncomingResourceNegotiation(
-                remoteAddress, negotiationID, resourceNegotiationData, this, session);
-
-        negotiation.setNegotiationListener(negotiationListener);
-        currentResourceNegotiations.add(negotiation);
-
-      } finally {
-        startStopSessionLock.unlock();
-      }
-    }
-    handler.handleIncomingResourceNegotiation(negotiation);
+    log.warn("resourceNegotiationRequestReceived should not be called in MultiSessionManager");
   }
 
   @Override
   public void invite(JID toInvite, String description) {
-
-    INegotiationHandler handler = negotiationHandler;
-
-    if (handler == null) {
-      log.warn("could not start an invitation because no handler is installed");
-      return;
-    }
-
-    OutgoingSessionNegotiation negotiation;
-
-    synchronized (this) {
-      if (!startStopSessionLock.tryLock()) {
-        log.warn(
-            "could not start an invitation because the current session is about to start or stop");
-        return;
-      }
-
-      try {
-
-        if (session == null) return;
-
-        /*
-         * this assumes that a user is added to the session before the
-         * negotiation terminates !
-         */
-        if (session.getResourceQualifiedJID(toInvite) != null) return;
-
-        if (currentSessionNegotiations.exists(toInvite)) return;
-
-        negotiation =
-            sessionNegotiationFactory.newOutgoingSessionNegotiation(
-                toInvite, this, session, description);
-
-        negotiation.setNegotiationListener(negotiationListener);
-        currentSessionNegotiations.add(negotiation);
-
-      } finally {
-        startStopSessionLock.unlock();
-      }
-    }
-    handler.handleOutgoingSessionNegotiation(negotiation);
+    log.warn("unexpected use in MultiSessionManager. Use inviteToSession");
   }
 
   @Override
   public void invite(Collection<JID> jidsToInvite, String description) {
-    for (JID jid : jidsToInvite) invite(jid, description);
+    log.warn("unexpected use in MultiSessionManager. Use inviteToSession");
+  }
+
+  public void inviteToSession(String sessionID, Collection<JID> jidsToInvite, String description){
+    ISarosSession s = getSessionByID(sessionID);
+      holderHashMap.get(sessionID).invite(jidsToInvite, description);
+  }
+
+  void registerHolder(SarosSessionHolder holder, String sessionID){
+    holderHashMap.put(sessionID, holder);
+  }
+
+  void unregisterHolder(String sessionID){
+    holderHashMap.remove(sessionID);
+    sessions.remove(getSessionByID(sessionID));
   }
 
   /**
