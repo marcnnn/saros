@@ -41,7 +41,7 @@ import saros.util.StackTrace;
 import saros.util.ThreadUtils;
 
 /**
- * The SessionManager is responsible for initiating new Saros sessions and for reacting to
+ * The SessionHolder is responsible for initiating new Saros sessions and for reacting to
  * invitations. The user can be only part of one session at most.
  */
 @Component(module = "core")
@@ -152,8 +152,10 @@ public class SarosSessionHolder implements ISarosSessionManager {
       SessionNegotiationHookManager hookManager,
       ConnectionHandler connectionHandler,
       ITransmitter transmitter,
-      IReceiver receiver) {
+      IReceiver receiver,
+      SarosSession session) {
 
+    this.session = session;
     this.context = context;
     this.connectionHandler = connectionHandler;
     this.currentSessionNegotiations = new SessionNegotiationObservable();
@@ -188,78 +190,7 @@ public class SarosSessionHolder implements ISarosSessionManager {
    */
   @Override
   public void startSession(final Set<IReferencePoint> referencePoints) {
-
-    /*
-     * FIXME split the logic, start a session without anything and then add
-     * resources !
-     */
-    try {
-      if (!startStopSessionLock.tryLock(LOCK_TIMEOUT, TimeUnit.MILLISECONDS)) {
-        log.warn(
-            "could not start a new session because another operation still tries to start or stop a session");
-        return;
-      }
-    } catch (InterruptedException e) {
-      Thread.currentThread().interrupt();
-      return;
-    }
-
-    try {
-
-      if (sessionShutdown)
-        throw new IllegalStateException(
-            "cannot start the session from the same thread context that is currently about to stop the session: "
-                + Thread.currentThread().getName());
-
-      if (sessionStartup) {
-        log.warn("recursive execution detected, ignoring session start request", new StackTrace());
-        return;
-      }
-
-      if (session != null) {
-        log.warn("could not start a new session because a session has already been started");
-        return;
-      }
-
-      if (negotiationPacketLister.isRejectingSessionNegotiationsRequests()) {
-        log.warn("cannot start a session while a session invitation is pending");
-        return;
-      }
-
-      sessionStartup = true;
-
-      final String sessionID = String.valueOf(SESSION_ID_GENERATOR.nextInt(Integer.MAX_VALUE));
-
-      negotiationPacketLister.setRejectSessionNegotiationRequests(true);
-
-      JID localUserJID = connectionHandler.getLocalJID();
-
-      IPreferenceStore hostProperties = new PreferenceStore();
-      if (hookManager != null) {
-        for (ISessionNegotiationHook hook : hookManager.getHooks()) {
-          hook.setInitialHostPreferences(hostProperties);
-        }
-      }
-
-      session = new SarosSession(sessionID, localUserJID, hostProperties, context);
-
-      sessionStarting(session);
-      session.start();
-      sessionStarted(session);
-
-      resourceNegotiationFactory = session.getComponent(ResourceNegotiationFactory.class);
-
-      for (IReferencePoint referencePoint : referencePoints) {
-        String referencePointId = String.valueOf(SESSION_ID_GENERATOR.nextInt(Integer.MAX_VALUE));
-
-        session.addSharedReferencePoint(referencePoint, referencePointId);
-      }
-
-      log.info("session started");
-    } finally {
-      sessionStartup = false;
-      startStopSessionLock.unlock();
-    }
+    log.warn("unexpectedly called startSession in SessionHolder", new StackTrace());
   }
 
   // FIXME offer a startSession method for the client and host !
