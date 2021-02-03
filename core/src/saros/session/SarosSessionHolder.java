@@ -71,6 +71,8 @@ public class SarosSessionHolder implements ISarosSessionManager {
   private volatile SarosSession session;
   private volatile ResourceNegotiationFactory resourceNegotiationFactory;
 
+  private final SarosMultiSessionManager multiSessionManager;
+
   private final IContainerContext context;
 
   private final SessionNegotiationFactory sessionNegotiationFactory;
@@ -153,7 +155,9 @@ public class SarosSessionHolder implements ISarosSessionManager {
       ConnectionHandler connectionHandler,
       ITransmitter transmitter,
       IReceiver receiver,
-      SarosSession session) {
+      SarosSession session,
+      SarosMultiSessionManager multiSessionManager,
+      ResourceNegotiationFactory resourceNegotiationFactory) {
 
     this.session = session;
     this.context = context;
@@ -168,6 +172,10 @@ public class SarosSessionHolder implements ISarosSessionManager {
     this.negotiationPacketLister =
         new NegotiationPacketListener(
             this, currentSessionNegotiations, currentResourceNegotiations, transmitter, receiver);
+
+    this.multiSessionManager = multiSessionManager;
+    multiSessionManager.registerHolder(this, session.getID());
+    this.resourceNegotiationFactory = resourceNegotiationFactory;
   }
 
   @Override
@@ -205,6 +213,7 @@ public class SarosSessionHolder implements ISarosSessionManager {
   /** @nonSWT */
   @Override
   public void stopSession(SessionEndReason reason) {
+    String localSessionID = session.getID();
 
     try {
       if (!startStopSessionLock.tryLock(LOCK_TIMEOUT, TimeUnit.MILLISECONDS)) {
@@ -258,6 +267,7 @@ public class SarosSessionHolder implements ISarosSessionManager {
       sessionEnded(currentSession, reason);
 
     } finally {
+      multiSessionManager.unregisterHolder(localSessionID);
       sessionShutdown = false;
       negotiationPacketLister.setRejectSessionNegotiationRequests(false);
       startStopSessionLock.unlock();

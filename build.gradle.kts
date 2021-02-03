@@ -255,8 +255,6 @@ tasks {
 
     register("sarosServer", Copy::class) {
         dependsOn(
-                ":saros.core:test",
-                ":saros.server:test",
                 ":saros.server:jar")
 
         group = "Build"

@@ -12,6 +12,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import saros.annotations.Component;
 import saros.communication.connection.ConnectionHandler;
@@ -161,6 +162,7 @@ public class SarosMultiSessionManager implements ISarosSessionManager {
       ITransmitter transmitter,
       IReceiver receiver) {
 
+    log.setLevel(Level.ALL);
     this.context = context;
     this.connectionHandler = connectionHandler;
     this.currentSessionNegotiations = new SessionNegotiationObservable();
@@ -355,7 +357,7 @@ public class SarosMultiSessionManager implements ISarosSessionManager {
     return null;
   }
 
-  public Set<ISarosSession> getSessions(){
+  public final Set<ISarosSession> getSessions(){
     return sessions;
   }
 
@@ -377,8 +379,13 @@ public class SarosMultiSessionManager implements ISarosSessionManager {
   }
 
   public void inviteToSession(String sessionID, Collection<JID> jidsToInvite, String description){
-    ISarosSession s = getSessionByID(sessionID);
-      holderHashMap.get(sessionID).invite(jidsToInvite, description);
+    SarosSessionHolder holder = holderHashMap.get(sessionID);
+
+    if (holder == null){
+      log.error("Unknown Session ID");
+      return;
+    }
+    holder.invite(jidsToInvite, description);
   }
 
   void registerHolder(SarosSessionHolder holder, String sessionID){
@@ -566,67 +573,18 @@ public class SarosMultiSessionManager implements ISarosSessionManager {
       handler.handleOutgoingResourceNegotiation(negotiation);
   }
 
+
   @Override
   public void startSharingReferencePoints(JID user) {
+    log.warn("unexpected use of startSharingReferencePoints");
+  }
 
-    ISarosSession currentSession = session;
-    ResourceNegotiationFactory currentResourceNegotiationFactory = resourceNegotiationFactory;
-
-    if (currentSession == null || currentResourceNegotiationFactory == null) {
-      /*
-       * as this currently only called by the OutgoingSessionNegotiation
-       * job just silently return
-       */
-      log.error("cannot share reference points when no session is running");
+  public void startSessionSharingReferencePoints(String sessionID, JID user){
+    if(holderHashMap.get(sessionID) == null){
+      log.warn("No known session with ID: " + sessionID);
       return;
     }
-
-    ResourceSharingData currentSharedReferencePoints = new ResourceSharingData();
-    for (IReferencePoint referencePoint : currentSession.getReferencePoints()) {
-      currentSharedReferencePoints.addReferencePoint(
-          referencePoint, session.getReferencePointId(referencePoint));
-    }
-
-    if (currentSharedReferencePoints.isEmpty()) return;
-
-    INegotiationHandler handler = negotiationHandler;
-
-    if (handler == null) {
-      log.warn("could not start a resource negotiation because no handler is installed");
-      return;
-    }
-
-    AbstractOutgoingResourceNegotiation negotiation;
-
-    synchronized (this) {
-      if (!startStopSessionLock.tryLock()) {
-        log.warn(
-            "could not start a resource negotiation because the"
-                + " current session is about to stop");
-        return;
-      }
-
-      try {
-        User remoteUser = currentSession.getUser(user);
-        if (remoteUser == null) {
-          log.warn(
-              "could not start a resource negotiation because"
-                  + " the remote user is not part of the current session");
-          return;
-        }
-
-        negotiation =
-            currentResourceNegotiationFactory.newOutgoingResourceNegotiation(
-                user, currentSharedReferencePoints, this, currentSession);
-
-        negotiation.setNegotiationListener(negotiationListener);
-        currentResourceNegotiations.add(negotiation);
-
-      } finally {
-        startStopSessionLock.unlock();
-      }
-    }
-    handler.handleOutgoingResourceNegotiation(negotiation);
+    holderHashMap.get(sessionID).startSharingReferencePoints(user);
   }
 
   @Override
