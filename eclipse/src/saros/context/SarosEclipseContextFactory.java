@@ -19,6 +19,7 @@ import saros.preferences.IPreferenceStore;
 import saros.repackaged.picocontainer.BindKey;
 import saros.repackaged.picocontainer.MutablePicoContainer;
 import saros.session.ISarosSessionContextFactory;
+import saros.session.SarosSessionManager;
 import saros.synchronize.UISynchronizer;
 import saros.synchronize.internal.EclipseSWTSynchronizer;
 import saros.ui.eventhandler.ConnectingFailureHandler;
@@ -71,7 +72,10 @@ public class SarosEclipseContextFactory extends AbstractContextFactory {
       Component.create(SkypeManager.class),
       Component.create(AwarenessInformationCollector.class),
       // Central connect/disconnect access point for the UI
-      Component.create(XMPPConnectionSupport.class)
+      Component.create(XMPPConnectionSupport.class),
+
+      // Saros Session Manager
+      Component.create(SarosSessionManager.class)
     };
   }
 

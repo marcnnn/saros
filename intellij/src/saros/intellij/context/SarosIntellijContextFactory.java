@@ -21,6 +21,7 @@ import saros.preferences.Preferences;
 import saros.repackaged.picocontainer.BindKey;
 import saros.repackaged.picocontainer.MutablePicoContainer;
 import saros.session.ISarosSessionContextFactory;
+import saros.session.SarosSessionManager;
 import saros.synchronize.UISynchronizer;
 
 /** Intellij related context */
@@ -56,6 +57,9 @@ public class SarosIntellijContextFactory extends AbstractContextFactory {
 
       // UI Utility
       Component.create(UIProjectUtils.class),
+
+      // Saros Session Manager
+      Component.create(SarosSessionManager.class)
     };
   }
 
