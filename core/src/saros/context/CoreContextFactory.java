@@ -62,7 +62,6 @@ public class CoreContextFactory extends AbstractContextFactory {
       Component.create(VersionManager.class),
       Component.create(MultiUserChatService.class),
       Component.create(SingleUserChatService.class),
-      Component.create(SarosSessionManager.class),
       Component.create(XMPPAccountStore.class),
       Component.create(ColorIDSetStorage.class),
 

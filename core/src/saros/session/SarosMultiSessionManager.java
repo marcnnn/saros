@@ -2,6 +2,7 @@ package saros.session;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -70,7 +71,7 @@ public class SarosMultiSessionManager implements ISarosSessionManager {
   private static final long NEGOTIATION_TIMEOUT = 10000L;
 
   private volatile SarosSession session; // change to list
-  private volatile Set<SarosSession> sessions;
+  private volatile Set<SarosSession> sessions = new HashSet<SarosSession>();
 
   private volatile ResourceNegotiationFactory resourceNegotiationFactory;
 
@@ -218,11 +219,12 @@ public class SarosMultiSessionManager implements ISarosSessionManager {
         log.warn("recursive execution detected, ignoring session start request", new StackTrace());
         return;
       }
-
+      /*
       if (session != null) {
         log.warn("could not start a new session because a session has already been started");
         return;
       }
+      */
 
       if (negotiationPacketLister.isRejectingSessionNegotiationsRequests()) {
         log.warn("cannot start a session while a session invitation is pending");
@@ -245,6 +247,8 @@ public class SarosMultiSessionManager implements ISarosSessionManager {
       }
 
       session = new SarosSession(sessionID, localUserJID, hostProperties, context);
+      sessions.add(session);
+
 
       sessionStarting(session);
       session.start();
@@ -275,7 +279,7 @@ public class SarosMultiSessionManager implements ISarosSessionManager {
     JID localUserJID = connectionHandler.getLocalJID();
 
     session = new SarosSession(id, localUserJID, host, localProperties, hostProperties, context);
-
+    sessions.add(session);
     resourceNegotiationFactory = session.getComponent(ResourceNegotiationFactory.class);
 
     log.info("joined uninitialized Saros session");
