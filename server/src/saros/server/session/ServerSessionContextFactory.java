@@ -19,6 +19,7 @@ public class ServerSessionContextFactory extends SarosCoreSessionContextFactory 
     container.addComponent(FolderActivityExecutor.class);
     container.addComponent(TextEditActivityExecutor.class);
     container.addComponent(SarosSessionHolder.class);
+    container.addComponent(NegotiationHandler.class);
 
     // Checksum cache support
     container.addComponent(IChecksumCache.class, NullChecksumCache.class);
