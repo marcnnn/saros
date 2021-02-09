@@ -28,14 +28,12 @@ import saros.negotiation.ResourceNegotiationFactory;
 import saros.negotiation.ResourceSharingData;
 import saros.negotiation.SessionNegotiation;
 import saros.negotiation.SessionNegotiationFactory;
-import saros.negotiation.hooks.ISessionNegotiationHook;
 import saros.negotiation.hooks.SessionNegotiationHookManager;
 import saros.net.ConnectionState;
 import saros.net.IReceiver;
 import saros.net.ITransmitter;
 import saros.net.xmpp.JID;
 import saros.preferences.IPreferenceStore;
-import saros.preferences.PreferenceStore;
 import saros.session.internal.SarosSession;
 import saros.util.StackTrace;
 import saros.util.ThreadUtils;
@@ -195,10 +193,12 @@ public class SarosSessionHolder implements ISarosSessionManager {
    *
    * <p>(At the moment, this separation is invisible to the user. They must share a reference point
    * in order to start a session.)
+   * @return
    */
   @Override
-  public void startSession(final Set<IReferencePoint> referencePoints) {
+  public String startSession(final Set<IReferencePoint> referencePoints) {
     log.warn("unexpectedly called startSession in SessionHolder", new StackTrace());
+    return session.getID();
   }
 
   // FIXME offer a startSession method for the client and host !

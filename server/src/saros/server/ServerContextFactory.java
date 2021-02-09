@@ -18,6 +18,8 @@ import saros.server.console.InviteCommand;
 import saros.server.console.ListSessionsCommand;
 import saros.server.console.ServerConsole;
 import saros.server.console.ShareCommand;
+import saros.server.console.StartSessionCommand;
+import saros.server.console.StopSessionCommand;
 import saros.server.dummies.NullRemoteProgressIndicatorFactory;
 import saros.server.filesystem.ServerWorkspaceImpl;
 import saros.server.net.ServerFeatureAdvertiser;
@@ -84,6 +86,8 @@ public class ServerContextFactory extends AbstractContextFactory {
       c.addComponent(InviteCommand.class);
       c.addComponent(ShareCommand.class);
       c.addComponent(ListSessionsCommand.class);
+      c.addComponent(StartSessionCommand.class);
+      c.addComponent(StopSessionCommand.class);
     }
   }
 
