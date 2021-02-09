@@ -32,8 +32,9 @@ public interface ISarosSessionManager {
    * Starts a new Saros session with the local user as the only participant.
    *
    * @param referencePoints the local reference points which should be shared
+   * @return
    */
-  void startSession(Set<IReferencePoint> referencePoints);
+  String startSession(Set<IReferencePoint> referencePoints);
 
   // FIXME this method is error prone and only used by the IPN, find a better
   // abstraction
