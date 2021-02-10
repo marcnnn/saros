@@ -452,6 +452,11 @@ public class SarosMultiSessionManager implements ISarosSessionManager {
     nextResourceNegotiationWorker = ThreadUtils.runSafeAsync(log, worker);
   }
 
+  public void addReferencePointsToSessionByID(
+      String sessionID, Set<IReferencePoint> referencePoints) {
+        holderHashMap.get(sessionID).addReferencePointsToSession(referencePoints);
+  }
+
   /**
    * This method handles new resource negotiations for already invited user (not the first in the
    * process of inviting to the session).

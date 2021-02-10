@@ -8,16 +8,17 @@ import org.apache.log4j.Logger;
 import saros.filesystem.IReferencePoint;
 import saros.server.filesystem.ServerProjectImpl;
 import saros.server.filesystem.ServerWorkspaceImpl;
-import saros.session.ISarosSession;
-import saros.session.ISarosSessionManager;
+import saros.session.SarosMultiSessionManager;
 
 public class ShareCommand extends ConsoleCommand {
   private static final Logger log = Logger.getLogger(ShareCommand.class);
-  private final ISarosSessionManager sessionManager;
+  private final SarosMultiSessionManager sessionManager;
   private final ServerWorkspaceImpl workspace;
 
   public ShareCommand(
-      ISarosSessionManager sessionManager, ServerWorkspaceImpl workspace, ServerConsole console) {
+      SarosMultiSessionManager sessionManager,
+      ServerWorkspaceImpl workspace,
+      ServerConsole console) {
     this.sessionManager = sessionManager;
     this.workspace = workspace;
     console.registerCommand(this);
@@ -30,19 +31,20 @@ public class ShareCommand extends ConsoleCommand {
 
   @Override
   public int minArgument() {
-    return 1;
+    return 2;
   }
 
   @Override
   public String help() {
-    return "share <PATH>... - Share projects relative to the workspace with session participants";
+    return "share <sessionID> <PATH>... - Share projects relative to the workspace with session participants";
   }
 
   @Override
   public void execute(List<String> args, PrintStream out) {
-    ISarosSession session = sessionManager.getSession();
+    String sessionID = args.get(0);
+    args = args.subList(1, args.size() - 1);
 
-    if (session == null) {
+    if (sessionManager.getSessionByID(sessionID) == null) {
       log.error("No Session running, cannot add any resources");
       return;
     }
@@ -57,7 +59,7 @@ public class ShareCommand extends ConsoleCommand {
           log.error(path + " could not be added to the session", e);
         }
       }
-      sessionManager.addReferencePointsToSession(projects);
+      sessionManager.addReferencePointsToSessionByID(sessionID, projects);
     } catch (Exception e) {
       log.error("Error sharing resources", e);
     }
