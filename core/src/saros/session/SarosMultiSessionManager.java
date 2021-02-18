@@ -107,45 +107,6 @@ public class SarosMultiSessionManager implements ISarosSessionManager {
 
   private volatile INegotiationHandler negotiationHandler;
 
-  private final NegotiationListener negotiationListener =
-      new NegotiationListener() {
-        @Override
-        public void negotiationTerminated(final SessionNegotiation negotiation) {
-          currentSessionNegotiations.remove(negotiation);
-        }
-
-        @Override
-        public void negotiationTerminated(final ResourceNegotiation negotiation) {
-          currentResourceNegotiations.remove(negotiation);
-
-          if (session != null
-              && session.isHost()
-              && negotiation instanceof AbstractIncomingResourceNegotiation
-              && !negotiation.isCanceled()) {
-            AbstractIncomingResourceNegotiation ipn =
-                (AbstractIncomingResourceNegotiation) negotiation;
-
-            ResourceSharingData resourceSharingData = new ResourceSharingData();
-            for (ResourceNegotiationData resourceNegotiationData :
-                ipn.getResourceNegotiationData()) {
-              String referencePointId = resourceNegotiationData.getReferencePointID();
-              IReferencePoint referencePoint = session.getReferencePoint(referencePointId);
-
-              resourceSharingData.addReferencePoint(referencePoint, referencePointId);
-            }
-
-            User originUser = session.getUser(negotiation.getPeer());
-            executeOutgoingResourceNegotiation(resourceSharingData, originUser);
-          }
-
-          if (currentResourceNegotiations.isEmpty()) {
-            synchronized (nextResourceNegotiation) {
-              nextResourceNegotiation.notifyAll();
-            }
-          }
-        }
-      };
-
   private final IConnectionStateListener connectionListener =
       (state, error) -> {
         if (state == ConnectionState.DISCONNECTING) {
@@ -267,18 +228,9 @@ public class SarosMultiSessionManager implements ISarosSessionManager {
   @Override
   public ISarosSession joinSession(
       String id, JID host, IPreferenceStore hostProperties, IPreferenceStore localProperties) {
-
-    assert session == null;
-
-    JID localUserJID = connectionHandler.getLocalJID();
-
-    session = new SarosSession(id, localUserJID, host, localProperties, hostProperties, context);
-    sessions.add(session);
-    resourceNegotiationFactory = session.getComponent(ResourceNegotiationFactory.class);
-
-    log.info("joined uninitialized Saros session");
-
-    return session;
+      log.error("joinSession() should not be called in Multi-Session-Manager.",
+          new StackTrace());
+    return null;
   }
 
   /** @nonSWT */
@@ -314,44 +266,7 @@ public class SarosMultiSessionManager implements ISarosSessionManager {
       String negotiationID,
       String version,
       String description) {
-
-    INegotiationHandler handler = negotiationHandler;
-
-    if (handler == null) {
-      log.warn("could not accept invitation because no handler is installed");
-      return;
-    }
-
-    IncomingSessionNegotiation negotiation;
-
-    synchronized (this) {
-      if (!startStopSessionLock.tryLock()) {
-        log.warn("could not accept invitation because the current session is about to stop");
-        return;
-      }
-
-      try {
-
-        // should not happen
-        if (negotiationPacketLister.isRejectingSessionNegotiationsRequests()) {
-          log.error("could not accept invitation because there is already a pending invitation");
-          return;
-        }
-
-        negotiationPacketLister.setRejectSessionNegotiationRequests(true);
-
-        negotiation =
-            sessionNegotiationFactory.newIncomingSessionNegotiation(
-                remoteAddress, negotiationID, sessionID, version, this, description);
-
-        negotiation.setNegotiationListener(negotiationListener);
-        currentSessionNegotiations.add(negotiation);
-
-      } finally {
-        startStopSessionLock.unlock();
-      }
-    }
-    handler.handleIncomingSessionNegotiation(negotiation);
+    holderHashMap.get(sessionID).sessionNegotiationRequestReceived(remoteAddress, sessionID, negotiationID, version, description);
   }
 
   public ISarosSession getSessionByID(String sessionID){
@@ -409,178 +324,11 @@ public class SarosMultiSessionManager implements ISarosSessionManager {
    */
   @Override
   public synchronized void addReferencePointsToSession(Set<IReferencePoint> referencePoints) {
-    if (referencePoints == null) {
-      return;
-    }
-
-    /*
-     * To prevent multiple concurrent negotiations per user. 1. Collect all
-     * new mappings, 2. If active negotiations are running wait till they
-     * finish (collect new mappings in the meantime), 3. Create one
-     * negotiation with all collected resources.
-     */
-
-    nextResourceNegotiation.addReferencePoints(referencePoints);
-
-    if (nextResourceNegotiationWorker != null && nextResourceNegotiationWorker.isAlive()) {
-      return;
-    } else if (currentResourceNegotiations.isEmpty()) {
-      /* shortcut to direct handling */
-      startNextResourceNegotiation();
-      return;
-    }
-
-    /* else create a worker thread */
-    Runnable worker =
-        new Runnable() {
-          @Override
-          public void run() {
-            synchronized (nextResourceNegotiation) {
-              while (!currentResourceNegotiations.isEmpty()) {
-                try {
-                  nextResourceNegotiation.wait();
-                } catch (InterruptedException e) {
-                  Thread.currentThread().interrupt();
-                  return;
-                }
-              }
-            }
-
-            startNextResourceNegotiation();
-          }
-        };
-    nextResourceNegotiationWorker = ThreadUtils.runSafeAsync(log, worker);
   }
 
   public void addReferencePointsToSessionByID(
       String sessionID, Set<IReferencePoint> referencePoints) {
         holderHashMap.get(sessionID).addReferencePointsToSession(referencePoints);
-  }
-
-  /**
-   * This method handles new resource negotiations for already invited user (not the first in the
-   * process of inviting to the session).
-   */
-  private synchronized void startNextResourceNegotiation() {
-    ISarosSession currentSession = session;
-
-    if (currentSession == null) {
-      log.warn("could not add resources because there is no active session");
-      return;
-    }
-
-    /*
-     * TODO: there are race conditions, USER A restricts USER B to read-only
-     * while this code is executed
-     */
-
-    if (!currentSession.hasWriteAccess()) {
-      log.error(
-          "current local user has not enough privileges to add resources to the current session");
-      return;
-    }
-
-    ResourceSharingData referencePointsToShare = new ResourceSharingData();
-    Set<IReferencePoint> referencePoints = nextResourceNegotiation.getReferencePoints();
-
-    /*
-     * Put all information about which reference points and resources to share into a
-     * referencePointsToShare, for passing to OutgoingResourceNegotiation. On the way, generate
-     * session-wide ID's for the reference points that don't have them yet.
-     */
-    for (IReferencePoint referencePoint : referencePoints) {
-      String referencePointId = currentSession.getReferencePointId(referencePoint);
-
-      if (referencePointId == null) {
-        referencePointId = String.valueOf(SESSION_ID_GENERATOR.nextInt(Integer.MAX_VALUE));
-      }
-      referencePointsToShare.addReferencePoint(referencePoint, referencePointId);
-
-      /*
-       * If this is the host, add the reference points directly to the session
-       * before sending it to the other clients. (Non-hosts, on the other
-       * hand, wait until the host has accepted the reference points and offers it
-       * back with a second reference point negotiation.)
-       *
-       * Note that partial reference points are re-added even if they were already
-       * registered as being part of the session. This is because their
-       * lists of shared resources may have changed.
-       */
-      if (currentSession.isHost() && !currentSession.isShared(referencePoint)) {
-        currentSession.addSharedReferencePoint(referencePoint, referencePointId);
-      }
-    }
-
-    if (referencePointsToShare.isEmpty()) {
-      log.warn(
-          "skipping resource negotiation because no new reference points were added to the current session");
-      return;
-    }
-
-    executeOutgoingResourceNegotiation(referencePointsToShare, session.getLocalUser());
-  }
-
-  private void executeOutgoingResourceNegotiation(
-      ResourceSharingData resourceSharingData, User originUser) {
-    INegotiationHandler handler = negotiationHandler;
-    if (handler == null) {
-      log.warn("could not start a resource negotiation because no handler is installed");
-      return;
-    }
-
-    List<AbstractOutgoingResourceNegotiation> negotiations =
-        new ArrayList<AbstractOutgoingResourceNegotiation>();
-
-    if (!startStopSessionLock.tryLock()) {
-      log.warn(
-          "could not start a resource negotiation because the current session is about to stop");
-      return;
-    }
-
-    ResourceNegotiationFactory currentResourceNegotiationFactory = resourceNegotiationFactory;
-
-    if (currentResourceNegotiationFactory == null) {
-      log.warn("could not start a resource negotiation as no session is running");
-
-      return;
-    }
-
-    List<User> recipients = new ArrayList<>();
-    if (session.isHost()) {
-      /*
-       * If we received these reference points from a non-host user previously,
-       * that user already has the reference point.
-       */
-      for (User user : session.getRemoteUsers()) {
-        if (!user.equals(originUser)) {
-          recipients.add(user);
-        }
-      }
-    } else {
-      /*
-       * As a non-host, we share the reference point to the host only, who
-       * takes care of sharing it with all other users in the session
-       * (see negotiationListener in this class).
-       */
-      recipients.add(session.getHost());
-    }
-
-    try {
-      for (User user : recipients) {
-        AbstractOutgoingResourceNegotiation negotiation =
-            currentResourceNegotiationFactory.newOutgoingResourceNegotiation(
-                user.getJID(), resourceSharingData, this, session);
-
-        negotiation.setNegotiationListener(negotiationListener);
-        currentResourceNegotiations.add(negotiation);
-        negotiations.add(negotiation);
-      }
-    } finally {
-      startStopSessionLock.unlock();
-    }
-
-    for (AbstractOutgoingResourceNegotiation negotiation : negotiations)
-      handler.handleOutgoingResourceNegotiation(negotiation);
   }
 
 
