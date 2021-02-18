@@ -122,25 +122,25 @@ public class SubscriptionHandler {
                 presence.getFrom(),
                 presence.getError().getCondition(),
                 presence.getError().getMessage());
-        log.warn(message);
+        log.error(message);
         return;
 
       case subscribed:
-        log.debug("contact subscribed to us: " + jid);
+        log.error("contact subscribed to us: " + jid);
         break;
 
       case unsubscribed:
-        log.debug("contact unsubscribed from us: " + jid);
+        log.error("contact unsubscribed from us: " + jid);
         notifySubscriptionCanceled(jid);
         break;
 
       case subscribe:
-        log.debug("contact requests to subscribe to us: " + jid);
+        log.error("contact requests to subscribe to us: " + jid);
         notifySubscriptionReceived(jid);
         break;
 
       case unsubscribe:
-        log.debug("contact requests to unsubscribe from us: " + jid);
+        log.error("contact requests to unsubscribe from us: " + jid);
         removeSubscription(jid);
         break;
 

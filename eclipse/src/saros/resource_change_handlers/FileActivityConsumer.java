@@ -100,7 +100,7 @@ public class FileActivityConsumer extends AbstractActivityConsumer implements St
 
     saros.filesystem.IFile file = activity.getResource();
 
-    log.debug("performing recovery for file: " + file);
+    log.error("performing recovery for file: " + file);
 
     /*
      * We have to save the editor or otherwise the internal buffer is not
@@ -118,7 +118,7 @@ public class FileActivityConsumer extends AbstractActivityConsumer implements St
     try {
       if (type == FileActivity.Type.CREATED) handleFileCreation(activity);
       else if (type == FileActivity.Type.REMOVED) handleFileDeletion(activity);
-      else log.warn("performing recovery for type " + type + " is not supported");
+      else log.error("performing recovery for type " + type + " is not supported");
     } finally {
 
       // TODO why does Jupiter not process the activities by itself ?
@@ -157,7 +157,7 @@ public class FileActivityConsumer extends AbstractActivityConsumer implements St
     final IFile file = ResourceConverter.getDelegate(fileWrapper);
 
     if (file.exists()) FileUtils.delete(file);
-    else log.warn("could not delete file " + file + " because it does not exist");
+    else log.error("could not delete file " + file + " because it does not exist");
   }
 
   private void handleFileCreation(FileActivity activity)
@@ -177,7 +177,7 @@ public class FileActivityConsumer extends AbstractActivityConsumer implements St
     if (!Arrays.equals(newContent, actualContent)) {
       FileUtils.writeFile(new ByteArrayInputStream(newContent), file);
     } else {
-      log.debug("FileActivity " + activity + " dropped (same content)");
+      log.error("FileActivity " + activity + " dropped (same content)");
     }
 
     if (encoding != null) sarosFile.setCharset(encoding);

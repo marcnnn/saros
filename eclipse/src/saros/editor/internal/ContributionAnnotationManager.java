@@ -248,7 +248,7 @@ public class ContributionAnnotationManager {
       final Position position = model.getPosition(annotation);
 
       if (position == null) {
-        log.warn("annotation could not be found in the current model: " + annotation);
+        log.error("annotation could not be found in the current model: " + annotation);
         continue;
       }
 

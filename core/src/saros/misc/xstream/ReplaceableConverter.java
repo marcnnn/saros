@@ -45,7 +45,7 @@ class ReplaceableConverter extends Replaceable<Converter> implements Converter {
       Object value, HierarchicalStreamWriter writer, MarshallingContext context) {
 
     if (isReset()) {
-      log.debug("Tried to marshal " + value + " with inactive converter " + delegate);
+      log.error("Tried to marshal " + value + " with inactive converter " + delegate);
       return;
     }
 
@@ -57,7 +57,7 @@ class ReplaceableConverter extends Replaceable<Converter> implements Converter {
       HierarchicalStreamReader reader, UnmarshallingContext context) {
 
     if (isReset()) {
-      log.debug("Tried to unmarshal with inactive converter " + delegate);
+      log.error("Tried to unmarshal with inactive converter " + delegate);
       return null;
     }
 

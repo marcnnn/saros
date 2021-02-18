@@ -257,7 +257,7 @@ public class EditorAPI {
     } else {
       VirtualFile file = FileDocumentManager.getInstance().getFile(editor.getDocument());
 
-      log.warn(
+      log.error(
           "Encountered caret for file "
               + file
               + " which is located neither at the start nor at the end of the selection."

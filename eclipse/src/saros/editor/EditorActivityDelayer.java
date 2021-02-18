@@ -90,7 +90,7 @@ final class EditorActivityDelayer extends AbstractActivityProducer {
     if (log.isDebugEnabled())
       log.error(
           "dropping activity " + activity + " due to invalid thread access", new StackTrace());
-    else log.warn("dropping activity " + activity + " due to invalid thread access");
+    else log.error("dropping activity " + activity + " due to invalid thread access");
 
     return false;
   }

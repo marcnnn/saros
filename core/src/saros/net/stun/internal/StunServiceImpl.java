@@ -142,7 +142,7 @@ public final class StunServiceImpl implements IStunService {
                 new InetSocketAddress(localAddress, 0),
                 timeout);
       } catch (PortUnreachableException e) {
-        log.warn("aborted STUN discovery: " + e.getMessage());
+        log.error("aborted STUN discovery: " + e.getMessage());
         return;
       } catch (IOException e) {
         log.error("an error occurred while performing a STUN discovery: " + e.getMessage(), e);
@@ -158,7 +158,7 @@ public final class StunServiceImpl implements IStunService {
       synchronized (StunServiceImpl.this) {
         if (publicInetAddress.getAddress().equals(localAddress)) isDirectConnection = true;
 
-        log.debug(
+        log.error(
             "discovered public WAN-IP: "
                 + publicInetAddress.getAddress().getHostAddress()
                 + " through interface "
@@ -265,14 +265,14 @@ public final class StunServiceImpl implements IStunService {
           responseData = response.getData();
 
           if (responseData.length <= STUN_HEADER_SIZE) {
-            log.warn("received STUN response with invalid header");
+            log.error("received STUN response with invalid header");
             continue;
           }
 
           // compare the transaction ID / Magic cookie
           for (int i = 4; i < STUN_HEADER_SIZE; i++) {
             if (requestData[i] != responseData[i]) {
-              log.warn("received STUN response with invalid transaction id");
+              log.error("received STUN response with invalid transaction id");
               continue;
             }
           }
@@ -298,7 +298,7 @@ public final class StunServiceImpl implements IStunService {
         in.read(transactionId);
 
         if (responseCode != BINDING_RESPONSE)
-          log.warn(
+          log.error(
               "received bad STUN response code from server: 0x"
                   + Integer.toHexString(responseCode & 0xFFFF));
 
@@ -316,7 +316,7 @@ public final class StunServiceImpl implements IStunService {
                   + length);
 
           if (attributesLength < 0) {
-            log.warn(
+            log.error(
                 "STUN response code 0x" + Integer.toHexString(code & 0xFFFF) + " is corrupted");
             break;
           }
@@ -342,7 +342,7 @@ public final class StunServiceImpl implements IStunService {
               if (ipFamily == IP4_FAMILY) inetAddress = new byte[4];
               else if (ipFamily == IP6_FAMILY) inetAddress = new byte[16];
               else {
-                log.warn(
+                log.error(
                     "received unknown IP family value: 0x"
                         + Integer.toHexString(ipFamily & 0xFFFF));
                 skipFully(in, length);
@@ -385,7 +385,7 @@ public final class StunServiceImpl implements IStunService {
           }
         }
       } catch (SocketTimeoutException e) {
-        log.warn(
+        log.error(
             "received no response from STUN server "
                 + stunServer
                 + " at local address "

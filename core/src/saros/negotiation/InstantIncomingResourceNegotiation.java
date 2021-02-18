@@ -77,18 +77,18 @@ public class InstantIncomingResourceNegotiation extends AbstractIncomingResource
     monitor.subTask("Waiting for Host to start...");
     monitor.waitForCompletion(expectedTransfer);
     monitor.subTask("Host is starting to send...");
-    log.debug(this + ": Host is starting to send...");
+    log.error(this + ": Host is starting to send...");
 
     try (InputStream transmissionStream = expectedTransfer.get().acceptStream();
         CountingInputStream countStream = new CountingInputStream(transmissionStream);
         IncomingStreamProtocol isp = new IncomingStreamProtocol(countStream, session, monitor)) {
       isp.receiveStream();
-      log.debug("stream bytes received: " + countStream.getByteCount());
+      log.error("stream bytes received: " + countStream.getByteCount());
     } catch (InterruptedException | ExecutionException e) {
       throw new LocalCancellationException(e.getMessage(), CancelOption.NOTIFY_PEER);
     }
 
-    log.debug(this + ": stream transmission done");
+    log.error(this + ": stream transmission done");
     monitor.done();
   }
 }

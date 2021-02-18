@@ -57,7 +57,7 @@ public class ConcurrentDocumentServer implements Startable {
 
     Consumer<IFile> deletedFileHandler =
         file -> {
-          log.debug("Resetting jupiter server for " + file);
+          log.error("Resetting jupiter server for " + file);
           server.removeFile(file);
         };
 
@@ -110,7 +110,7 @@ public class ConcurrentDocumentServer implements Startable {
     final List<QueueItem> result = new ArrayList<QueueItem>();
 
     if (resourceActivityFilter.isFiltered(activity)) {
-      log.debug("Ignored activity for already deleted resource: " + activity);
+      log.error("Ignored activity for already deleted resource: " + activity);
 
       return result;
     }
@@ -169,7 +169,7 @@ public class ConcurrentDocumentServer implements Startable {
 
     assert sarosSession.isHost();
 
-    log.debug("resetting jupiter server for user: " + user + ", file: " + file);
+    log.error("resetting jupiter server for user: " + user + ", file: " + file);
 
     server.reset(file, user);
   }

@@ -112,7 +112,7 @@ public class PacketCollector implements PacketListener {
       try {
         resultQueue.add(packet);
       } catch (IllegalStateException e) {
-        log.warn("Queue has reached capacity, collector canceled.");
+        log.error("Queue has reached capacity, collector canceled.");
         cancel();
       }
     }

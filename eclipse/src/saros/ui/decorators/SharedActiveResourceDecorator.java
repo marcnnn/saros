@@ -151,7 +151,7 @@ public class SharedActiveResourceDecorator implements ILightweightLabelDecorator
             IResource resource = ResourceConverter.getDelegate(file);
 
             if (resource != null) activeEditorResources.put(user, getResources(resource));
-            else log.warn("resource for editor " + file + " does not exist locally");
+            else log.error("resource for editor " + file + " does not exist locally");
           }
 
           updateImageDescriptorMapping();
@@ -244,7 +244,7 @@ public class SharedActiveResourceDecorator implements ILightweightLabelDecorator
     Set<IResource> resources = new HashSet<IResource>();
 
     if (resource == null) {
-      log.warn("resource should not be null");
+      log.error("resource should not be null");
       return resources;
     }
 

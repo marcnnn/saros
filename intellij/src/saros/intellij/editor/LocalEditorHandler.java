@@ -52,7 +52,7 @@ public class LocalEditorHandler {
       @NotNull IFile file, @NotNull VirtualFile virtualFile, boolean activate) {
 
     if (!sarosSession.isShared(file)) {
-      log.debug(
+      log.error(
           "Ignored open editor request for file "
               + virtualFile
               + " as it does not belong to a shared reference point");
@@ -84,7 +84,7 @@ public class LocalEditorHandler {
     IFile file = (IFile) VirtualFileConverter.convertToResource(virtualFile, referencePoint);
 
     if (file == null || !sarosSession.isShared(file)) {
-      log.debug(
+      log.error(
           "Could not open Editor for file "
               + virtualFile
               + " as it does not belong to the given reference point "
@@ -118,12 +118,12 @@ public class LocalEditorHandler {
       @NotNull VirtualFile virtualFile, @NotNull IFile file, boolean activate) {
 
     if (!virtualFile.exists()) {
-      log.debug("Could not open Editor for file " + virtualFile + " as it does not exist");
+      log.error("Could not open Editor for file " + virtualFile + " as it does not exist");
 
       return null;
 
     } else if (!sarosSession.isShared(file)) {
-      log.debug("Ignored open editor request for file " + virtualFile + " as it is not shared");
+      log.error("Ignored open editor request for file " + virtualFile + " as it is not shared");
 
       return null;
     }
@@ -133,7 +133,7 @@ public class LocalEditorHandler {
     Editor editor = ProjectAPI.openEditor(project, virtualFile, activate);
 
     if (editor == null) {
-      log.debug("Ignoring non-text editor for file " + virtualFile);
+      log.error("Ignoring non-text editor for file " + virtualFile);
 
       return null;
     }
@@ -141,7 +141,7 @@ public class LocalEditorHandler {
     editorPool.add(file, editor);
     manager.startEditor(editor);
 
-    log.debug("Opened Editor " + editor + " for file " + virtualFile);
+    log.error("Opened Editor " + editor + " for file " + virtualFile);
 
     return editor;
   }
@@ -190,7 +190,7 @@ public class LocalEditorHandler {
     VirtualFile virtualFile = VirtualFileConverter.convertToVirtualFile(file);
 
     if (virtualFile == null || !virtualFile.exists()) {
-      log.warn("Failed to save document for " + file + " - could not get a valid virtual file");
+      log.error("Failed to save document for " + file + " - could not get a valid virtual file");
 
       return;
     }
@@ -202,7 +202,7 @@ public class LocalEditorHandler {
     document = DocumentAPI.getDocument(virtualFile);
 
     if (document == null) {
-      log.warn(
+      log.error(
           "Failed to save document for " + virtualFile + " - could not get a matching document");
 
       return;

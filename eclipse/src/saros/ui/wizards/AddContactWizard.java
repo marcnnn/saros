@@ -52,7 +52,7 @@ public class AddContactWizard extends Wizard {
     final String nickname = addContactWizardPage.getNickname();
 
     if (addContactWizardPage.isContactAlreadyAdded()) {
-      log.debug("contact " + jid.toString() + " already added");
+      log.error("contact " + jid.toString() + " already added");
       return true;
     }
 
@@ -76,7 +76,7 @@ public class AddContactWizard extends Wizard {
                 }
               });
     } catch (InvocationTargetException e) {
-      log.warn(e.getCause().getMessage(), e.getCause());
+      log.error(e.getCause().getMessage(), e.getCause());
       addContactWizardPage.setErrorMessage(e.getMessage());
       // Leave the wizard open
       return false;
@@ -111,7 +111,7 @@ public class AddContactWizard extends Wizard {
             return SWTUtils.runSWTSync(
                 () -> DialogUtils.openQuestionMessageDialog(null, title, message));
           } catch (Exception e) {
-            log.debug("Error opening questionMessageDialog", e);
+            log.error("Error opening questionMessageDialog", e);
             return false;
           }
         };

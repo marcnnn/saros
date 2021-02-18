@@ -151,7 +151,7 @@ public class LocationAnnotationManager {
       Position position = new Position(start, end - start);
       model.addAnnotation(annotation, position);
     } catch (BadLocationException e) {
-      log.warn("Internal Error:", e);
+      log.error("Internal Error:", e);
     }
   }
 

@@ -113,7 +113,7 @@ public class CollaborationUtils {
     Shell shell = SWTUtils.getShell();
 
     if (sarosSession == null) {
-      log.warn("cannot leave a non-running session");
+      log.error("cannot leave a non-running session");
       return;
     }
 
@@ -163,7 +163,7 @@ public class CollaborationUtils {
     ISarosSession session = sessionManager.getSession();
 
     if (session == null) {
-      log.warn("cannot add resources to a non-running session");
+      log.error("cannot add resources to a non-running session");
       return;
     }
 
@@ -187,7 +187,7 @@ public class CollaborationUtils {
             refreshProjects(projects, null);
 
           } catch (CoreException e) {
-            log.warn("failed to refresh projects", e);
+            log.error("failed to refresh projects", e);
             /*
              * FIXME use a Job instead of a plain thread and so better
              * execption handling !
@@ -210,7 +210,7 @@ public class CollaborationUtils {
     final ISarosSession sarosSession = sessionManager.getSession();
 
     if (sarosSession == null) {
-      log.warn("cannot add contacts to a non-running session");
+      log.error("cannot add contacts to a non-running session");
       return;
     }
 

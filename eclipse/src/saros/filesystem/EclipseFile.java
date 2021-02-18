@@ -68,7 +68,7 @@ public class EclipseFile extends AbstractEclipseResource implements IFile {
     String fileEncoding = file.getCharset();
 
     if (encoding.equals(fileEncoding)) {
-      log.debug("encoding does not need to be changed for file: " + file);
+      log.error("encoding does not need to be changed for file: " + file);
 
       return;
     }
@@ -77,7 +77,7 @@ public class EclipseFile extends AbstractEclipseResource implements IFile {
 
     // use inherited encoding if possible
     if (encoding.equals(parentContainerEncoding)) {
-      log.debug(
+      log.error(
           "changing encoding for file "
               + file
               + " to inherit parent container encoding: "
@@ -88,7 +88,7 @@ public class EclipseFile extends AbstractEclipseResource implements IFile {
       return;
     }
 
-    log.debug("changing encoding for file " + file + " to encoding: " + encoding);
+    log.error("changing encoding for file " + file + " to encoding: " + encoding);
 
     file.setCharset(encoding, new NullProgressMonitor());
   }

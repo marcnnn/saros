@@ -113,7 +113,7 @@ public class ArchiveOutgoingResourceNegotiation extends AbstractOutgoingResource
   @Override
   protected void cleanup(IProgressMonitor monitor) {
     if (zipArchive != null && !zipArchive.delete())
-      log.warn("could not delete archive file: " + zipArchive.getAbsolutePath());
+      log.error("could not delete archive file: " + zipArchive.getAbsolutePath());
     super.cleanup(monitor);
   }
 
@@ -180,7 +180,7 @@ public class ArchiveOutgoingResourceNegotiation extends AbstractOutgoingResource
       }
     }
 
-    log.debug(this + " : creating archive");
+    log.error(this + " : creating archive");
 
     File tempArchive = null;
 
@@ -204,7 +204,7 @@ public class ArchiveOutgoingResourceNegotiation extends AbstractOutgoingResource
       File archive, JID remoteContact, String transferID, IProgressMonitor monitor)
       throws SarosCancellationException, IOException {
 
-    log.debug(this + " : sending archive");
+    log.error(this + " : sending archive");
     monitor.beginTask("Sending archive file...", 100);
 
     XMPPFileTransfer transfer =
@@ -213,6 +213,6 @@ public class ArchiveOutgoingResourceNegotiation extends AbstractOutgoingResource
 
     monitor.done();
 
-    log.debug(this + " : archive send");
+    log.error(this + " : archive send");
   }
 }

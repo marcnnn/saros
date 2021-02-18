@@ -112,7 +112,7 @@ public class ConcurrentDocumentClient implements Startable {
       resourceActivityFilter.handleFileCreation(activity);
 
       if (resourceActivityFilter.isFiltered(activity)) {
-        log.debug("Ignored activity for already deleted resource: " + activity);
+        log.error("Ignored activity for already deleted resource: " + activity);
 
         return activities;
       }
@@ -189,7 +189,7 @@ public class ConcurrentDocumentClient implements Startable {
    *     authoritative one and thus does not need to be reset).
    */
   public synchronized void reset(IFile file) {
-    log.debug("Resetting jupiter client for " + file);
+    log.error("Resetting jupiter client for " + file);
     jupiterClient.reset(file);
   }
 

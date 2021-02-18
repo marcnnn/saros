@@ -99,7 +99,7 @@ public class HeartbeatDispatcher extends AbstractActivityProducer implements Sta
         log.error(heartbeatScheduledExecutor + " is still running");
 
     } catch (InterruptedException e) {
-      log.warn("interrupted while waiting for " + heartbeatScheduledExecutor + " to terminate", e);
+      log.error("interrupted while waiting for " + heartbeatScheduledExecutor + " to terminate", e);
       Thread.currentThread().interrupt();
     }
   }

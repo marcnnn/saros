@@ -87,7 +87,7 @@ public class SkypeManager {
       result = URLEncoder.encode(value, "UTF-8");
     } catch (UnsupportedEncodingException e) {
 
-      log.warn("failed to url encode data:" + value, e);
+      log.error("failed to url encode data:" + value, e);
     }
 
     return result;
@@ -138,7 +138,7 @@ public class SkypeManager {
       isAvailable = p.waitFor() == 0;
 
     } catch (IOException | InterruptedException e) {
-      log.warn("failed to determine Skype installation", e);
+      log.error("failed to determine Skype installation", e);
       isAvailable = true;
 
       if (e instanceof InterruptedException) Thread.currentThread().interrupt();

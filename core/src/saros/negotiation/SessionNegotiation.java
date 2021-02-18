@@ -72,7 +72,7 @@ public abstract class SessionNegotiation extends Negotiation {
 
     if (cause.getCancelOption() != CancelOption.NOTIFY_PEER) return;
 
-    log.debug("notifying remote contact " + getPeer() + " of the local cancellation");
+    log.error("notifying remote contact " + getPeer() + " of the local cancellation");
 
     PacketExtension notification =
         CancelInviteExtension.PROVIDER.create(

@@ -180,7 +180,7 @@ public class ConsistencyButton extends AbstractSessionToolbarButton {
       return;
     }
 
-    log.debug("Inconsistency indicator goes: " + (isInconsistent ? "on" : "off"));
+    log.error("Inconsistency indicator goes: " + (isInconsistent ? "on" : "off"));
 
     EDTExecutor.invokeLater(() -> setInconsistent(isInconsistent));
 

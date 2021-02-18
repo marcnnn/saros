@@ -92,7 +92,7 @@ class MultiUserChatStateManager {
             return;
           }
 
-          log.debug(
+          log.error(
               "Incoming Message from "
                   + message.getFrom()
                   + " with state: "
@@ -143,7 +143,7 @@ class MultiUserChatStateManager {
       message.addExtension(extension);
       muc.sendMessage(message);
     } catch (Exception e1) {
-      log.debug("Couldn't send state (" + e1.getMessage() + ")");
+      log.error("Couldn't send state (" + e1.getMessage() + ")");
     }
 
     this.lastState = newState;

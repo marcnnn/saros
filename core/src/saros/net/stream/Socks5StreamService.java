@@ -131,7 +131,7 @@ public class Socks5StreamService implements IStreamService, BytestreamListener {
    * @param future
    */
   private void waitToCloseResponse(final Future<Socks5BytestreamSession> future) {
-    log.debug(prefix() + "canceling response connection as it is not needed");
+    log.error(prefix() + "canceling response connection as it is not needed");
 
     Thread waitToCloseResponse =
         new Thread("CloseUnneededResponseConnection") {
@@ -143,7 +143,7 @@ public class Socks5StreamService implements IStreamService, BytestreamListener {
             } catch (InterruptedException e) {
               // nothing to do here
             } catch (ExecutionException e) {
-              log.debug(
+              log.error(
                   prefix()
                       + "Exception while waiting to close unneeded connection: "
                       + e.getMessage());
@@ -207,14 +207,14 @@ public class Socks5StreamService implements IStreamService, BytestreamListener {
       session = preferInSession ? inSession : outSession;
     }
 
-    log.debug(
+    log.error(
         prefix()
             + "trying if "
             + (preferInSession ? "incoming " : "outgoing")
             + " session is bidirectional");
 
     if (streamIsBidirectional(session, preferInSession)) {
-      log.debug(
+      log.error(
           msg
               + "but at least the server allows bidirectional connections. (using "
               + (preferInSession ? "incoming session" : "outgoing session")
@@ -230,7 +230,7 @@ public class Socks5StreamService implements IStreamService, BytestreamListener {
           "Could only establish one unidirectional connection but need two for wrapping.");
     }
 
-    log.debug(
+    log.error(
         msg
             + "and the server does not allow bidirectional connections. Wrapped session established.");
 
@@ -297,7 +297,7 @@ public class Socks5StreamService implements IStreamService, BytestreamListener {
      * as setting the timeout later on would throw an exception
      */
 
-    log.debug(prefix() + "stream is unidirectional. Trying to wrap bidirectional one.");
+    log.error(prefix() + "stream is unidirectional. Trying to wrap bidirectional one.");
 
     return false;
   }
@@ -315,7 +315,7 @@ public class Socks5StreamService implements IStreamService, BytestreamListener {
       throws XMPPException, InterruptedException {
 
     String peer = request.getFrom();
-    log.debug(
+    log.error(
         prefix() + "receiving response connection from " + peer + ", " + verboseLocalProxyInfo());
 
     Socks5BytestreamSession inSession = (Socks5BytestreamSession) request.accept();
@@ -326,7 +326,7 @@ public class Socks5StreamService implements IStreamService, BytestreamListener {
     Exchanger<Socks5BytestreamSession> exchanger = runningRemoteConnects.get(sessionID);
 
     if (exchanger == null) {
-      log.warn(prefix() + "Received response connection without a running connect");
+      log.error(prefix() + "Received response connection without a running connect");
       closeQuietly(inSession);
       return;
     }
@@ -334,7 +334,7 @@ public class Socks5StreamService implements IStreamService, BytestreamListener {
     try {
       exchanger.exchange(inSession, TARGET_RESPONSE_TIMEOUT, TimeUnit.MILLISECONDS);
     } catch (InterruptedException e) {
-      log.debug(prefix() + "Wrapping bidirectional stream was interrupted.");
+      log.error(prefix() + "Wrapping bidirectional stream was interrupted.");
       closeQuietly(inSession);
     } catch (TimeoutException e) {
       log.error(
@@ -364,7 +364,7 @@ public class Socks5StreamService implements IStreamService, BytestreamListener {
       throws XMPPException, IOException, InterruptedException {
     String peer = request.getFrom();
 
-    log.debug(prefix() + "receiving request from " + peer + ", " + verboseLocalProxyInfo());
+    log.error(prefix() + "receiving request from " + peer + ", " + verboseLocalProxyInfo());
 
     IByteStreamConnectionListener listener = connectionListener;
 
@@ -375,7 +375,7 @@ public class Socks5StreamService implements IStreamService, BytestreamListener {
     String connectionIdentifier = getConnectionIdentifier(sessionID);
 
     if (connectionIdentifier == null) {
-      log.warn(
+      log.error(
           "rejecting request from " + peer + " , no connection identifier found: " + sessionID);
       request.reject();
       return null;
@@ -405,11 +405,11 @@ public class Socks5StreamService implements IStreamService, BytestreamListener {
             StreamMode.SOCKS5_DIRECT,
             listener);
       } else {
-        log.debug(prefix() + "incoming connection is mediated.");
+        log.error(prefix() + "incoming connection is mediated.");
       }
 
     } catch (Exception e) {
-      log.warn(
+      log.error(
           prefix()
               + "Couldn't accept request but still trying to establish a response connection: "
               + e.getMessage());
@@ -422,7 +422,7 @@ public class Socks5StreamService implements IStreamService, BytestreamListener {
       outSession = responseFuture.get();
 
       if (outSession.isDirect()) {
-        log.debug(prefix() + "newly established session is direct! Discarding the other.");
+        log.error(prefix() + "newly established session is direct! Discarding the other.");
         closeQuietly(inSession);
         configureSocks5Socket(outSession);
 
@@ -487,7 +487,7 @@ public class Socks5StreamService implements IStreamService, BytestreamListener {
     if (manager == null || listener == null)
       throw new IOException(this + " transport is not initialized");
 
-    log.debug(
+    log.error(
         prefix() + "establishing connection to " + peer + ", " + verboseLocalProxyInfo() + "...");
 
     // before establishing, we have to put the exchanger to the map
@@ -517,13 +517,13 @@ public class Socks5StreamService implements IStreamService, BytestreamListener {
               listener);
         }
 
-        log.debug(
+        log.error(
             prefix()
                 + "connection/session is mediated, performing additional connection optimization...");
 
       } catch (IOException e) {
         exception = e;
-        log.warn(
+        log.error(
             prefix()
                 + "could not establish a connection to "
                 + peer
@@ -534,7 +534,7 @@ public class Socks5StreamService implements IStreamService, BytestreamListener {
         XMPPError error = e.getXMPPError();
 
         if (error != null && error.getCode() == 406) {
-          log.warn(
+          log.error(
               prefix()
                   + "could not establish a connection to "
                   + peer
@@ -546,7 +546,7 @@ public class Socks5StreamService implements IStreamService, BytestreamListener {
            */
           throw e;
         } else if (error != null && error.getCode() == 404) {
-          log.warn(
+          log.error(
               prefix()
                   + "could not establish a connection to "
                   + peer
@@ -572,7 +572,7 @@ public class Socks5StreamService implements IStreamService, BytestreamListener {
             e);
       }
 
-      log.debug(prefix() + "waiting for " + peer + " to establish a connection...");
+      log.error(prefix() + "waiting for " + peer + " to establish a connection...");
       Socks5BytestreamSession inSession = null;
 
       // else wait for request
@@ -580,7 +580,7 @@ public class Socks5StreamService implements IStreamService, BytestreamListener {
         inSession = exchanger.exchange(null, TARGET_RESPONSE_TIMEOUT, TimeUnit.MILLISECONDS);
 
         if (inSession.isDirect()) {
-          log.debug(prefix() + "response connection is direct! Discarding the other.");
+          log.error(prefix() + "response connection is direct! Discarding the other.");
           closeQuietly(outSession);
           configureSocks5Socket(inSession);
 
@@ -600,7 +600,7 @@ public class Socks5StreamService implements IStreamService, BytestreamListener {
           throw new IOException(
               prefix() + msg + " and could not establish a connection from this side, too:",
               exception);
-        else log.debug(msg);
+        else log.error(msg);
       }
 
       BytestreamSession session =
@@ -629,7 +629,7 @@ public class Socks5StreamService implements IStreamService, BytestreamListener {
   private BytestreamSession establishResponseSession(String sessionID, String peer)
       throws XMPPException, IOException, InterruptedException {
 
-    log.debug(prefix() + "Start to establish new response connection");
+    log.error(prefix() + "Start to establish new response connection");
 
     Socks5BytestreamManager manager = socks5Manager;
 
@@ -654,7 +654,7 @@ public class Socks5StreamService implements IStreamService, BytestreamListener {
       throw new IllegalArgumentException(
           "connectionID must not contain '" + IStreamService.SESSION_ID_DELIMITER + "'");
 
-    log.debug("establishing Socks5 bytestream to: " + remoteAddress);
+    log.error("establishing Socks5 bytestream to: " + remoteAddress);
 
     try {
       return establishBinaryChannel(connectionID, remoteAddress.toString());
@@ -692,7 +692,7 @@ public class Socks5StreamService implements IStreamService, BytestreamListener {
 
     List<Runnable> notCommenced = executorService.shutdownNow();
     if (notCommenced.size() > 0)
-      log.warn(prefix() + "threads for response connections found that didn't commence yet");
+      log.error(prefix() + "threads for response connections found that didn't commence yet");
     executorService = null;
   }
 
@@ -700,7 +700,7 @@ public class Socks5StreamService implements IStreamService, BytestreamListener {
 
   @Override
   public void incomingBytestreamRequest(BytestreamRequest request) {
-    log.debug(
+    log.error(
         "received request to establish a Socks5 bytestream to "
             + request.getFrom()
             + " ["
@@ -716,7 +716,7 @@ public class Socks5StreamService implements IStreamService, BytestreamListener {
       IByteStreamConnectionListener listener = connectionListener;
 
       if (listener == null) {
-        log.warn(
+        log.error(
             "closing bytestream connection "
                 + connection
                 + " because transport "
@@ -733,7 +733,7 @@ public class Socks5StreamService implements IStreamService, BytestreamListener {
        * do not interrupt here as this is called by SMACK and nobody knows
        * how SMACK handle thread interruption
        */
-      log.warn("interrupted while establishing bytestream connection to " + request.getFrom());
+      log.error("interrupted while establishing bytestream connection to " + request.getFrom());
     } catch (Exception e) {
       log.error("could not establish bytestream connection to " + request.getFrom(), e);
     }
@@ -813,15 +813,15 @@ public class Socks5StreamService implements IStreamService, BytestreamListener {
       socketField.setAccessible(true);
       socket = (Socket) socketField.get(session);
     } catch (Exception e) {
-      log.warn("Smack API has changed, cannot access socket options", e);
+      log.error("Smack API has changed, cannot access socket options", e);
       return;
     }
 
     try {
       socket.setTcpNoDelay(TCP_NODELAY);
-      log.debug("nagle algorithm for socket disabled: " + TCP_NODELAY);
+      log.error("nagle algorithm for socket disabled: " + TCP_NODELAY);
     } catch (Exception e) {
-      log.warn("could not modifiy TCP_NODELAY socket option", e);
+      log.error("could not modifiy TCP_NODELAY socket option", e);
     }
 
     /*
@@ -833,10 +833,10 @@ public class Socks5StreamService implements IStreamService, BytestreamListener {
     //
     // try {
     // socket.setSoLinger(true, lingerTimeout);
-    // log.debug("socket is configured with SO_LINGER timeout: "
+    // log.error("socket is configured with SO_LINGER timeout: "
     // + socket.getSoLinger() + " s");
     // } catch (Exception e) {
-    // log.warn("could not modify SO_LINGER socket option", e);
+    // log.error("could not modify SO_LINGER socket option", e);
     // }
 
   }

@@ -65,10 +65,10 @@ public class MultiUserChatService extends AbstractChatService {
 
     MultiUserChat chat = new MultiUserChat(currentConnection, preferences);
 
-    log.debug("Joining MUC...");
+    log.error("Joining MUC...");
 
     if (preferences.getService() == null) {
-      log.warn("MUC service is not available, aborting connection request");
+      log.error("MUC service is not available, aborting connection request");
       notifyChatAborted(chat, null);
       return null;
     }
@@ -100,7 +100,7 @@ public class MultiUserChatService extends AbstractChatService {
   @Override
   public void destroyChat(IChat chat) {
     assert chat != null;
-    log.debug("leaving multi user chat " + chat);
+    log.error("leaving multi user chat " + chat);
 
     chats.remove(chat);
 

@@ -25,7 +25,7 @@ public class ConsistencyAction extends AbstractSarosAction {
   /** This method starts {@link ConsistencyWatchdogClient#runRecovery(IProgressMonitor)}. */
   @Override
   public void execute() {
-    log.debug("user activated CW recovery.");
+    log.error("user activated CW recovery.");
 
     final ProgressFrame progress = new ProgressFrame("Consistency action");
 

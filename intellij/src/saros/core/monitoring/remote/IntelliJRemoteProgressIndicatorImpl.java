@@ -102,7 +102,7 @@ final class IntelliJRemoteProgressIndicatorImpl implements IRemoteProgressIndica
   @Override
   public synchronized void handleProgress(ProgressActivity activity) {
     if (!remoteUser.equals(activity.getSource())) {
-      log.warn(
+      log.error(
           "RemoteProgress with ID: "
               + remoteProgressID
               + " is owned by user "
@@ -113,7 +113,7 @@ final class IntelliJRemoteProgressIndicatorImpl implements IRemoteProgressIndica
     }
 
     if (!running) {
-      log.debug(
+      log.error(
           "RemoteProgress with ID: "
               + remoteProgressID
               + " has already been closed. Discarding activity: "
@@ -184,7 +184,7 @@ final class IntelliJRemoteProgressIndicatorImpl implements IRemoteProgressIndica
           monitor.done();
           break update;
         case CANCEL:
-          log.debug("progress was canceled by remote user");
+          log.error("progress was canceled by remote user");
           monitor.setCanceled(true);
           break update;
       }

@@ -679,7 +679,7 @@ public class SarosView extends ViewPart {
       case LOCAL_USER_LEFT:
         return;
       default:
-        log.warn("no UI notification available for stop reason: " + reason);
+        log.error("no UI notification available for stop reason: " + reason);
         return;
     }
 

@@ -154,7 +154,7 @@ class SelectionAnnotation extends AbstractEditorAnnotation {
       annotationRange.addRangeHighlighter(rangeHighlighter);
 
     } else {
-      log.warn("Could not create range highlighter for range " + annotationRange + " for " + this);
+      log.error("Could not create range highlighter for range " + annotationRange + " for " + this);
     }
 
     addCaretRangeHighlighter(annotationRange, editor, user, file);
@@ -193,7 +193,7 @@ class SelectionAnnotation extends AbstractEditorAnnotation {
             caretPosition, caretPosition, editor, caretTextAttributes, file);
 
     if (caretHighlighter == null) {
-      log.warn("Could not create caret highlighter for position " + caretPosition + " for " + this);
+      log.error("Could not create caret highlighter for position " + caretPosition + " for " + this);
     }
   }
 

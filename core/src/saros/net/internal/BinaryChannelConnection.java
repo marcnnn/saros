@@ -84,7 +84,7 @@ public class BinaryChannelConnection implements IByteStreamConnection {
     public void run() {
       String connection = BinaryChannelConnection.this.toString();
 
-      log.debug(connection + " ReceiverThread started.");
+      log.error(connection + " ReceiverThread started.");
       try {
         while (!isInterrupted()) {
           final BinaryXMPPExtension extension = readNextXMPPExtension();
@@ -92,9 +92,9 @@ public class BinaryChannelConnection implements IByteStreamConnection {
         }
 
       } catch (SocketException e) {
-        log.debug(connection + " connection closed locally: " + e.getMessage());
+        log.error(connection + " connection closed locally: " + e.getMessage());
       } catch (EOFException e) {
-        log.debug(connection + " connection closed remotely:" + e.getMessage());
+        log.error(connection + " connection closed remotely:" + e.getMessage());
       } catch (IOException e) {
         log.error(connection + " network error: " + e.getMessage(), e);
       } catch (Exception e) {
@@ -183,7 +183,7 @@ public class BinaryChannelConnection implements IByteStreamConnection {
       }
 
       if (receiveThread.isAlive()) {
-        log.warn("timeout while waiting for closure of binary channel " + this);
+        log.error("timeout while waiting for closure of binary channel " + this);
         receiveThread.interrupt();
       }
     }

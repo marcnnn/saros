@@ -263,7 +263,7 @@ public class ConsistencyWatchdogClient extends AbstractActivityProducer implemen
        * host, check whether we still have it. If it exists, we do have an
        * inconsistency
        */
-      log.debug(
+      log.error(
           "Inconsistency detected -> resource found that does not exist on host side: " + file);
 
       return true;
@@ -274,14 +274,14 @@ public class ConsistencyWatchdogClient extends AbstractActivityProducer implemen
        * If the checksum tells us that the file exists, but we do not have
        * it, it is an inconsistency as well
        */
-      log.debug(
+      log.error(
           "Inconsistency detected -> no resource found that does exist on host side: " + file);
 
       return true;
     }
 
     if (!checksum.existsFile() && !existsFileLocally) {
-      log.debug("Ignoring checksum activity for file that does not exist on both sides: " + file);
+      log.error("Ignoring checksum activity for file that does not exist on both sides: " + file);
 
       return false;
     }
@@ -289,7 +289,7 @@ public class ConsistencyWatchdogClient extends AbstractActivityProducer implemen
     final String normalizedEditorContent = editorManager.getNormalizedContent(file);
 
     if (normalizedEditorContent == null) {
-      log.debug("Inconsistency detected -> no editor content found for resource: " + file);
+      log.error("Inconsistency detected -> no editor content found for resource: " + file);
 
       return true;
     }
@@ -297,7 +297,7 @@ public class ConsistencyWatchdogClient extends AbstractActivityProducer implemen
     if ((normalizedEditorContent.length() != checksum.getLength())
         || (normalizedEditorContent.hashCode() != checksum.getHash())) {
 
-      log.debug(
+      log.error(
           String.format(
               "Inconsistency detected -> %s L(%d %s %d) H(%x %s %x)",
               file.toString(),

@@ -30,11 +30,11 @@ public class ProxySynchronizedQueue {
   public Operation receiveOperation(JupiterActivity jupiterActivity) {
     Operation op = null;
     try {
-      log.debug(user + ": Operation before OT:" + jupiterActivity.getOperation().toString());
+      log.error(user + ": Operation before OT:" + jupiterActivity.getOperation().toString());
 
       op = algorithm.receiveJupiterActivity(jupiterActivity);
 
-      log.debug(user + ": Operation after OT: " + op.toString());
+      log.error(user + ": Operation after OT: " + op.toString());
     } catch (TransformationException e) {
       throw new RuntimeException(e);
     }

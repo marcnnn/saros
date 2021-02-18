@@ -48,7 +48,7 @@ public class SoundPlayer {
     try {
       url = FileLocator.toFileURL(url);
     } catch (IOException e1) {
-      log.debug("Could not convert to file URL:", e1);
+      log.error("Could not convert to file URL:", e1);
       return null;
     }
 

@@ -65,7 +65,7 @@ public class DirtyStateListener implements IElementStateListener {
             // Only trigger save events for files managed in the editor pool
             if (!editorManager.isManaged(file)) return;
 
-            log.debug("Dirty state reset for: " + file);
+            log.error("Dirty state reset for: " + file);
             editorManager.sendEditorActivitySaved(file);
           }
         });
@@ -127,7 +127,7 @@ public class DirtyStateListener implements IElementStateListener {
 
     for (IDocumentProvider provider : documentProviders.keySet()) {
       // ????
-      log.warn(
+      log.error(
           "DocumentProvider was not correctly"
               + " unregistered yet, EditorPool must be corrupted: "
               + documentProviders);

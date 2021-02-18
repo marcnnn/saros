@@ -69,7 +69,7 @@ public class RemoteWriteAccessManager extends AbstractActivityConsumer {
         getEditorState(file).remove(sender);
         break;
       default:
-        log.warn(".receive() Unknown Activity type");
+        log.error(".receive() Unknown Activity type");
     }
     updateConnectionState(file);
   }
@@ -111,7 +111,7 @@ public class RemoteWriteAccessManager extends AbstractActivityConsumer {
     editorStates.clear();
 
     if (!connectedUserWithWriteAccessFiles.isEmpty()) {
-      log.warn(
+      log.error(
           "RemoteWriteAccessManager could not"
               + " be dispose correctly. Still connect to: "
               + connectedUserWithWriteAccessFiles);

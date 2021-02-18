@@ -46,7 +46,7 @@ public class IBBStreamService implements IStreamService, BytestreamListener {
       throw new IllegalArgumentException(
           "connectionID must not contain '" + IStreamService.SESSION_ID_DELIMITER + "'");
 
-    log.debug("establishing IBB bytestream to: " + remoteAddress);
+    log.error("establishing IBB bytestream to: " + remoteAddress);
 
     final BytestreamManager currentManager = manager;
     final IByteStreamConnectionListener currentConnectionListener = connectionListener;
@@ -94,12 +94,12 @@ public class IBBStreamService implements IStreamService, BytestreamListener {
   @Override
   public void incomingBytestreamRequest(BytestreamRequest request) {
 
-    log.debug("accepting IBB bytestream from: " + request.getFrom());
+    log.error("accepting IBB bytestream from: " + request.getFrom());
 
     final IByteStreamConnectionListener currentConnectionListener = connectionListener;
 
     if (currentConnectionListener == null) {
-      log.warn(this + " is not initialized, rejecting connection...");
+      log.error(this + " is not initialized, rejecting connection...");
       request.reject();
     }
 

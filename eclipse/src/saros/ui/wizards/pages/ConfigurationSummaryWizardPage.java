@@ -203,7 +203,7 @@ public class ConfigurationSummaryWizardPage extends WizardPage {
       try {
         disabledUPnP = new Image(null, ImageManager.ICON_UPNP, SWT.IMAGE_DISABLE);
       } catch (Exception e) {
-        log.debug("Unable to convert image:" + e.getMessage()); // $NON-NLS-1$
+        log.error("Unable to convert image:" + e.getMessage()); // $NON-NLS-1$
       }
 
       uPnPOption.setContent(

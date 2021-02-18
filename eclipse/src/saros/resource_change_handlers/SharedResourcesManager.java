@@ -140,7 +140,7 @@ public class SharedResourcesManager extends AbstractActivityProducer
     if (event.getType() == IResourceChangeEvent.POST_CHANGE) {
       handlePostChange(event);
     } else {
-      log.warn("cannot handle event type : " + event);
+      log.error("cannot handle event type : " + event);
     }
   }
 
@@ -209,7 +209,7 @@ public class SharedResourcesManager extends AbstractActivityProducer
 
       if (isProjectOpenedDelta(projectDelta)) {
         if (log.isDebugEnabled()) {
-          log.debug("ignoring delta changes for project " + project + " as it was only opened");
+          log.error("ignoring delta changes for project " + project + " as it was only opened");
         }
 
         continue;
@@ -247,7 +247,7 @@ public class SharedResourcesManager extends AbstractActivityProducer
 
         } catch (CoreException e) {
           // cannot be thrown by our custom visitor
-          log.warn(
+          log.error(
               this.getClass().getSimpleName() + " is not supposed to throw a CoreException", e);
         }
 
@@ -333,7 +333,7 @@ public class SharedResourcesManager extends AbstractActivityProducer
         return;
       }
 
-      log.warn("Resource changed while paused:\n" + deltaToString(delta));
+      log.error("Resource changed while paused:\n" + deltaToString(delta));
     } else {
       log.error("Unexpected event type in in logPauseWarning: " + event);
     }

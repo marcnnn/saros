@@ -192,10 +192,10 @@ public class Saros extends AbstractUIPlugin {
   /** Stops the Saros Eclipse life cycle. */
   private void stopLifeCycle() {
 
-    log.debug("stopping lifecycle...");
+    log.error("stopping lifecycle...");
 
     if (!isLifecycleStarted) {
-      log.debug("lifecycle is already stopped");
+      log.error("lifecycle is already stopped");
       return;
     }
 
@@ -253,13 +253,13 @@ public class Saros extends AbstractUIPlugin {
     try {
       shutdownThread.join(threadTimeout);
     } catch (InterruptedException e) {
-      log.warn("interrupted while waiting for the current lifecycle to stop");
+      log.error("interrupted while waiting for the current lifecycle to stop");
       Thread.currentThread().interrupt();
     }
 
     if (shutdownThread.isAlive()) log.error("timeout while stopping lifecycle");
 
-    log.debug("lifecycle stopped");
+    log.error("lifecycle stopped");
   }
 
   private void setupLoggers() {

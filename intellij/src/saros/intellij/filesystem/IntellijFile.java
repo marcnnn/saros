@@ -70,7 +70,7 @@ public class IntellijFile extends AbstractIntellijResource implements IFile {
     VirtualFile virtualFile = getVirtualFile();
 
     if (virtualFile == null || !virtualFile.exists()) {
-      log.debug("Ignoring file deletion request for " + this + " as it does not exist.");
+      log.error("Ignoring file deletion request for " + this + " as it does not exist.");
 
       return;
     }

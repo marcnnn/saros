@@ -92,7 +92,7 @@ class SharedReferencePointMapper {
     idToReferencePointMapping.put(id, referencePoint);
     referencePointToIDMapping.put(referencePoint, id);
 
-    log.debug("added reference point " + referencePoint + " with ID " + id);
+    log.error("added reference point " + referencePoint + " with ID " + id);
   }
 
   /**
@@ -125,14 +125,14 @@ class SharedReferencePointMapper {
     IReferencePoint referencePoint = idToReferencePointMapping.get(id);
 
     if (referencePoint == null) {
-      log.warn("could not remove reference point, no reference point is registered with ID: " + id);
+      log.error("could not remove reference point, no reference point is registered with ID: " + id);
       return;
     }
 
     idToReferencePointMapping.remove(id);
     referencePointToIDMapping.remove(referencePoint);
 
-    log.debug("removed reference point " + referencePoint + " with ID " + id);
+    log.error("removed reference point " + referencePoint + " with ID " + id);
   }
 
   /**

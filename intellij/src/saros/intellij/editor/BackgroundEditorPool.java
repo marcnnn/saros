@@ -130,7 +130,7 @@ public class BackgroundEditorPool implements Disposable {
     Project project = ((IntellijReferencePoint) file.getReferencePoint()).getProject();
 
     Editor backgroundEditor = ProjectAPI.createBackgroundEditor(document, project);
-    log.debug("Created background editor for " + backgroundEditor.getDocument());
+    log.error("Created background editor for " + backgroundEditor.getDocument());
 
     backgroundEditors.put(file, backgroundEditor);
 
@@ -154,7 +154,7 @@ public class BackgroundEditorPool implements Disposable {
 
   /** Releases all held background editors and then drops the mapping. */
   synchronized void clear() {
-    log.debug("Cleaning up background editor pool");
+    log.error("Cleaning up background editor pool");
 
     for (Editor backgroundEditor : backgroundEditors.values()) {
       releaseBackgroundEditor(backgroundEditor);
@@ -190,7 +190,7 @@ public class BackgroundEditorPool implements Disposable {
    * @see ProjectAPI#releaseBackgroundEditor(Editor)
    */
   private static void releaseBackgroundEditor(@NotNull Editor backgroundEditor) {
-    log.debug("Dropping and releasing background editor for " + backgroundEditor.getDocument());
+    log.error("Dropping and releasing background editor for " + backgroundEditor.getDocument());
     ProjectAPI.releaseBackgroundEditor(backgroundEditor);
   }
 
@@ -244,7 +244,7 @@ public class BackgroundEditorPool implements Disposable {
 
         IFile file = eldest.getKey();
         Document document = editor.getDocument();
-        log.debug("Evicting least recently used entry from cache: " + file + " - " + document);
+        log.error("Evicting least recently used entry from cache: " + file + " - " + document);
 
         return true;
       }

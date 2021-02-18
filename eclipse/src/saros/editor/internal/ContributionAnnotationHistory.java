@@ -69,7 +69,7 @@ class ContributionAnnotationHistory {
       }
     }
 
-    log.warn(
+    log.error(
         "could not find annotation "
             + oldAnnotation
             + " in the current history for user: "

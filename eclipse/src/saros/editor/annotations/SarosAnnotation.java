@@ -122,7 +122,7 @@ public abstract class SarosAnnotation extends Annotation {
    */
   public static void resetColors() {
 
-    log.debug("resetting annotation colors");
+    log.error("resetting annotation colors");
 
     final IPreferenceStore preferenceStore = EditorsUI.getPreferenceStore();
 
@@ -142,7 +142,7 @@ public abstract class SarosAnnotation extends Annotation {
             lookup.getAnnotationPreference(annotationTypeToLookup);
 
         if (preference == null) {
-          log.warn("could not reset color for annotation type: " + annotationTypeToLookup);
+          log.error("could not reset color for annotation type: " + annotationTypeToLookup);
           continue;
         }
 

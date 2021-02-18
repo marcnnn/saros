@@ -62,7 +62,7 @@ public class MultiUserChat extends AbstractChat {
       new IChatListener() {
         @Override
         public void stateChanged(JID jid, ChatState state) {
-          log.debug("stateChanged fired with state: " + state.toString());
+          log.error("stateChanged fired with state: " + state.toString());
 
           if (!participants.containsKey(jid) && state == ChatState.active) {
             /*
@@ -113,7 +113,7 @@ public class MultiUserChat extends AbstractChat {
       new PacketListener() {
         @Override
         public void processPacket(Packet packet) {
-          log.debug("processPacket called");
+          log.error("processPacket called");
 
           if (packet instanceof Message) {
             Message message = (Message) packet;
@@ -189,7 +189,7 @@ public class MultiUserChat extends AbstractChat {
       if (createdRoom) muc.destroy(null, null);
       else muc.leave();
     } catch (Exception e) {
-      log.warn("could not leave or destroy room: " + preferences.getRoom(), e);
+      log.error("could not leave or destroy room: " + preferences.getRoom(), e);
     }
 
     mucStateManager = null;
@@ -226,7 +226,7 @@ public class MultiUserChat extends AbstractChat {
     if (currentUser == null) throw new XMPPException("not connected to a server");
 
     try {
-      log.debug("Trying to create room on server " + this.preferences.getService());
+      log.error("Trying to create room on server " + this.preferences.getService());
       newMuc.create(currentUser);
       createdRoom = true;
       joined = true;
@@ -258,7 +258,7 @@ public class MultiUserChat extends AbstractChat {
       configureRoom();
     }
 
-    log.debug(
+    log.error(
         "MUC "
             + ((createdRoom) ? "created and " : "")
             + "joined. Server: "
@@ -274,7 +274,7 @@ public class MultiUserChat extends AbstractChat {
   /** Create and dispatch configuration for a multi user chat room. */
   private void configureRoom() {
     try {
-      log.debug("Configuring room");
+      log.error("Configuring room");
       // Get the the room's configuration form
       Form form = muc.getConfigurationForm();
 
@@ -317,7 +317,7 @@ public class MultiUserChat extends AbstractChat {
       // Send the completed form to the server to configure the room
       muc.sendConfigurationForm(submitForm);
     } catch (XMPPException e) {
-      log.warn("could not configure MUC room", e);
+      log.error("could not configure MUC room", e);
     }
   }
 

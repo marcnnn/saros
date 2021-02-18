@@ -75,7 +75,7 @@ public final class SharedResourceDecorator implements ILightweightLabelDecorator
         public void sessionEnded(ISarosSession session, SessionEndReason reason) {
           session.removeListener(sessionListener);
           SharedResourceDecorator.this.session = null;
-          log.debug("clearing decoration for all shared resources");
+          log.error("clearing decoration for all shared resources");
           updateDecoratorsAsync(null); // update all labels
 
           lastDecoratedReferencePoint = null;
@@ -86,7 +86,7 @@ public final class SharedResourceDecorator implements ILightweightLabelDecorator
       new ISessionListener() {
         @Override
         public void resourcesAdded(IReferencePoint referencePoint) {
-          log.debug("updating decoration for all shared resources");
+          log.error("updating decoration for all shared resources");
           updateDecoratorsAsync(null); // update all labels
         }
       };

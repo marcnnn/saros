@@ -44,7 +44,7 @@ public class FollowModeNotificationDispatcher implements IFollowModeListener {
 
       default:
         shownReason = reason.name();
-        log.warn("Encountered unknown reason for follow mode end. reason: " + reason);
+        log.error("Encountered unknown reason for follow mode end. reason: " + reason);
     }
 
     NotificationPanel.showInformation(

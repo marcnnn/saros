@@ -86,7 +86,7 @@ public class ConnectServerAction extends AbstractSarosAction {
     }
 
     if (newJID.equals(currentJID)) {
-      log.debug(
+      log.error(
           "Ignoring connection action as account is already connected. current JID: "
               + currentJID
               + ", new JID: "

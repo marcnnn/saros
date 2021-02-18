@@ -130,7 +130,7 @@ public class UserInformationHandler implements Startable {
 
     for (User user : usersRemoved) extension.addUser(user, UserListEntry.USER_REMOVED);
 
-    log.debug(
+    log.error(
         "synchronizing user list (A)"
             + usersAdded
             + ", (R) "
@@ -168,7 +168,7 @@ public class UserInformationHandler implements Startable {
         for (Iterator<User> it = awaitReply.iterator(); it.hasNext(); ) {
           User user = it.next();
           if (!currentRemoteUsers.contains(user)) {
-            log.debug(
+            log.error(
                 "no longer waiting for user list confirmation of user " + user + " [left session]");
             it.remove();
           }
@@ -183,16 +183,16 @@ public class UserInformationHandler implements Startable {
         JID jid = new JID(result.getFrom());
 
         if (!remove(awaitReply, jid)) {
-          log.warn("received user list confirmation from unknown user: " + jid);
+          log.error("received user list confirmation from unknown user: " + jid);
         } else {
-          log.debug("received user list confirmation from: " + jid);
+          log.error("received user list confirmation from: " + jid);
         }
       }
 
       notReplied.addAll(awaitReply);
 
-      if (notReplied.isEmpty()) log.debug("synchronized user list with user(s) " + remoteUsers);
-      else log.warn("failed to synchronize user list with user(s) " + notReplied);
+      if (notReplied.isEmpty()) log.error("synchronized user list with user(s) " + remoteUsers);
+      else log.error("failed to synchronize user list with user(s) " + notReplied);
 
       return notReplied;
 
@@ -237,14 +237,14 @@ public class UserInformationHandler implements Startable {
         UserFinishedResourceNegotiationExtension.PROVIDER.getPayload(packet);
 
     if (payload == null) {
-      log.warn("UserFinishedResourceNegotiation-payload is corrupted");
+      log.error("UserFinishedResourceNegotiation-payload is corrupted");
       return;
     }
 
     User fromUser = session.getUser(fromJID);
 
     if (fromUser == null) {
-      log.warn(
+      log.error(
           "received UserFinishedResourceNegotiationPacket from "
               + fromJID
               + " who is not part of the current session");
@@ -266,19 +266,19 @@ public class UserInformationHandler implements Startable {
      */
     JID fromJID = new JID(packet.getFrom());
 
-    log.debug("received user list from " + fromJID);
+    log.error("received user list from " + fromJID);
 
     UserListExtension userListExtension = UserListExtension.PROVIDER.getPayload(packet);
 
     if (userListExtension == null) {
-      log.warn("user list payload is corrupted");
+      log.error("user list payload is corrupted");
       return;
     }
 
     User fromUser = session.getUser(fromJID);
 
     if (fromUser == null) {
-      log.warn("received user list from " + fromJID + " who is not part of the current session");
+      log.error("received user list from " + fromJID + " who is not part of the current session");
       return;
     }
 
@@ -288,7 +288,7 @@ public class UserInformationHandler implements Startable {
         user = session.getUser(userEntry.jid);
 
         if (user != null) {
-          log.debug("updating permissions for user: " + user + " [" + userEntry.permission + "]");
+          log.error("updating permissions for user: " + user + " [" + userEntry.permission + "]");
           // FIXME this should be properly synchronized
           user.setPermission(userEntry.permission);
           continue;
@@ -307,7 +307,7 @@ public class UserInformationHandler implements Startable {
         user = session.getUser(userEntry.jid);
 
         if (user == null) {
-          log.warn("cannot remove user " + userEntry.jid + ", user is not in the session");
+          log.error("cannot remove user " + userEntry.jid + ", user is not in the session");
           continue;
         }
 
@@ -319,7 +319,7 @@ public class UserInformationHandler implements Startable {
   }
 
   private void sendUserListConfirmation(JID to) {
-    log.debug("sending user list received confirmation to " + to);
+    log.error("sending user list received confirmation to " + to);
     try {
       transmitter.send(
           ISarosSession.SESSION_CONNECTION_ID,

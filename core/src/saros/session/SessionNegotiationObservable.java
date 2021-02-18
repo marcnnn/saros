@@ -64,12 +64,12 @@ final class SessionNegotiationObservable {
     }
 
     if (!currentNegotiations.isEmpty())
-      log.warn(
+      log.error(
           "there is already a running session negotiation for contact: " + negotiation.getPeer());
 
     for (final SessionNegotiation currentNegotiation : currentNegotiations) {
       if (currentNegotiation.getID().equals(negotiation.getID())) {
-        log.warn("a session negotiation with ID " + negotiation.getID() + " is already registered");
+        log.error("a session negotiation with ID " + negotiation.getID() + " is already registered");
         return;
       }
     }
@@ -96,7 +96,7 @@ final class SessionNegotiationObservable {
       }
     }
 
-    log.warn("a session negotiation with ID " + negotiation.getID() + " is not registered");
+    log.error("a session negotiation with ID " + negotiation.getID() + " is not registered");
   }
 
   /**

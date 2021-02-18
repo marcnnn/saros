@@ -222,7 +222,7 @@ public class STFController {
     exportObject(AccountManipulatorImpl.getInstance(), "accountManipulator");
 
     try {
-      for (String s : registry.list()) log.debug("registered Object: " + s);
+      for (String s : registry.list()) log.error("registered Object: " + s);
     } catch (AccessException e) {
       log.error("failed on access", e);
     } catch (RemoteException e) {
@@ -240,9 +240,9 @@ public class STFController {
                 try {
                   if (registry != null && name != null) registry.unbind(name);
                 } catch (RemoteException e) {
-                  log.warn("Failed to unbind: " + name, e);
+                  log.error("Failed to unbind: " + name, e);
                 } catch (NotBoundException e) {
-                  log.warn("Failed to unbind: " + name, e);
+                  log.error("Failed to unbind: " + name, e);
                 }
               }
             });

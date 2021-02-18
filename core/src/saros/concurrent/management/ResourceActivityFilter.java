@@ -60,7 +60,7 @@ class ResourceActivityFilter {
           List<User> remainingUsers = deletedFileFilter.get(file);
 
           if (remainingUsers == null) {
-            log.warn(
+            log.error(
                 "Received unexpected deletion acknowledgment for file that is not filtered: "
                     + source
                     + " - "
@@ -69,7 +69,7 @@ class ResourceActivityFilter {
             return;
 
           } else if (!remainingUsers.contains(source)) {
-            log.warn(
+            log.error(
                 "Received acknowledgment for file deletion from unexpected user: "
                     + source
                     + " - "
@@ -78,12 +78,12 @@ class ResourceActivityFilter {
             return;
           }
 
-          log.debug("Received deletion acknowledgment from " + source + " for " + file);
+          log.error("Received deletion acknowledgment from " + source + " for " + file);
 
           remainingUsers.remove(source);
 
           if (remainingUsers.isEmpty()) {
-            log.debug(
+            log.error(
                 "Dropping activity filter for " + file + " as all acknowledgments were received");
 
             deletedFileFilter.remove(file);
@@ -107,7 +107,7 @@ class ResourceActivityFilter {
             remainingUsers.remove(user);
 
             if (remainingUsers.isEmpty()) {
-              log.debug(
+              log.error(
                   "Dropping activity filter for "
                       + entry.getKey()
                       + " as there are no more pending acknowledgments");
@@ -124,7 +124,7 @@ class ResourceActivityFilter {
             IFile file = iterator.next().getKey();
 
             if (file.getReferencePoint().equals(referencePoint)) {
-              log.debug(
+              log.error(
                   "Dropping activity filter for "
                       + file
                       + " as it is no longer part of the session");
@@ -189,7 +189,7 @@ class ResourceActivityFilter {
     remoteUsers.remove(activity.getSource());
 
     if (!remoteUsers.isEmpty()) {
-      log.debug(
+      log.error(
           "Adding activity filter for deleted file "
               + removedFile
               + ", waiting for acknowledgment from user(s) "
@@ -225,7 +225,7 @@ class ResourceActivityFilter {
       IFile addedFile = fileActivity.getResource();
 
       if (deletedFileFilter.containsKey(addedFile)) {
-        log.debug("Removing activity filter for re-created file " + addedFile);
+        log.error("Removing activity filter for re-created file " + addedFile);
 
         deletedFileFilter.remove(addedFile);
       }

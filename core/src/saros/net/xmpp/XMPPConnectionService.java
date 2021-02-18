@@ -359,7 +359,7 @@ public class XMPPConnectionService {
       connection.removeConnectionListener(smackConnectionListener);
       connection.disconnect();
     } catch (RuntimeException e) {
-      log.warn("could not disconnect from the current XMPPConnection", e);
+      log.error("could not disconnect from the current XMPPConnection", e);
     } finally {
 
       uninitialzeNetworkComponents();
@@ -381,7 +381,7 @@ public class XMPPConnectionService {
     }
 
     if (error == null) {
-      log.debug(prefix + " new connection state == " + state);
+      log.error(prefix + " new connection state == " + state);
     } else {
       log.error(prefix + " new connection state == " + state, error);
     }
@@ -421,7 +421,7 @@ public class XMPPConnectionService {
     proxy.start();
     socks5ProxyPort = proxy.getPort();
 
-    log.debug(
+    log.error(
         "started Socks5 proxy on port: " + socks5ProxyPort + " [listening on all interfaces]");
 
     List<String> interfaceAddresses = new ArrayList<String>();
@@ -430,15 +430,15 @@ public class XMPPConnectionService {
       interfaceAddresses.addAll(proxyAddresses);
 
       if (interfaceAddresses.isEmpty())
-        log.warn("Socks5 preconfigured addresses list is empty, using autodetect mode");
-      else log.debug("using preconfigured addresses: " + interfaceAddresses);
+        log.error("Socks5 preconfigured addresses list is empty, using autodetect mode");
+      else log.error("using preconfigured addresses: " + interfaceAddresses);
     }
 
     if (interfaceAddresses.isEmpty()) {
       for (InetAddress interfaceAddress : NetworkingUtils.getAllNonLoopbackLocalIPAddresses(true)) {
         interfaceAddresses.add(interfaceAddress.getHostAddress());
       }
-      log.debug("using autodetected addresses: " + interfaceAddresses);
+      log.error("using autodetected addresses: " + interfaceAddresses);
     }
 
     proxy.replaceLocalAddresses(interfaceAddresses);
@@ -482,7 +482,7 @@ public class XMPPConnectionService {
                 List<GatewayDevice> devices = upnpService.getGateways(false);
 
                 if (devices == null) {
-                  log.warn("aborting UPNP port mapping due to network failure");
+                  log.error("aborting UPNP port mapping due to network failure");
                   return;
                 }
 
@@ -494,7 +494,7 @@ public class XMPPConnectionService {
                 }
 
                 if (device == null) {
-                  log.warn(
+                  log.error(
                       "could not find gateway device with id: + "
                           + gatewayDeviceID
                           + " in the current network environment");
@@ -503,7 +503,7 @@ public class XMPPConnectionService {
 
                 upnpService.deletePortMapping(device, socks5ProxyPort, IUPnPService.TCP);
 
-                log.debug(
+                log.error(
                     "creating port mapping on device: "
                         + device.getFriendlyName()
                         + " ["
@@ -515,7 +515,7 @@ public class XMPPConnectionService {
                 if (!upnpService.createPortMapping(
                     device, socks5ProxyPort, IUPnPService.TCP, PORT_MAPPING_DESCRIPTION)) {
 
-                  log.warn(
+                  log.error(
                       "failed to create port mapping on device: "
                           + device.getFriendlyName()
                           + " ["
@@ -557,7 +557,7 @@ public class XMPPConnectionService {
 
       if (!upnpService.isMapped(device, socks5ProxyPort, IUPnPService.TCP)) break deleteMapping;
 
-      log.debug(
+      log.error(
           "deleting port mapping on device: "
               + device.getFriendlyName()
               + " ["
@@ -567,7 +567,7 @@ public class XMPPConnectionService {
               + "]");
 
       if (!upnpService.deletePortMapping(device, socks5ProxyPort, IUPnPService.TCP)) {
-        log.warn(
+        log.error(
             "failed to delete port mapping on device: "
                 + device.getFriendlyName()
                 + " ["

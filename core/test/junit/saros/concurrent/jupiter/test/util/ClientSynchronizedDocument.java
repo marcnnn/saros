@@ -38,7 +38,7 @@ public class ClientSynchronizedDocument implements NetworkEventHandler, Document
   public Operation receiveOperation(JupiterActivity jupiterActivity) {
     Operation op = null;
     try {
-      log.debug("Client: " + user + " receive " + jupiterActivity.getOperation().toString());
+      log.error("Client: " + user + " receive " + jupiterActivity.getOperation().toString());
       /* 1. transform operation. */
       op = algorithm.receiveJupiterActivity(jupiterActivity);
       // op =

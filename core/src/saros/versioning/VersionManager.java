@@ -49,14 +49,14 @@ public class VersionManager {
     String versionString = infoManager.getRemoteInfo(contact, VERSION_KEY).orElse(null);
 
     if (versionString == null) {
-      log.warn("remote version not found for: " + contact);
+      log.error("remote version not found for: " + contact);
       return new VersionCompatibilityResult(Compatibility.UNKNOWN, localVersion, Version.INVALID);
     }
 
     Version remoteVersion = Version.parseVersion(versionString);
 
     if (remoteVersion == Version.INVALID) {
-      log.warn("contact: " + contact + ", remote version string is invalid: " + versionString);
+      log.error("contact: " + contact + ", remote version string is invalid: " + versionString);
     }
 
     Compatibility compatibility = localVersion.determineCompatibilityWith(remoteVersion);

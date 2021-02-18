@@ -81,7 +81,7 @@ public final class ActivityHandler implements Startable {
 
         @Override
         public void run() {
-          log.debug("activity dispatcher started");
+          log.error("activity dispatcher started");
 
           boolean isPoisoned = false;
 
@@ -109,7 +109,7 @@ public final class ActivityHandler implements Startable {
             dispatchAndExecuteActivities(activitiesToExecute);
           }
 
-          log.debug("activity dispatcher stopped");
+          log.error("activity dispatcher stopped");
         }
       };
 
@@ -270,7 +270,7 @@ public final class ActivityHandler implements Startable {
     try {
       dispatchThread.join(TIMEOUT);
     } catch (InterruptedException e) {
-      log.warn(
+      log.error(
           "interrupted while waiting for " + dispatchThread.getName() + " thread to terminate");
 
       Thread.currentThread().interrupt();
@@ -347,7 +347,7 @@ public final class ActivityHandler implements Startable {
                * activity.
                */
               if (!source.isInSession()) {
-                log.warn("dropping activity for user that is no longer in session: " + activity);
+                log.error("dropping activity for user that is no longer in session: " + activity);
                 continue;
               }
 

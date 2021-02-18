@@ -116,7 +116,7 @@ public class LocalCaretPositionChangeHandler implements IProjectEventHandler {
     }
 
     if (!caret.equals(caret.getCaretModel().getPrimaryCaret())) {
-      log.debug("filtered out caret event for non-primary caret " + caret);
+      log.error("filtered out caret event for non-primary caret " + caret);
       return;
     }
 

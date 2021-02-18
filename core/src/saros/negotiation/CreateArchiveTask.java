@@ -111,14 +111,14 @@ public class CreateArchiveTask implements IWorkspaceRunnable {
     } finally {
       IOUtils.closeQuietly(zipStream);
       if (cleanup && archive != null && archive.exists() && !archive.delete())
-        log.warn("could not delete archive file: " + archive);
+        log.error("could not delete archive file: " + archive);
 
       monitor.done();
     }
 
     stopWatch.stop();
 
-    log.debug(
+    log.error(
         String.format(
             "created archive %s I/O: [%s]",
             archive.getAbsolutePath(),
@@ -151,7 +151,7 @@ public class CreateArchiveTask implements IWorkspaceRunnable {
       try {
         size += file.getSize();
       } catch (IOException e) {
-        log.warn("unable to retrieve file size for file: " + file, e);
+        log.error("unable to retrieve file size for file: " + file, e);
       }
     }
 

@@ -168,19 +168,19 @@ public class ConsistencyAction extends Action implements Disposable {
         currentSession.getComponent(ConsistencyWatchdogClient.class);
 
     if (watchdogClient == null) {
-      log.warn(
+      log.error(
           "watchdog client component is not available, cannot perform inconsistency notification");
       return;
     }
 
     if (currentSession.isHost() && isInconsistent) {
-      log.warn(
+      log.error(
           "No inconsistency should ever be reported" //$NON-NLS-1$
               + " to the host"); //$NON-NLS-1$
       return;
     }
 
-    log.debug(
+    log.error(
         "Inconsistency indicator goes: " //$NON-NLS-1$
             + (isInconsistent ? "on" : "off")); // $NON-NLS-1$ //$NON-NLS-2$
 
@@ -251,11 +251,11 @@ public class ConsistencyAction extends Action implements Disposable {
         currentSession.getComponent(ConsistencyWatchdogClient.class);
 
     if (watchdogClient == null) {
-      log.warn("watchdog client component is not available, cannot perform recovery");
+      log.error("watchdog client component is not available, cannot perform recovery");
       return;
     }
 
-    log.debug("user activated CW recovery."); // $NON-NLS-1$
+    log.error("user activated CW recovery."); // $NON-NLS-1$
 
     Shell shell = SWTUtils.getShell();
 

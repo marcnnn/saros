@@ -41,7 +41,7 @@ class ReplaceableSingleValueConverter extends Replaceable<SingleValueConverter>
   @Override
   public synchronized String toString(Object obj) {
     if (isReset()) {
-      log.debug("Tried to marshal " + obj + " with inactive converter " + delegate);
+      log.error("Tried to marshal " + obj + " with inactive converter " + delegate);
       return "";
     }
 
@@ -51,7 +51,7 @@ class ReplaceableSingleValueConverter extends Replaceable<SingleValueConverter>
   @Override
   public synchronized Object fromString(String str) {
     if (isReset()) {
-      log.debug("Tried to unmarshal " + str + " with inactive converter " + delegate);
+      log.error("Tried to unmarshal " + str + " with inactive converter " + delegate);
       return null;
     }
 

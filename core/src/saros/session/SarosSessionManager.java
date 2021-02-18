@@ -195,7 +195,7 @@ public class SarosSessionManager implements ISarosSessionManager {
      */
     try {
       if (!startStopSessionLock.tryLock(LOCK_TIMEOUT, TimeUnit.MILLISECONDS)) {
-        log.warn(
+        log.error(
             "could not start a new session because another operation still tries to start or stop a session");
         return;
       }
@@ -212,17 +212,17 @@ public class SarosSessionManager implements ISarosSessionManager {
                 + Thread.currentThread().getName());
 
       if (sessionStartup) {
-        log.warn("recursive execution detected, ignoring session start request", new StackTrace());
+        log.error("recursive execution detected, ignoring session start request", new StackTrace());
         return;
       }
 
       if (session != null) {
-        log.warn("could not start a new session because a session has already been started");
+        log.error("could not start a new session because a session has already been started");
         return;
       }
 
       if (negotiationPacketLister.isRejectingSessionNegotiationsRequests()) {
-        log.warn("cannot start a session while a session invitation is pending");
+        log.error("cannot start a session while a session invitation is pending");
         return;
       }
 
@@ -286,7 +286,7 @@ public class SarosSessionManager implements ISarosSessionManager {
 
     try {
       if (!startStopSessionLock.tryLock(LOCK_TIMEOUT, TimeUnit.MILLISECONDS)) {
-        log.warn(
+        log.error(
             "could not stop the current session because another operation still tries to start or stop a session");
         return;
       }
@@ -303,7 +303,7 @@ public class SarosSessionManager implements ISarosSessionManager {
                 + Thread.currentThread().getName());
 
       if (sessionShutdown) {
-        log.warn("recursive execution detected, ignoring session stop request", new StackTrace());
+        log.error("recursive execution detected, ignoring session stop request", new StackTrace());
         return;
       }
 
@@ -311,9 +311,9 @@ public class SarosSessionManager implements ISarosSessionManager {
 
       sessionShutdown = true;
 
-      log.debug("terminating all running negotiations");
+      log.error("terminating all running negotiations");
 
-      if (!terminateNegotiations()) log.warn("there are still running negotiations");
+      if (!terminateNegotiations()) log.error("there are still running negotiations");
 
       sessionEnding(session);
 
@@ -367,7 +367,7 @@ public class SarosSessionManager implements ISarosSessionManager {
     INegotiationHandler handler = negotiationHandler;
 
     if (handler == null) {
-      log.warn("could not accept invitation because no handler is installed");
+      log.error("could not accept invitation because no handler is installed");
       return;
     }
 
@@ -375,7 +375,7 @@ public class SarosSessionManager implements ISarosSessionManager {
 
     synchronized (this) {
       if (!startStopSessionLock.tryLock()) {
-        log.warn("could not accept invitation because the current session is about to stop");
+        log.error("could not accept invitation because the current session is about to stop");
         return;
       }
 
@@ -411,14 +411,14 @@ public class SarosSessionManager implements ISarosSessionManager {
     INegotiationHandler handler = negotiationHandler;
 
     if (handler == null) {
-      log.warn("could not accept resource negotiation because no handler is installed");
+      log.error("could not accept resource negotiation because no handler is installed");
       return;
     }
 
     AbstractIncomingResourceNegotiation negotiation;
     synchronized (this) {
       if (!startStopSessionLock.tryLock()) {
-        log.warn(
+        log.error(
             "could not accept resource negotiation because the current session is about to stop");
         return;
       }
@@ -426,7 +426,7 @@ public class SarosSessionManager implements ISarosSessionManager {
       ResourceNegotiationFactory currentResourceNegotiationFactory = resourceNegotiationFactory;
 
       if (currentResourceNegotiationFactory == null) {
-        log.warn("could not accept resource negotiation as no session is running");
+        log.error("could not accept resource negotiation as no session is running");
 
         return;
       }
@@ -452,7 +452,7 @@ public class SarosSessionManager implements ISarosSessionManager {
     INegotiationHandler handler = negotiationHandler;
 
     if (handler == null) {
-      log.warn("could not start an invitation because no handler is installed");
+      log.error("could not start an invitation because no handler is installed");
       return;
     }
 
@@ -460,7 +460,7 @@ public class SarosSessionManager implements ISarosSessionManager {
 
     synchronized (this) {
       if (!startStopSessionLock.tryLock()) {
-        log.warn(
+        log.error(
             "could not start an invitation because the current session is about to start or stop");
         return;
       }
@@ -554,7 +554,7 @@ public class SarosSessionManager implements ISarosSessionManager {
     ISarosSession currentSession = session;
 
     if (currentSession == null) {
-      log.warn("could not add resources because there is no active session");
+      log.error("could not add resources because there is no active session");
       return;
     }
 
@@ -601,7 +601,7 @@ public class SarosSessionManager implements ISarosSessionManager {
     }
 
     if (referencePointsToShare.isEmpty()) {
-      log.warn(
+      log.error(
           "skipping resource negotiation because no new reference points were added to the current session");
       return;
     }
@@ -613,7 +613,7 @@ public class SarosSessionManager implements ISarosSessionManager {
       ResourceSharingData resourceSharingData, User originUser) {
     INegotiationHandler handler = negotiationHandler;
     if (handler == null) {
-      log.warn("could not start a resource negotiation because no handler is installed");
+      log.error("could not start a resource negotiation because no handler is installed");
       return;
     }
 
@@ -621,7 +621,7 @@ public class SarosSessionManager implements ISarosSessionManager {
         new ArrayList<AbstractOutgoingResourceNegotiation>();
 
     if (!startStopSessionLock.tryLock()) {
-      log.warn(
+      log.error(
           "could not start a resource negotiation because the current session is about to stop");
       return;
     }
@@ -629,7 +629,7 @@ public class SarosSessionManager implements ISarosSessionManager {
     ResourceNegotiationFactory currentResourceNegotiationFactory = resourceNegotiationFactory;
 
     if (currentResourceNegotiationFactory == null) {
-      log.warn("could not start a resource negotiation as no session is running");
+      log.error("could not start a resource negotiation as no session is running");
 
       return;
     }
@@ -698,7 +698,7 @@ public class SarosSessionManager implements ISarosSessionManager {
     INegotiationHandler handler = negotiationHandler;
 
     if (handler == null) {
-      log.warn("could not start a resource negotiation because no handler is installed");
+      log.error("could not start a resource negotiation because no handler is installed");
       return;
     }
 
@@ -706,7 +706,7 @@ public class SarosSessionManager implements ISarosSessionManager {
 
     synchronized (this) {
       if (!startStopSessionLock.tryLock()) {
-        log.warn(
+        log.error(
             "could not start a resource negotiation because the"
                 + " current session is about to stop");
         return;
@@ -715,7 +715,7 @@ public class SarosSessionManager implements ISarosSessionManager {
       try {
         User remoteUser = currentSession.getUser(user);
         if (remoteUser == null) {
-          log.warn(
+          log.error(
               "could not start a resource negotiation because"
                   + " the remote user is not part of the current session");
           return;

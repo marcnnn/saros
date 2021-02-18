@@ -70,7 +70,7 @@ public class AnnotationManager implements Disposable {
       selectionAnnotation =
           new SelectionAnnotation(user, file, start, end, editor, isBackwardsSelection);
     } catch (IllegalStateException e) {
-      log.warn(
+      log.error(
           "Failed to add contribution annotation for file "
               + file
               + " and user "
@@ -129,7 +129,7 @@ public class AnnotationManager implements Disposable {
     try {
       contributionAnnotation = new ContributionAnnotation(user, file, start, end, editor);
     } catch (IllegalStateException e) {
-      log.warn(
+      log.error(
           "Failed to add contribution annotation for file "
               + file
               + " and user "

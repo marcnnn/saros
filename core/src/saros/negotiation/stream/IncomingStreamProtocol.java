@@ -47,7 +47,7 @@ public class IncomingStreamProtocol extends AbstractStreamProtocol implements Au
       IFile file = session.getReferencePoint(referencePointID).getFile(filePath);
 
       String message = "receiving " + displayName(file);
-      log.debug(message);
+      log.error(message);
       monitor.subTask(message);
 
       /*

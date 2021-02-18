@@ -37,7 +37,7 @@ public class ServerEditorManager implements IEditorManager {
     try {
       getOrCreateEditor(file);
     } catch (IOException e) {
-      log.warn("Could not open editor for " + file);
+      log.error("Could not open editor for " + file);
     }
   }
 

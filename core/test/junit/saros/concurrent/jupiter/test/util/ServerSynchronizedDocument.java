@@ -41,7 +41,7 @@ public class ServerSynchronizedDocument
 
     while (accessDenied) {
       try {
-        log.debug("wait for semaphore.");
+        log.error("wait for semaphore.");
         wait();
       } catch (InterruptedException e) {
         log.error(e.getMessage());
@@ -66,7 +66,7 @@ public class ServerSynchronizedDocument
         proxy = proxyQueues.get(u);
 
         if (!u.equals(user)) {
-          log.debug(
+          log.error(
               u
                   + " : proxy timestamp "
                   + proxy.getAlgorithm().getTimestamp()
@@ -81,7 +81,7 @@ public class ServerSynchronizedDocument
            */
           proxy.sendOperation(op);
 
-          log.debug(
+          log.error(
               u
                   + " : vector after receive "
                   + proxy.getAlgorithm().getTimestamp()
@@ -95,7 +95,7 @@ public class ServerSynchronizedDocument
       e.printStackTrace();
 
     } finally {
-      log.debug("end of lock and clear semaphore.");
+      log.error("end of lock and clear semaphore.");
       accessDenied = false;
       notifyAll();
     }

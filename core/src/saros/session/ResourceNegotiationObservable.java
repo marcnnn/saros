@@ -55,7 +55,7 @@ final class ResourceNegotiationObservable {
 
     for (final ResourceNegotiation currentNegotiation : currentNegotiations) {
       if (currentNegotiation.getID().equals(negotiation.getID())) {
-        log.warn(
+        log.error(
             negotiation.getPeer()
                 + ": a resource negotiation with ID "
                 + negotiation.getID()
@@ -86,7 +86,7 @@ final class ResourceNegotiationObservable {
       }
     }
 
-    log.warn(
+    log.error(
         negotiation.getPeer()
             + ": a resource negotiation with ID "
             + negotiation.getID()

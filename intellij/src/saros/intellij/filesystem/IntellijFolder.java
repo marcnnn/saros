@@ -144,7 +144,7 @@ public class IntellijFolder extends AbstractIntellijResource implements IFolder 
     VirtualFile virtualFile = getVirtualFile();
 
     if (virtualFile == null || !virtualFile.exists()) {
-      log.debug("Ignoring file deletion request for " + this + " as folder does not exist");
+      log.error("Ignoring file deletion request for " + this + " as folder does not exist");
 
       return;
     }

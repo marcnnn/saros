@@ -49,7 +49,7 @@ public class ServerUISynchronizerImpl implements UISynchronizer {
       Future<?> f = executor.submit(runnable);
       f.get();
     } catch (InterruptedException e) {
-      log.warn("interrupted while waiting for runnable " + runnable + " to finish execution");
+      log.error("interrupted while waiting for runnable " + runnable + " to finish execution");
       Thread.currentThread().interrupt();
     } catch (ExecutionException e) {
       log.error("execution of runnable " + runnable + " failed", e);

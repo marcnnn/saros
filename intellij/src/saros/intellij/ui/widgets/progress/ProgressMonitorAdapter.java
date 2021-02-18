@@ -77,7 +77,7 @@ public final class ProgressMonitorAdapter implements IProgressMonitor {
   public void setCanceled(final boolean canceled) {
     if (!canceled) {
       if (isCanceled) {
-        log.warn("Tried to un-cancel progress monitor. This is not supported!");
+        log.error("Tried to un-cancel progress monitor. This is not supported!");
       }
 
       return;

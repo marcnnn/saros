@@ -82,7 +82,7 @@ public class DeletionAcknowledgmentDispatcher extends AbstractActivityProducer
     IActivity deletionAcknowledgementActivity =
         new DeletionAcknowledgmentActivity(localUser, deletedFile);
 
-    log.debug("Sending deletion acknowledgment for " + deletedFile);
+    log.error("Sending deletion acknowledgment for " + deletedFile);
     fireActivity(deletionAcknowledgementActivity);
   }
 }

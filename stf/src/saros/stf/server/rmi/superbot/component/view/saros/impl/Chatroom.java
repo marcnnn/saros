@@ -85,7 +85,7 @@ public final class Chatroom extends StfRemoteObject implements IChatroom {
   public String getUserNameOnChatLinePartnerChangeSeparator() throws RemoteException {
     chatTab.activate();
     SarosSWTBot bot = new SarosSWTBot(chatTab.widget);
-    log.debug(
+    log.error(
         "user name of the first chat line partner change separator: "
             + bot.chatLinePartnerChangeSeparator().getPlainID());
     return bot.chatLinePartnerChangeSeparator().getPlainID();
@@ -97,7 +97,7 @@ public final class Chatroom extends StfRemoteObject implements IChatroom {
     chatTab.activate();
     SarosSWTBot bot = new SarosSWTBot(chatTab.widget);
 
-    log.debug(
+    log.error(
         "user name of the chat line partner change separator with the index"
             + index
             + ": "
@@ -111,7 +111,7 @@ public final class Chatroom extends StfRemoteObject implements IChatroom {
     chatTab.activate();
     SarosSWTBot bot = new SarosSWTBot(chatTab.widget);
 
-    log.debug(
+    log.error(
         "user name of the chat line partner change separator with the plainID "
             + plainID
             + ": "
@@ -125,7 +125,7 @@ public final class Chatroom extends StfRemoteObject implements IChatroom {
     chatTab.activate();
     SarosSWTBot bot = new SarosSWTBot(chatTab.widget);
 
-    log.debug("text of the first chat line: " + bot.chatLine().getText());
+    log.error("text of the first chat line: " + bot.chatLine().getText());
     return bot.chatLine().getText();
   }
 
@@ -135,7 +135,7 @@ public final class Chatroom extends StfRemoteObject implements IChatroom {
     chatTab.activate();
     SarosSWTBot bot = new SarosSWTBot(chatTab.widget);
 
-    log.debug(
+    log.error(
         "text of the chat line with the index " + index + ": " + bot.chatLine(index).getText());
     return bot.chatLine(index).getText();
   }
@@ -146,7 +146,7 @@ public final class Chatroom extends StfRemoteObject implements IChatroom {
     chatTab.activate();
     SarosSWTBot bot = new SarosSWTBot(chatTab.widget);
 
-    log.debug("text of the last chat line: " + bot.lastChatLine().getText());
+    log.error("text of the last chat line: " + bot.lastChatLine().getText());
     return bot.lastChatLine().getText();
   }
 
@@ -156,7 +156,7 @@ public final class Chatroom extends StfRemoteObject implements IChatroom {
     chatTab.activate();
     SarosSWTBot bot = new SarosSWTBot(chatTab.widget);
 
-    log.debug("text of the chat line with the specifed regex: " + bot.chatLine(regex).getText());
+    log.error("text of the chat line with the specifed regex: " + bot.chatLine(regex).getText());
     return bot.chatLine(regex).getText();
   }
 
@@ -171,7 +171,7 @@ public final class Chatroom extends StfRemoteObject implements IChatroom {
   public String getTitle() throws RemoteException {
 
     String tabTitle = chatTab.getText();
-    log.debug("tab title text: " + tabTitle);
+    log.error("tab title text: " + tabTitle);
     return tabTitle;
   }
 

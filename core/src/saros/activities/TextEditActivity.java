@@ -291,7 +291,7 @@ public class TextEditActivity extends AbstractResourceActivity<IFile> {
           new InsertOperation(startPosition, newTextLineDelta, newTextOffsetDelta, newText));
     }
 
-    log.warn("NoOp Text edit: new '" + newText + "' old '" + replacedText + "'");
+    log.error("NoOp Text edit: new '" + newText + "' old '" + replacedText + "'");
     return new NoOperation();
   }
 

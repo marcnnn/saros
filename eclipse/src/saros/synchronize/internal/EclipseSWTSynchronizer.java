@@ -48,7 +48,7 @@ public class EclipseSWTSynchronizer implements UISynchronizer {
     } catch (SWTException e) {
 
       if (PlatformUI.getWorkbench().isClosing()) {
-        log.warn(
+        log.error(
             "could not execute runnable " + runnable + ", UI thread is not available",
             new StackTrace());
       } else {

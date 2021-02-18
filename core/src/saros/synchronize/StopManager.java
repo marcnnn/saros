@@ -137,7 +137,7 @@ public final class StopManager extends AbstractActivityProducer implements Start
       if (stopActivity.getState() == State.ACKNOWLEDGED) {
         synchronized (notificationLock) {
           if (!expectedAcknowledgments.contains(stopActivity)) {
-            log.warn("Received unexpected StopActivity: " + stopActivity);
+            log.error("Received unexpected StopActivity: " + stopActivity);
             return;
           }
 
@@ -146,7 +146,7 @@ public final class StopManager extends AbstractActivityProducer implements Start
            * that to happen. Warn if the removal is failing besides the above check.
            */
           if (!expectedAcknowledgments.remove(stopActivity)) {
-            log.warn("Received unexpected " + "StopActivity acknowledgement: " + stopActivity);
+            log.error("Received unexpected " + "StopActivity acknowledgement: " + stopActivity);
             return;
           }
 
@@ -209,7 +209,7 @@ public final class StopManager extends AbstractActivityProducer implements Start
                   try {
                     StartHandle startHandle = stop(user, cause);
                     resultingHandles.add(startHandle);
-                    log.debug("added " + startHandle + " to resulting handles.");
+                    log.error("added " + startHandle + " to resulting handles.");
                   } catch (CancellationException e) {
                     isTimeout.set(true);
                     log.error("user " + user + " did not respond");
@@ -340,13 +340,13 @@ public final class StopManager extends AbstractActivityProducer implements Start
     }
 
     if (!acknowledged) {
-      log.warn("No acknowledgment arrived, gave up waiting");
+      log.error("No acknowledgment arrived, gave up waiting");
 
       handle.start();
       throw new CancellationException();
     }
 
-    log.debug("Acknowledgment arrived " + user);
+    log.error("Acknowledgment arrived " + user);
 
     return handle;
   }
@@ -381,12 +381,12 @@ public final class StopManager extends AbstractActivityProducer implements Start
        * Ok if the local user was the initiator of the stop. If not
        * something is wrong.
        */
-      log.debug(startHandle + " couldn't be removed because it doesn't exist any more.");
+      log.error(startHandle + " couldn't be removed because it doesn't exist any more.");
     }
 
     int remainingHandles = getStartHandles(sarosSession.getLocalUser()).size();
     if (remainingHandles > 0) {
-      log.debug(remainingHandles + " startHandles remaining.");
+      log.error(remainingHandles + " startHandles remaining.");
       return false;
     }
 

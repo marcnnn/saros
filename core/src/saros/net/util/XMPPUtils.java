@@ -261,7 +261,7 @@ public class XMPPUtils {
         }
 
       } catch (XMPPException e) {
-        log.warn("could not query identity: " + item.getEntityID(), e);
+        log.error("could not query identity: " + item.getEntityID(), e);
       }
     }
 
@@ -318,7 +318,7 @@ public class XMPPUtils {
           }
         }
       } catch (XMPPException e) {
-        log.warn("could not query identity: " + item.getEntityID(), e);
+        log.error("could not query identity: " + item.getEntityID(), e);
       }
     }
 

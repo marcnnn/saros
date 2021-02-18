@@ -107,12 +107,12 @@ public class XStreamExtensionProvider<T> implements PacketExtensionProvider, IQP
     Class<? extends Converter> clazz = converter.getClass();
 
     if (replaceables.containsKey(clazz)) {
-      log.debug("Renewing existing converter of " + clazz);
+      log.error("Renewing existing converter of " + clazz);
       replaceables.get(clazz).replace(converter);
       return;
     }
 
-    log.debug("Registering new converter of " + clazz);
+    log.error("Registering new converter of " + clazz);
 
     ReplaceableConverter replaceable = new ReplaceableConverter(converter);
     xstream.registerConverter(replaceable);
@@ -130,7 +130,7 @@ public class XStreamExtensionProvider<T> implements PacketExtensionProvider, IQP
     Class<? extends Converter> clazz = converter.getClass();
 
     if (replaceables.containsKey(clazz)) {
-      log.debug("Unregistering (resetting) converter of " + clazz);
+      log.error("Unregistering (resetting) converter of " + clazz);
       replaceables.get(clazz).reset();
     }
   }
@@ -147,12 +147,12 @@ public class XStreamExtensionProvider<T> implements PacketExtensionProvider, IQP
     Class<? extends SingleValueConverter> clazz = converter.getClass();
 
     if (replaceableSingles.containsKey(clazz)) {
-      log.debug("Renewing existing converter of " + clazz);
+      log.error("Renewing existing converter of " + clazz);
       replaceableSingles.get(clazz).replace(converter);
       return;
     }
 
-    log.debug("Registering new converter of " + clazz);
+    log.error("Registering new converter of " + clazz);
 
     ReplaceableSingleValueConverter replaceable = new ReplaceableSingleValueConverter(converter);
     xstream.registerConverter(replaceable);
@@ -170,7 +170,7 @@ public class XStreamExtensionProvider<T> implements PacketExtensionProvider, IQP
     Class<? extends SingleValueConverter> clazz = converter.getClass();
 
     if (replaceableSingles.containsKey(clazz)) {
-      log.debug("Unregistering (resetting) converter of " + clazz);
+      log.error("Unregistering (resetting) converter of " + clazz);
       replaceableSingles.get(clazz).reset();
     }
   }

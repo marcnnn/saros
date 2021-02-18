@@ -72,7 +72,7 @@ final class NegotiationPacketListener {
           final CancelInviteExtension extension = CancelInviteExtension.PROVIDER.getPayload(packet);
 
           if (extension == null) {
-            log.warn("received malformed session negotiation packet from " + packet.getFrom());
+            log.error("received malformed session negotiation packet from " + packet.getFrom());
             return;
           }
 
@@ -91,7 +91,7 @@ final class NegotiationPacketListener {
               InvitationOfferingExtension.PROVIDER.getPayload(packet);
 
           if (extension == null) {
-            log.warn("received malformed session negotiation packet from " + packet.getFrom());
+            log.error("received malformed session negotiation packet from " + packet.getFrom());
             return;
           }
 
@@ -114,7 +114,7 @@ final class NegotiationPacketListener {
               CancelResourceNegotiationExtension.PROVIDER.getPayload(packet);
 
           if (extension == null) {
-            log.warn("received malformed resource negotiation packet from " + packet.getFrom());
+            log.error("received malformed resource negotiation packet from " + packet.getFrom());
             return;
           }
 
@@ -133,7 +133,7 @@ final class NegotiationPacketListener {
               ResourceNegotiationOfferingExtension.PROVIDER.getPayload(packet);
 
           if (extension == null) {
-            log.warn("received malformed resource negotiation packet from " + packet.getFrom());
+            log.error("received malformed resource negotiation packet from " + packet.getFrom());
             return;
           }
 
@@ -198,7 +198,7 @@ final class NegotiationPacketListener {
     final SessionNegotiation negotiation = sessionNegotiations.get(sender, sessionNegotiationID);
 
     if (negotiation == null) {
-      log.warn(
+      log.error(
           "received session negotiation cancel from "
               + sender
               + " for a nonexisting instance with id: "
@@ -206,7 +206,7 @@ final class NegotiationPacketListener {
       return;
     }
 
-    log.debug(
+    log.error(
         sender
             + " canceled session negotiation [id="
             + sessionNegotiationID
@@ -284,7 +284,7 @@ final class NegotiationPacketListener {
     final ResourceNegotiation negotiation = resourceNegotiations.get(sender, negotiationID);
 
     if (negotiation != null) {
-      log.debug(
+      log.error(
           sender
               + " canceled resource negotiation [id="
               + negotiationID
@@ -294,7 +294,7 @@ final class NegotiationPacketListener {
 
       negotiation.remoteCancel(errorMessage);
     } else {
-      log.warn(
+      log.error(
           "received resource negotiation cancel from "
               + sender
               + " for a nonexistent instance with id: "

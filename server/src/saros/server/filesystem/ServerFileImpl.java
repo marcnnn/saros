@@ -68,7 +68,7 @@ public class ServerFileImpl extends ServerResourceImpl implements IFile {
     try {
       Files.delete(getLocation());
     } catch (NoSuchFileException e) {
-      log.debug("Could not delete " + getFullPath() + " because it doesn't exist (ignoring)", e);
+      log.error("Could not delete " + getFullPath() + " because it doesn't exist (ignoring)", e);
     }
   }
 

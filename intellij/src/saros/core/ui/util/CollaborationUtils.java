@@ -99,7 +99,7 @@ public class CollaborationUtils {
     ISarosSession sarosSession = sessionManager.getSession();
 
     if (sarosSession == null) {
-      log.warn("cannot leave a non-running session");
+      log.error("cannot leave a non-running session");
       return;
     }
 
@@ -152,7 +152,7 @@ public class CollaborationUtils {
     final ISarosSession sarosSession = sessionManager.getSession();
 
     if (sarosSession == null) {
-      log.warn("cannot add resources to a non-running session");
+      log.error("cannot add resources to a non-running session");
       return;
     }
 
@@ -191,7 +191,7 @@ public class CollaborationUtils {
     final ISarosSession sarosSession = sessionManager.getSession();
 
     if (sarosSession == null) {
-      log.warn("cannot add contacts to a non-running session");
+      log.error("cannot add contacts to a non-running session");
       return;
     }
 
@@ -290,7 +290,7 @@ public class CollaborationUtils {
 
             totalFileSize += file.getSize();
           } catch (IOException e) {
-            log.warn("failed to retrieve size of file " + resource, e);
+            log.error("failed to retrieve size of file " + resource, e);
           }
           break;
         case REFERENCE_POINT:
@@ -304,7 +304,7 @@ public class CollaborationUtils {
             totalFileCount += subFileCountAndSize.getRight();
 
           } catch (Exception e) {
-            log.warn("failed to process container: " + resource, e);
+            log.error("failed to process container: " + resource, e);
           }
           break;
         default:

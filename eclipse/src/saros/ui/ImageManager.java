@@ -194,7 +194,7 @@ public class ImageManager {
     ImageDescriptor descriptor = getImageDescriptor(path);
 
     if (descriptor == null) {
-      log.warn(
+      log.error(
           "could not create image for path '"
               + path
               + "', either the file does not exists or the format is not supported");

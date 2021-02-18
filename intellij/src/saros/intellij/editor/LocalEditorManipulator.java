@@ -61,7 +61,7 @@ public class LocalEditorManipulator {
    */
   public Editor openEditor(@NotNull IFile file, boolean activate) {
     if (!sarosSession.isShared(file)) {
-      log.warn("Ignored open editor request for file " + file + " as it is not shared");
+      log.error("Ignored open editor request for file " + file + " as it is not shared");
 
       return null;
     }
@@ -69,7 +69,7 @@ public class LocalEditorManipulator {
     VirtualFile virtualFile = VirtualFileConverter.convertToVirtualFile(file);
 
     if (virtualFile == null || !virtualFile.exists()) {
-      log.warn(
+      log.error(
           "Could not open Editor for file "
               + file
               + " as a matching virtual file does not exist or could not be found");
@@ -82,7 +82,7 @@ public class LocalEditorManipulator {
     Editor editor = ProjectAPI.openEditor(project, virtualFile, activate);
 
     if (editor == null) {
-      log.debug("Ignoring non-text editor for file " + virtualFile);
+      log.error("Ignoring non-text editor for file " + virtualFile);
 
       return null;
     }
@@ -90,7 +90,7 @@ public class LocalEditorManipulator {
     manager.startEditor(editor);
     editorPool.add(file, editor);
 
-    log.debug("Opened Editor " + editor + " for file " + virtualFile);
+    log.error("Opened Editor " + editor + " for file " + virtualFile);
 
     return editor;
   }
@@ -103,12 +103,12 @@ public class LocalEditorManipulator {
   public void closeEditor(IFile file) {
     editorPool.removeEditor(file);
 
-    log.debug("Removed editor for file " + file + " from EditorPool");
+    log.error("Removed editor for file " + file + " from EditorPool");
 
     VirtualFile virtualFile = VirtualFileConverter.convertToVirtualFile(file);
 
     if (virtualFile == null || !virtualFile.exists()) {
-      log.warn(
+      log.error(
           "Could not close Editor for file "
               + file
               + " as a matching virtual file does not exist or could not be found");
@@ -122,7 +122,7 @@ public class LocalEditorManipulator {
       ProjectAPI.closeEditor(project, virtualFile);
     }
 
-    log.debug("Closed editor for file " + virtualFile);
+    log.error("Closed editor for file " + virtualFile);
   }
 
   /**
@@ -147,7 +147,7 @@ public class LocalEditorManipulator {
     if ((selection == null || selection.isEmpty()) && range == null) {
       VirtualFile file = DocumentAPI.getVirtualFile(editor.getDocument());
 
-      log.warn(
+      log.error(
           "Could not adjust viewport for "
               + file
               + " as no target location was given: given line range and text selection were null.");
@@ -225,7 +225,7 @@ public class LocalEditorManipulator {
   public void handleContentRecovery(IFile file, byte[] content, String encoding, User source) {
     VirtualFile virtualFile = VirtualFileConverter.convertToVirtualFile(file);
     if (virtualFile == null) {
-      log.warn(
+      log.error(
           "Could not recover file content of "
               + file
               + " as it could not be converted to a virtual file.");
@@ -237,7 +237,7 @@ public class LocalEditorManipulator {
 
     Document document = DocumentAPI.getDocument(virtualFile);
     if (document == null) {
-      log.warn(
+      log.error(
           "Could not recover file content of "
               + file
               + " as no valid document representation was returned by the Intellij API.");
@@ -253,7 +253,7 @@ public class LocalEditorManipulator {
     try {
       text = new String(content, encoding);
     } catch (UnsupportedEncodingException e) {
-      log.warn("Could not decode text using given encoding. Using default instead.", e);
+      log.error("Could not decode text using given encoding. Using default instead.", e);
 
       text = new String(content);
 
@@ -300,7 +300,7 @@ public class LocalEditorManipulator {
       editor = ProjectAPI.openEditor(project, virtualFile, false);
 
       if (editor == null) {
-        log.warn("Could not obtain text editor for open, recovered file " + virtualFile);
+        log.error("Could not obtain text editor for open, recovered file " + virtualFile);
 
         return;
       }

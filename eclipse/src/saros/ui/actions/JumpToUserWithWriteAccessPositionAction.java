@@ -81,7 +81,7 @@ public class JumpToUserWithWriteAccessPositionAction extends Action implements D
             if (participants.size() == 1) {
               editorManager.jumpToUser(participants.get(0));
             } else {
-              log.warn("More than one participant selected."); // $NON-NLS-1$
+              log.error("More than one participant selected."); // $NON-NLS-1$
             }
           }
         });

@@ -81,7 +81,7 @@ public abstract class AbstractLocalDocumentModificationHandler implements IProje
     assert !disposed || !enabled : "disposed listeners must not be enabled";
 
     if (!this.enabled && enabled) {
-      log.debug("Started listening for document events");
+      log.error("Started listening for document events");
 
       EditorFactory.getInstance()
           .getEventMulticaster()
@@ -91,7 +91,7 @@ public abstract class AbstractLocalDocumentModificationHandler implements IProje
 
     } else if (this.enabled && !enabled) {
 
-      log.debug("Stopped listening for document events");
+      log.error("Stopped listening for document events");
 
       EditorFactory.getInstance().getEventMulticaster().removeDocumentListener(documentListener);
 

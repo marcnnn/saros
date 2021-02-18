@@ -119,7 +119,7 @@ public final class SarosView extends StfRemoteObject implements ISarosView {
     try {
       b.pressShortcut(KeyStroke.getInstance("ESC"));
     } catch (ParseException e) {
-      log.debug("", e);
+      log.error("", e);
     }
   }
 

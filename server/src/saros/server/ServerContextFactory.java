@@ -115,7 +115,7 @@ public class ServerContextFactory extends AbstractContextFactory {
                 try {
                   FileUtils.deleteDirectory(path.toFile());
                 } catch (IOException e) {
-                  log.warn("Could not remove temporary workspace folder", e);
+                  log.error("Could not remove temporary workspace folder", e);
                 }
               }
             });

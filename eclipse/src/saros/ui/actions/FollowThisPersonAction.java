@@ -114,7 +114,7 @@ public class FollowThisPersonAction extends Action implements Disposable {
                 SelectionRetrieverFactory.getSelectionRetriever(User.class).getSelection();
 
             if (!canBeExecuted(users)) {
-              log.warn(
+              log.error(
                   "could not execute change follow mode action " //$NON-NLS-1$
                       + "because either no session is running, " //$NON-NLS-1$
                       + "more than one user is selected or " //$NON-NLS-1$

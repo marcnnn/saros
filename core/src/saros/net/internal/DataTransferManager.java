@@ -82,7 +82,7 @@ public class DataTransferManager implements IConnectionListener, IConnectionMana
 
           notfiyconnectionChanged(id, connection, incomingRequest);
 
-          log.debug(
+          log.error(
               "bytestream connection changed "
                   + connection
                   + ", inc="
@@ -100,7 +100,7 @@ public class DataTransferManager implements IConnectionListener, IConnectionMana
           if (current != null) {
             current.close();
             if (current == connection) {
-              log.warn(
+              log.error(
                   "closed connection [pool id="
                       + id
                       + "]: "
@@ -109,7 +109,7 @@ public class DataTransferManager implements IConnectionListener, IConnectionMana
 
               return;
             } else {
-              log.warn(
+              log.error(
                   "existing connection [pool id="
                       + id
                       + "] "
@@ -187,13 +187,13 @@ public class DataTransferManager implements IConnectionListener, IConnectionMana
     if (out != null) {
       closed |= true;
       out.close();
-      log.debug("closed connection [pool id=" + outID + "]: " + out);
+      log.error("closed connection [pool id=" + outID + "]: " + out);
     }
 
     if (in != null) {
       closed |= true;
       in.close();
-      log.debug("closed connection [pool id=" + inID + "]: " + in);
+      log.error("closed connection [pool id=" + inID + "]: " + in);
     }
 
     return closed;
@@ -273,9 +273,9 @@ public class DataTransferManager implements IConnectionListener, IConnectionMana
           connection = streamService.connect(connectionID, peer);
           break;
         } catch (IOException e) {
-          log.warn("failed to connect to " + peer + " using stream service: " + streamService, e);
+          log.error("failed to connect to " + peer + " using stream service: " + streamService, e);
         } catch (InterruptedException e) {
-          log.warn(
+          log.error(
               "interrupted while connecting to "
                   + peer
                   + " using stream service: "
@@ -328,7 +328,7 @@ public class DataTransferManager implements IConnectionListener, IConnectionMana
 
     if (useIBB && fallbackService != null) streamServices.add(fallbackService);
 
-    log.debug(
+    log.error(
         "used stream service order for the current XMPP connection: "
             + Arrays.toString(streamServices.toArray()));
   }

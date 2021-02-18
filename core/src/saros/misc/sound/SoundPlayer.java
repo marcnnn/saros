@@ -36,7 +36,7 @@ public class SoundPlayer {
     try {
       audioInputStream = AudioSystem.getAudioInputStream(file);
     } catch (UnsupportedAudioFileException e) {
-      log.warn("unsupported audio file: " + file.getName(), e);
+      log.error("unsupported audio file: " + file.getName(), e);
       return;
     } catch (IOException e) {
       log.error("unable to read audio file:" + file.getName(), e);
@@ -52,7 +52,7 @@ public class SoundPlayer {
       audioLine = (SourceDataLine) AudioSystem.getLine(info);
       audioLine.open(format);
     } catch (LineUnavailableException e) {
-      log.warn("no audioline available, could not play audio file: " + file.getName(), e);
+      log.error("no audioline available, could not play audio file: " + file.getName(), e);
       IOUtils.closeQuietly(audioInputStream);
       return;
     } catch (Exception e) {

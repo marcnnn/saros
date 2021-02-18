@@ -100,7 +100,7 @@ public class ArchiveIncomingResourceNegotiation extends AbstractIncomingResource
       monitor.done();
     } finally {
       if (archiveFile != null && !archiveFile.delete()) {
-        log.warn("Could not clean up archive file " + archiveFile.getAbsolutePath());
+        log.error("Could not clean up archive file " + archiveFile.getAbsolutePath());
       }
     }
   }
@@ -122,7 +122,7 @@ public class ArchiveIncomingResourceNegotiation extends AbstractIncomingResource
 
     long startTime = System.currentTimeMillis();
 
-    log.debug(this + " : unpacking archive file...");
+    log.error(this + " : unpacking archive file...");
 
     /*
      * TODO: calculate the ADLER32 checksums during decompression and add
@@ -141,7 +141,7 @@ public class ArchiveIncomingResourceNegotiation extends AbstractIncomingResource
       throw canceled;
     }
 
-    log.debug(
+    log.error(
         String.format("unpacked archive in %d s", (System.currentTimeMillis() - startTime) / 1000));
 
     // TODO: now add the checksums into the cache
@@ -151,12 +151,12 @@ public class ArchiveIncomingResourceNegotiation extends AbstractIncomingResource
       throws IOException, SarosCancellationException {
 
     monitor.beginTask("Receiving archive file...", 100);
-    log.debug("waiting for incoming archive stream request");
+    log.error("waiting for incoming archive stream request");
 
     monitor.subTask("Host is compressing resource files. Waiting for the archive file...");
     monitor.waitForCompletion(expectedTransfer);
     monitor.subTask("Receiving archive file...");
-    log.debug(this + " : receiving archive");
+    log.error(this + " : receiving archive");
 
     File archiveFile = File.createTempFile("saros_archive_" + System.currentTimeMillis(), null);
 
@@ -171,13 +171,13 @@ public class ArchiveIncomingResourceNegotiation extends AbstractIncomingResource
       throw new IOException(e.getMessage(), e.getCause());
     } finally {
       if (transferFailed && !archiveFile.delete()) {
-        log.warn("Could not clean up archive file " + archiveFile.getAbsolutePath());
+        log.error("Could not clean up archive file " + archiveFile.getAbsolutePath());
       }
     }
 
     monitor.done();
 
-    log.debug(
+    log.error(
         this
             + " : stored archive in file "
             + archiveFile.getAbsolutePath()

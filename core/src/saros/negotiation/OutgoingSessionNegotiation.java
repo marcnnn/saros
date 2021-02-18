@@ -107,7 +107,7 @@ public final class OutgoingSessionNegotiation extends SessionNegotiation {
    * <p>- Handling incoming shared resource resources (IncomingResourceNegotiation)
    */
   public Status start(IProgressMonitor monitor) {
-    log.debug(this + " : starting negotiation");
+    log.error(this + " : starting negotiation");
 
     observeMonitor(monitor);
 
@@ -202,7 +202,7 @@ public final class OutgoingSessionNegotiation extends SessionNegotiation {
    */
   private void checkAvailability(IProgressMonitor monitor) throws LocalCancellationException {
 
-    log.debug(this + " : checking Saros support");
+    log.error(this + " : checking Saros support");
     monitor.setTaskName("Checking Saros support...");
 
     JID resourceQualifiedJID =
@@ -213,7 +213,7 @@ public final class OutgoingSessionNegotiation extends SessionNegotiation {
           getPeer() + " does not support Saros or the request timed out. Please try again.",
           CancelOption.DO_NOT_NOTIFY_PEER);
 
-    log.debug(this + " :  remote contact offers Saros support");
+    log.error(this + " :  remote contact offers Saros support");
 
     // FIXME accept only RQ JIDs
     setPeer(resourceQualifiedJID);
@@ -228,7 +228,7 @@ public final class OutgoingSessionNegotiation extends SessionNegotiation {
    */
   private void checkVersion(IProgressMonitor monitor) throws SarosCancellationException {
 
-    log.debug(this + " : checking version compatibility");
+    log.error(this + " : checking version compatibility");
     monitor.setTaskName("Checking version compatibility...");
 
     XMPPContact contact =
@@ -267,8 +267,8 @@ public final class OutgoingSessionNegotiation extends SessionNegotiation {
           CancelOption.DO_NOT_NOTIFY_PEER);
     }
 
-    if (comp == Compatibility.OK) log.debug(this + " : Saros versions are compatible");
-    else log.warn(this + " : Saros versions are not compatible");
+    if (comp == Compatibility.OK) log.error(this + " : Saros versions are compatible");
+    else log.error(this + " : Saros versions are not compatible");
 
     localVersion = result.getLocalVersion().toString();
   }
@@ -277,7 +277,7 @@ public final class OutgoingSessionNegotiation extends SessionNegotiation {
   private void sendInvitationOffer(IProgressMonitor monitor) throws SarosCancellationException {
     monitor.setTaskName("Sending negotiation request...");
 
-    log.debug(this + " : sending negotiation request");
+    log.error(this + " : sending negotiation request");
     checkCancellation(CancelOption.DO_NOT_NOTIFY_PEER);
 
     InvitationOfferingExtension invitationOffering =
@@ -292,7 +292,7 @@ public final class OutgoingSessionNegotiation extends SessionNegotiation {
    * auto-generated on the remote side.
    */
   private void awaitAcknowledgement(IProgressMonitor monitor) throws SarosCancellationException {
-    log.debug(this + " : waiting for negotiation acknowledgement");
+    log.error(this + " : waiting for negotiation acknowledgement");
 
     monitor.setTaskName("Waiting for negotiation acknowledgement...");
 
@@ -302,14 +302,14 @@ public final class OutgoingSessionNegotiation extends SessionNegotiation {
           CancelOption.DO_NOT_NOTIFY_PEER);
     }
 
-    log.debug(this + " : negotiation acknowledged");
+    log.error(this + " : negotiation acknowledged");
   }
 
   /** Waits until the remote side successfully connected to the inviter side. */
   private void awaitConnectionEstablishment(IProgressMonitor monitor)
       throws SarosCancellationException {
 
-    log.debug(this + " : waiting for peer to establish connection");
+    log.error(this + " : waiting for peer to establish connection");
 
     monitor.setTaskName("Waiting for " + getPeer().getBareJID() + " to connect...");
 
@@ -319,13 +319,13 @@ public final class OutgoingSessionNegotiation extends SessionNegotiation {
           "Remote side was unable to connect.", CancelOption.NOTIFY_PEER);
     }
 
-    log.debug(this + " : connection established");
+    log.error(this + " : connection established");
   }
 
   /** Waits until the remote side manually accepts the invitation. */
   private void awaitAcceptance(IProgressMonitor monitor) throws SarosCancellationException {
 
-    log.debug(this + " : waiting for peer to accept the negotiation");
+    log.error(this + " : waiting for peer to accept the negotiation");
 
     /*
      * TODO get rid of the wording "invitation" and remove the remote peer
@@ -338,7 +338,7 @@ public final class OutgoingSessionNegotiation extends SessionNegotiation {
           "Negotiation was not accepted.", CancelOption.NOTIFY_PEER);
     }
 
-    log.debug(this + " : negotiation accepted");
+    log.error(this + " : negotiation accepted");
   }
 
   /**
@@ -348,7 +348,7 @@ public final class OutgoingSessionNegotiation extends SessionNegotiation {
   private InvitationParameterExchangeExtension awaitClientSessionPreferences(
       IProgressMonitor monitor) throws SarosCancellationException {
 
-    log.debug(this + " : waiting for client's session negotiation configuration data");
+    log.error(this + " : waiting for client's session negotiation configuration data");
 
     monitor.setTaskName("Waiting for remote session configuration data...");
 
@@ -365,7 +365,7 @@ public final class OutgoingSessionNegotiation extends SessionNegotiation {
       throw new LocalCancellationException(
           getPeer() + " sent malformed data", CancelOption.DO_NOT_NOTIFY_PEER);
 
-    log.debug(this + " : received client's session parameters");
+    log.error(this + " : received client's session parameters");
 
     return parameters;
   }
@@ -402,13 +402,13 @@ public final class OutgoingSessionNegotiation extends SessionNegotiation {
   private void sendSessionParameters(
       InvitationParameterExchangeExtension modifiedParameters, IProgressMonitor monitor) {
 
-    log.debug(this + " : sending updated session negotiation data");
+    log.error(this + " : sending updated session negotiation data");
 
     monitor.setTaskName("Sending final session configuration data...");
     transmitter.sendPacketExtension(
         getPeer(), InvitationParameterExchangeExtension.PROVIDER.create(modifiedParameters));
 
-    log.debug(this + " : sent updated session negotiation data");
+    log.error(this + " : sent updated session negotiation data");
   }
 
   /**
@@ -417,7 +417,7 @@ public final class OutgoingSessionNegotiation extends SessionNegotiation {
    */
   private void awaitCompletion(IProgressMonitor monitor) throws SarosCancellationException {
 
-    log.debug(this + " : waiting for remote side to start its Saros session");
+    log.error(this + " : waiting for remote side to start its Saros session");
 
     monitor.setTaskName("Establishing connection and performing final initialization...");
 
@@ -426,7 +426,7 @@ public final class OutgoingSessionNegotiation extends SessionNegotiation {
           "Invitation was not accepted.", CancelOption.NOTIFY_PEER);
     }
 
-    log.debug(this + " : remote side started its Saros session");
+    log.error(this + " : remote side started its Saros session");
   }
 
   /** Applies and saves the final session parameters. */
@@ -455,7 +455,7 @@ public final class OutgoingSessionNegotiation extends SessionNegotiation {
   private void completeInvitation(IPreferenceStore properties, IProgressMonitor monitor)
       throws IOException {
 
-    log.debug(this + " : synchronizing user list");
+    log.error(this + " : synchronizing user list");
 
     monitor.setTaskName("Synchronizing user list...");
 
@@ -463,7 +463,7 @@ public final class OutgoingSessionNegotiation extends SessionNegotiation {
 
     synchronized (REMOVE_ME_IF_SESSION_ADD_USER_IS_THREAD_SAFE) {
       sarosSession.addUser(user);
-      log.debug(
+      log.error(
           this
               + " : added "
               + getPeer()
@@ -488,7 +488,7 @@ public final class OutgoingSessionNegotiation extends SessionNegotiation {
               new InvitationAcknowledgedExtension(getID())));
     }
 
-    log.debug(this + " : session negotiation finished");
+    log.error(this + " : session negotiation finished");
   }
 
   private void createCollectors() {

@@ -253,7 +253,7 @@ public class XMPPReceiver implements IReceiver, IBinaryXMPPExtensionReceiver {
             ProviderManager.getInstance().getExtensionProvider(name, namespace);
 
     if (provider == null) {
-      log.warn(
+      log.error(
           "could not deserialize transfer object because no provider with namespace '"
               + namespace
               + "' and element name '"

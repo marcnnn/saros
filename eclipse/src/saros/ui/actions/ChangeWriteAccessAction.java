@@ -178,11 +178,11 @@ public class ChangeWriteAccessAction extends Action implements Disposable {
                 performPermissionChange(session, selected, permission);
                 updateEnablement();
               } else {
-                log.warn(
+                log.error(
                     "Did not change write access of " + selected + ", because it's already set.");
               }
             } else {
-              log.warn("More than one participant selected."); // $NON-NLS-1$
+              log.error("More than one participant selected."); // $NON-NLS-1$
             }
           }
         });
@@ -223,7 +223,7 @@ public class ChangeWriteAccessAction extends Action implements Disposable {
       Throwable t = e.getCause();
 
       if (t instanceof CancellationException) {
-        log.warn("permission change failed, user " + user + " did not respond"); // $NON-NLS-1$
+        log.error("permission change failed, user " + user + " did not respond"); // $NON-NLS-1$
         MessageDialog.openWarning(
             SWTUtils.getShell(),
             Messages.SarosUI_permission_canceled,

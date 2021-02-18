@@ -231,7 +231,7 @@ public class ConnectButton extends AbstractToolbarButton {
     }
 
     if (userID == null) {
-      log.debug("Account creation canceled by user during user id entry.");
+      log.error("Account creation canceled by user during user id entry.");
 
       return null;
     }
@@ -244,7 +244,7 @@ public class ConnectButton extends AbstractToolbarButton {
           Messages.ConnectButton_account_creation_invalid_jid_message,
           Messages.ConnectButton_account_creation_invalid_jid_title);
 
-      log.debug("Account creation failed as the user did not provide a valid user id.");
+      log.error("Account creation failed as the user did not provide a valid user id.");
 
       return null;
     }
@@ -270,7 +270,7 @@ public class ConnectButton extends AbstractToolbarButton {
     }
 
     if (password == null) {
-      log.debug("Account creation canceled by user during password entry.");
+      log.error("Account creation canceled by user during password entry.");
 
       return null;
 
@@ -280,7 +280,7 @@ public class ConnectButton extends AbstractToolbarButton {
           Messages.ConnectButton_account_creation_invalid_password_message,
           Messages.ConnectButton_account_creation_invalid_password_title);
 
-      log.debug("Account creation failed as the user did not provide a valid password.");
+      log.error("Account creation failed as the user did not provide a valid password.");
 
       return null;
     }
@@ -306,7 +306,7 @@ public class ConnectButton extends AbstractToolbarButton {
     }
 
     if (server == null) {
-      log.debug("Account creation canceled by user during server entry.");
+      log.error("Account creation canceled by user during server entry.");
 
       return null;
 
@@ -330,7 +330,7 @@ public class ConnectButton extends AbstractToolbarButton {
       }
 
       if (portUserEntry == null) {
-        log.debug("Account creation canceled by user during server port entry.");
+        log.error("Account creation canceled by user during server port entry.");
 
         return null;
       }
@@ -350,7 +350,7 @@ public class ConnectButton extends AbstractToolbarButton {
             Messages.ConnectButton_account_creation_xmpp_server_invalid_port_message,
             Messages.ConnectButton_account_creation_xmpp_server_invalid_port_title);
 
-        log.debug("Account creation failed as the user did not provide a valid server port.");
+        log.error("Account creation failed as the user did not provide a valid server port.");
 
         return null;
       }

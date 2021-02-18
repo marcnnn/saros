@@ -78,7 +78,7 @@ public class Document {
       String is = doc.toString().substring(start, end);
 
       if (!is.equals(activity.getReplacedText())) {
-        log.warn("Text should be '" + activity.getReplacedText() + "' is '" + is + "'");
+        log.error("Text should be '" + activity.getReplacedText() + "' is '" + is + "'");
         throw new RuntimeException(
             "Text should be '" + activity.getReplacedText() + "' is '" + is + "'");
       }

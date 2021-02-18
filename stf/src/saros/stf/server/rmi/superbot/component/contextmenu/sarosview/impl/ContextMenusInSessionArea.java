@@ -79,7 +79,7 @@ public final class ContextMenusInSessionArea extends ContextMenusInSarosView
     log.trace("start following participant: " + participantJID.getBase());
 
     if (isFollowing()) {
-      log.warn("you are already following participant: " + participantJID.getBase());
+      log.error("you are already following participant: " + participantJID.getBase());
       return;
     }
 
@@ -107,7 +107,7 @@ public final class ContextMenusInSessionArea extends ContextMenusInSarosView
     log.trace("stop following user: " + participantJID.getBase());
 
     if (!isFollowing()) {
-      log.warn("you are not following participant: " + participantJID.getBase());
+      log.error("you are not following participant: " + participantJID.getBase());
       return;
     }
 

@@ -76,7 +76,7 @@ public final class ConsistencyWatchdogHandler extends AbstractActivityProducer
 
   private void triggerRecovery(final ChecksumErrorActivity checksumError) {
 
-    log.debug("received Checksum Error: " + checksumError);
+    log.error("received Checksum Error: " + checksumError);
 
     /*
      * fork a thread as this is normally called from the UI thread and so we

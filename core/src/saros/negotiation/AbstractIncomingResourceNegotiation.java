@@ -337,7 +337,7 @@ public abstract class AbstractIncomingResourceNegotiation extends ResourceNegoti
       final Map<String, IReferencePoint> localReferencePointMapping, final IProgressMonitor monitor)
       throws SarosCancellationException, IOException {
 
-    log.debug(this + " : computing file and folder differences");
+    log.error(this + " : computing file and folder differences");
 
     monitor.beginTask(
         "Computing reference point difference(s)...",
@@ -386,7 +386,7 @@ public abstract class AbstractIncomingResourceNegotiation extends ResourceNegoti
       final Map<String, FileListDiff> diffs)
       throws IOException {
 
-    log.debug(this + " : deleting files and folders, creating empty folders");
+    log.error(this + " : deleting files and folders, creating empty folders");
 
     final List<FileList> result = new ArrayList<FileList>();
 
@@ -432,7 +432,7 @@ public abstract class AbstractIncomingResourceNegotiation extends ResourceNegoti
       missingFiles.addAll(diff.getAddedFiles());
       missingFiles.addAll(diff.getAlteredFiles());
 
-      log.debug(this + " : " + missingFiles.size() + " file(s) must be synchronized");
+      log.error(this + " : " + missingFiles.size() + " file(s) must be synchronized");
 
       /*
        * We send an empty file list to the host as a notification that we

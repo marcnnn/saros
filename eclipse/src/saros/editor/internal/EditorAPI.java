@@ -136,7 +136,7 @@ public class EditorAPI {
          *
          * TODO Open as an internal editor
          */
-        log.warn(
+        log.error(
             "Editor for file "
                 + file.getName()
                 + " is configured to be opened externally,"
@@ -226,7 +226,7 @@ public class EditorAPI {
           IEditorPart editorPart = reference.getEditor(false);
 
           if (editorPart == null) {
-            log.debug("editor part needs to be restored: " + reference.getTitle());
+            log.error("editor part needs to be restored: " + reference.getTitle());
             // Making this call might cause partOpen events
             editorPart = reference.getEditor(true);
           }
@@ -234,7 +234,7 @@ public class EditorAPI {
           if (editorPart != null) {
             editorParts.add(editorPart);
           } else {
-            log.warn("editor part could not be restored: " + reference);
+            log.error("editor part could not be restored: " + reference);
           }
         }
       }
@@ -265,7 +265,7 @@ public class EditorAPI {
     IResource resource = ResourceUtil.getResource(input);
 
     if (resource == null) {
-      log.warn("could not get resource reference from editor part: " + editorPart);
+      log.error("could not get resource reference from editor part: " + editorPart);
     }
 
     return resource;
@@ -380,7 +380,7 @@ public class EditorAPI {
       }
 
     } catch (BadLocationException e) {
-      log.warn(
+      log.error(
           "Could not calculate the start line or start line offset for the given start offset "
               + offset
               + " in the document "
@@ -500,7 +500,7 @@ public class EditorAPI {
       lineOffset = document.getLineOffset(textPosition.getLineNumber());
 
     } catch (BadLocationException e) {
-      log.warn(
+      log.error(
           "Could not calculate the line offset for the given text position "
               + textPosition
               + " in the document "
@@ -633,7 +633,7 @@ public class EditorAPI {
     if (bottom < top) {
       // FIXME This warning occurs when the document is shorter than the
       // viewport
-      log.warn(
+      log.error(
           "Viewport Range Problem in " + viewer + ": Bottom == " + bottom + " < Top == " + top);
       bottom = top;
     }

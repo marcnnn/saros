@@ -194,7 +194,7 @@ public class AddReferencePointToSessionWizard extends Wizard {
           VirtualFile existingResource = baseDirectory.findChild(directoryName);
 
           if (existingResource != null) {
-            log.warn(
+            log.error(
                 "Directory '"
                     + directoryName
                     + "' could not be created as a resource with the same name already exists: "
@@ -250,7 +250,7 @@ public class AddReferencePointToSessionWizard extends Wizard {
           }
 
           if (ProjectAPI.isExcluded(project, referencePointFile)) {
-            log.warn(
+            log.error(
                 "Could not share created directory "
                     + referencePointFile
                     + "  as it is excluded from the project scope.");
@@ -692,7 +692,7 @@ public class AddReferencePointToSessionWizard extends Wizard {
         }
 
       } catch (IOException e) {
-        log.warn("could not calculate local file list for reference point " + referencePoint, e);
+        log.error("could not calculate local file list for reference point " + referencePoint, e);
       }
     }
     return modifiedResources;

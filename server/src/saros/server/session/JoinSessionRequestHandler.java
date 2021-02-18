@@ -47,7 +47,7 @@ public final class JoinSessionRequestHandler {
                   }
                 });
           } catch (RejectedExecutionException e) {
-            log.warn("Join Session request cannot be accepted (queue is full).", e);
+            log.error("Join Session request cannot be accepted (queue is full).", e);
           }
         }
       };

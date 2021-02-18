@@ -309,7 +309,7 @@ public class ConfigurationSettingsWizardPage extends WizardPage {
         this.gateways.add(gw);
 
       } catch (Exception e) {
-        log.debug("Error updating UPnP selector:" + e.getMessage()); // $NON-NLS-1$
+        log.error("Error updating UPnP selector:" + e.getMessage()); // $NON-NLS-1$
         // ignore faulty gateway
       }
     }

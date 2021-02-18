@@ -68,7 +68,7 @@ public class AdditionalResourceDataFactory {
       Map<String, String> providerData = additionalResourceDataProvider.getMapping(referencePoint);
 
       if (!Collections.disjoint(additionalResourceData.keySet(), providerData.keySet())) {
-        log.warn(
+        log.error(
             "Key sets used by additional resource data providers are not disjoint! Noticed while processing "
                 + additionalResourceDataProvider.getClass().getSimpleName());
       }

@@ -208,11 +208,11 @@ public class ChangeColorManager extends AbstractActivityProducer implements Star
       currentUsers.addAll(favoriteUserColors.keySet());
 
       if (affected == null) {
-        log.warn("received color id change for a user that is no longer part of the session");
+        log.error("received color id change for a user that is no longer part of the session");
         return;
       }
 
-      log.debug(
+      log.error(
           "received color id change fo user : " + affected + " [" + activity.getColorID() + "]");
 
       // host send us an update for a user
@@ -262,7 +262,7 @@ public class ChangeColorManager extends AbstractActivityProducer implements Star
   private void reassignSessionColorIDs(List<User> currentUsers, User user, boolean joined) {
     assert session.isHost() : "only the session host can assign a color id";
 
-    log.debug("reassigning color IDs for the current session users");
+    log.error("reassigning color IDs for the current session users");
 
     synchronized (this) {
 
@@ -293,7 +293,7 @@ public class ChangeColorManager extends AbstractActivityProducer implements Star
 
         // no conflict = OK
         if (isOptimalColorAssignment(assignedColors)) {
-          log.debug("color conflict resolve result = NO CONFLICT");
+          log.error("color conflict resolve result = NO CONFLICT");
           break resolveColorConflicts;
         }
 
@@ -318,7 +318,7 @@ public class ChangeColorManager extends AbstractActivityProducer implements Star
            */
           if (favoriteUserColors.containsValue(UserColorID.UNKNOWN)
               && isValidColorAssignment(assignedColors)) {
-            log.debug(
+            log.error(
                 "color conflict resolve result = FAVORITE COLORS UNKNOWN, USING PREVIOUS COLOR ASSIGNMENT");
             break resolveColorConflicts;
           }
@@ -327,7 +327,7 @@ public class ChangeColorManager extends AbstractActivityProducer implements Star
            * if color assignment is optimal, assignment is resolved.
            */
           if (isOptimalColorAssignment(assignedColors)) {
-            log.debug("color conflict resolve result = ALREADY SOLVED");
+            log.error("color conflict resolve result = ALREADY SOLVED");
             break resolveColorConflicts;
           } else {
             // the colorIdSet was not optimal, reassign colors
@@ -348,10 +348,10 @@ public class ChangeColorManager extends AbstractActivityProducer implements Star
         /* release all colors again as they will be removed again */
         for (int colorID : assignedColors.values()) addColorIdToPool(colorID);
 
-        log.debug("color conflict resolve result = RESOLVED");
+        log.error("color conflict resolve result = RESOLVED");
       } // END resolveColorConflicts
 
-      log.debug("new color assignment: " + assignedColors);
+      log.error("new color assignment: " + assignedColors);
 
       updateColorAndUserPools(assignedColors);
 
@@ -532,7 +532,7 @@ public class ChangeColorManager extends AbstractActivityProducer implements Star
     Integer colorIDUseCount = usedColorIDs.get(colorID);
 
     if (colorIDUseCount == null) {
-      log.warn("color id: " + colorID + " was added although it was never removed");
+      log.error("color id: " + colorID + " was added although it was never removed");
       colorIDUseCount = 0;
     } else {
       colorIDUseCount--;
@@ -568,7 +568,7 @@ public class ChangeColorManager extends AbstractActivityProducer implements Star
 
     ColorIDSet colorIDSet = colorIDSetStorage.getColorIDSet(asIDCollection(users));
 
-    log.debug("updating color id set: " + Arrays.toString(colorIDSet.getParticipants().toArray()));
+    log.error("updating color id set: " + Arrays.toString(colorIDSet.getParticipants().toArray()));
 
     /*
      * reset colors to unknown otherwise we may get an illegal state

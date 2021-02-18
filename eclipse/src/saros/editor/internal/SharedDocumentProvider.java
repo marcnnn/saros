@@ -69,7 +69,7 @@ public final class SharedDocumentProvider extends TextFileDocumentProvider {
   /** This constructor is necessary when Eclipse creates a SharedDocumentProvider. */
   public SharedDocumentProvider() {
 
-    log.debug("SharedDocumentProvider created by Eclipse");
+    log.error("SharedDocumentProvider created by Eclipse");
 
     SarosPluginContext.initComponent(this);
 

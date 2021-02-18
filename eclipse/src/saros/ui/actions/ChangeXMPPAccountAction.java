@@ -249,7 +249,7 @@ public class ChangeXMPPAccountAction extends Action implements IMenuCreator, Dis
     try {
       service.executeCommand("saros.ui.commands.OpenSarosPreferences", null);
     } catch (Exception e) {
-      log.debug("Could execute command", e);
+      log.error("Could execute command", e);
     }
   }
 }

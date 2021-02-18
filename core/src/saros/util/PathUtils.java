@@ -147,7 +147,7 @@ public class PathUtils {
 
     if (File.separator.equals(PORTABLE_SEPARATOR)) {
       if (normalizedLocalPathString.contains(WINDOWS_SEPARATOR)) {
-        log.warn(
+        log.error(
             "The given local path contains occurrences of the Windows separator character '"
                 + WINDOWS_SEPARATOR
                 + "'. This character is not seen as a separator by the local filesystem, meaning "
@@ -187,7 +187,7 @@ public class PathUtils {
 
     } else {
       if (portablePathString.contains(File.separator)) {
-        log.warn(
+        log.error(
             "The given portable path contains occurrences of the local separator character '"
                 + File.separator
                 + "'. This character was not seen as a separator on the system where the portable "

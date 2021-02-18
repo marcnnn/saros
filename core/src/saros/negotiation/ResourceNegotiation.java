@@ -96,7 +96,7 @@ public abstract class ResourceNegotiation extends Negotiation {
 
     if (cause.getCancelOption() != CancelOption.NOTIFY_PEER) return;
 
-    log.debug(
+    log.error(
         "notifying remote contact "
             + getPeer()
             + " of the local resource negotiation cancellation");

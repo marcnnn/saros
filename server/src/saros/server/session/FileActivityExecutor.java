@@ -57,7 +57,7 @@ public class FileActivityExecutor extends AbstractActivityConsumer implements St
           executeFileRemoval(activity);
           break;
         default:
-          log.warn("Unknown file activity type " + activity.getType());
+          log.error("Unknown file activity type " + activity.getType());
           break;
       }
     } catch (IOException | IllegalCharsetNameException | UnsupportedCharsetException e) {
@@ -85,7 +85,7 @@ public class FileActivityExecutor extends AbstractActivityConsumer implements St
     IFile newFile = activity.getResource();
 
     if (!oldFile.exists()) {
-      log.warn(
+      log.error(
           "Could not move file as it does not exist."
               + " source: "
               + oldFile

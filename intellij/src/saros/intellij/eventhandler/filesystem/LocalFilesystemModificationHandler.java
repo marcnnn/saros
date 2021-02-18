@@ -252,7 +252,7 @@ public class LocalFilesystemModificationHandler extends AbstractActivityProducer
 
     if (!virtualFile.getFileType().isBinary()) {
       // modification already handled by document modification handler
-      log.debug(
+      log.error(
           "Ignoring content change on the virtual file level for text resource "
               + virtualFile
               + ", requested by: "
@@ -260,7 +260,7 @@ public class LocalFilesystemModificationHandler extends AbstractActivityProducer
 
     } else {
       // TODO handle content changes for non-text resources; see #996
-      log.warn(
+      log.error(
           "Detected unhandled content change on the virtual file level for non-text resource "
               + virtualFile
               + ", requested by: "
@@ -469,7 +469,7 @@ public class LocalFilesystemModificationHandler extends AbstractActivityProducer
               (IFolder) VirtualFileConverter.convertToResource(fileOrDir, baseReferencePoint);
 
           if (childFolder == null || !session.isShared(childFolder)) {
-            log.debug(
+            log.error(
                 "Ignoring non-shared child folder deletion: "
                     + fileOrDir
                     + ", parent folder: "
@@ -707,7 +707,7 @@ public class LocalFilesystemModificationHandler extends AbstractActivityProducer
                         oldFolderWrapper.getReferencePointRelativePath().resolve(relativePath));
 
             if (!session.isShared(oldFolder)) {
-              log.debug(
+              log.error(
                   "Ignoring non-shared child folder move - folder: "
                       + oldFolder
                       + ", old parent: "
@@ -798,7 +798,7 @@ public class LocalFilesystemModificationHandler extends AbstractActivityProducer
     Path relativePath = getRelativePath(oldBaseParent, oldFile);
 
     if (relativePath == null) {
-      log.warn(
+      log.error(
           "Could not create file move activity for "
               + oldFile
               + " to "
@@ -937,7 +937,7 @@ public class LocalFilesystemModificationHandler extends AbstractActivityProducer
 
         // TODO consider using FilePropertyEvent#isRename() once it is no longer marked experimental
         if (oldName.equals(newName)) {
-          log.debug(
+          log.error(
               "Dropping file property event for "
                   + file
                   + " as it is detected to be a re-parsing of the file.");
@@ -1015,7 +1015,7 @@ public class LocalFilesystemModificationHandler extends AbstractActivityProducer
       return Paths.get(root.getPath()).relativize(Paths.get(file.getPath()));
 
     } catch (IllegalArgumentException e) {
-      log.warn(
+      log.error(
           "Could not find a relative path from the base file " + root + " to the file " + file, e);
 
       return null;
@@ -1053,7 +1053,7 @@ public class LocalFilesystemModificationHandler extends AbstractActivityProducer
         return document.getText().getBytes(file.getCharset().name());
 
       } else {
-        log.debug(
+        log.error(
             "Could not get Document for file "
                 + file
                 + ", using file content on disk instead. This content might"
@@ -1064,7 +1064,7 @@ public class LocalFilesystemModificationHandler extends AbstractActivityProducer
       }
 
     } catch (IOException e) {
-      log.warn("Could not get content for file " + file, e);
+      log.error("Could not get content for file " + file, e);
 
       return new byte[0];
     }
@@ -1126,7 +1126,7 @@ public class LocalFilesystemModificationHandler extends AbstractActivityProducer
     Editor editor = ProjectAPI.openEditor(project, oldFile, false);
 
     if (editor == null) {
-      log.debug("Ignoring non-text editor of moved file " + oldFile);
+      log.error("Ignoring non-text editor of moved file " + oldFile);
 
       return;
     }
@@ -1151,7 +1151,7 @@ public class LocalFilesystemModificationHandler extends AbstractActivityProducer
       return;
     }
 
-    log.debug("Dispatching resource activity " + activity);
+    log.error("Dispatching resource activity " + activity);
 
     fireActivity(activity);
   }

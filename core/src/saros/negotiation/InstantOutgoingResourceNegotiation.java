@@ -134,7 +134,7 @@ public class InstantOutgoingResourceNegotiation extends AbstractOutgoingResource
       throws SarosCancellationException, IOException {
     if (transferList.isEmpty()) return;
 
-    log.debug(this + ": file transfer start");
+    log.error(this + ": file transfer start");
     assert fileTransferManager != null;
 
     String message = "Sending files to " + getPeer().getName() + "...";
@@ -158,7 +158,7 @@ public class InstantOutgoingResourceNegotiation extends AbstractOutgoingResource
       /* await sending is done before closing stream */
       try {
         while (!transfer.isDone() && transfer.getAmountWritten() != out.getByteCount()) {
-          log.debug(
+          log.error(
               "stream bytes written/planned "
                   + transfer.getAmountWritten()
                   + "/"
@@ -173,7 +173,7 @@ public class InstantOutgoingResourceNegotiation extends AbstractOutgoingResource
     }
 
     monitor.done();
-    log.debug(this + ": file transfer done, " + writtenBytes + " bytes sent");
+    log.error(this + ": file transfer done, " + writtenBytes + " bytes sent");
   }
 
   @Override
@@ -215,7 +215,7 @@ public class InstantOutgoingResourceNegotiation extends AbstractOutgoingResource
   private void fileOpened(IFile file) {
     if (file != null) {
       openedFiles.addFirst(file);
-      log.debug(this + ": added " + file + " to open files queue");
+      log.error(this + ": added " + file + " to open files queue");
     }
   }
 

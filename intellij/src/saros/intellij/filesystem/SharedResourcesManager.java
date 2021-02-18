@@ -150,7 +150,7 @@ public class SharedResourcesManager implements Startable {
 
     IFile file = activity.getResource();
 
-    log.debug("performing recovery for file: " + file);
+    log.error("performing recovery for file: " + file);
 
     FileActivity.Type type = activity.getType();
 
@@ -168,7 +168,7 @@ public class SharedResourcesManager implements Startable {
         handleFileDeletion(activity);
 
       } else {
-        log.warn("performing recovery for type " + type + " is not supported");
+        log.error("performing recovery for type " + type + " is not supported");
       }
     } finally {
       /*
@@ -196,7 +196,7 @@ public class SharedResourcesManager implements Startable {
     IFile newFile = activity.getResource();
 
     if (!oldFile.exists()) {
-      log.warn(
+      log.error(
           "Could not move file "
               + oldFile
               + " as it does not exist."
@@ -250,7 +250,7 @@ public class SharedResourcesManager implements Startable {
         try {
           selectedEditorStateSnapshot.replaceSelectedFile(oldFile, newFile);
         } catch (IllegalStateException e) {
-          log.warn("Failed to update the captured selected editor state", e);
+          log.error("Failed to update the captured selected editor state", e);
         }
 
         selectedEditorStateSnapshot.applyHeldState();
@@ -268,7 +268,7 @@ public class SharedResourcesManager implements Startable {
     IFile file = activity.getResource();
 
     if (!file.exists()) {
-      log.warn("Could not delete file " + file + " as it does not exist.");
+      log.error("Could not delete file " + file + " as it does not exist.");
 
       return;
     }
@@ -299,7 +299,7 @@ public class SharedResourcesManager implements Startable {
     IFile file = activity.getResource();
 
     if (file.exists()) {
-      log.warn("Could not create file " + file + " as it already exists.");
+      log.error("Could not create file " + file + " as it already exists.");
 
       return;
     }
@@ -323,7 +323,7 @@ public class SharedResourcesManager implements Startable {
     IFolder folder = activity.getResource();
 
     if (folder.exists()) {
-      log.warn("Could not create folder " + folder + " as it already exist.");
+      log.error("Could not create folder " + folder + " as it already exist.");
 
       return;
     }
@@ -354,7 +354,7 @@ public class SharedResourcesManager implements Startable {
     IFolder folder = activity.getResource();
 
     if (!folder.exists()) {
-      log.warn("Could not delete folder " + folder + " as it does not exist.");
+      log.error("Could not delete folder " + folder + " as it does not exist.");
 
       return;
     }

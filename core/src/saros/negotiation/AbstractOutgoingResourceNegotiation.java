@@ -186,7 +186,7 @@ public abstract class AbstractOutgoingResourceNegotiation extends ResourceNegoti
 
     checkCancellation(CancelOption.NOTIFY_PEER);
 
-    log.debug(this + " : sending file list");
+    log.error(this + " : sending file list");
 
     /*
      * file lists are normally very small so we "accept" the circumstance
@@ -220,7 +220,7 @@ public abstract class AbstractOutgoingResourceNegotiation extends ResourceNegoti
   protected List<FileList> getRemoteFileList(IProgressMonitor monitor)
       throws IOException, SarosCancellationException {
 
-    log.debug(this + " : waiting for remote file list");
+    log.error(this + " : waiting for remote file list");
 
     monitor.beginTask(
         "Waiting for " + getPeer().getName() + " to choose reference point(s) location",
@@ -238,7 +238,7 @@ public abstract class AbstractOutgoingResourceNegotiation extends ResourceNegoti
     List<FileList> remoteFileLists =
         ResourceNegotiationMissingFilesExtension.PROVIDER.getPayload(packet).getFileLists();
 
-    log.debug(this + " : remote file list has been received");
+    log.error(this + " : remote file list has been received");
 
     checkCancellation(CancelOption.NOTIFY_PEER);
 
@@ -267,7 +267,7 @@ public abstract class AbstractOutgoingResourceNegotiation extends ResourceNegoti
 
     final List<User> usersToStop = new ArrayList<User>(session.getUsers());
 
-    log.debug(this + " : stopping users " + usersToStop);
+    log.error(this + " : stopping users " + usersToStop);
 
     monitor.beginTask("Locking the session...", IProgressMonitor.UNKNOWN);
 
@@ -277,7 +277,7 @@ public abstract class AbstractOutgoingResourceNegotiation extends ResourceNegoti
           .getStopManager()
           .stop(usersToStop, "archive creation for OPN [id=" + getID() + "]");
     } catch (CancellationException e) {
-      log.warn("failed to stop users", e);
+      log.error("failed to stop users", e);
       return null;
     } finally {
       monitor.done();
@@ -286,7 +286,7 @@ public abstract class AbstractOutgoingResourceNegotiation extends ResourceNegoti
 
   protected void startUsers(List<StartHandle> startHandles) {
     for (StartHandle startHandle : startHandles) {
-      log.debug(this + " : restarting user " + startHandle.getUser());
+      log.error(this + " : restarting user " + startHandle.getUser());
       startHandle.start();
     }
   }

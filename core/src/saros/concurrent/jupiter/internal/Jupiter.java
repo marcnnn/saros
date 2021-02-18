@@ -146,7 +146,7 @@ public class Jupiter implements Algorithm {
     if (jupiterActivity.getOperation() instanceof TimestampOperation) {
 
       // TODO Use timestamps correctly!
-      log.warn("Timestamp operations are not tested at the moment");
+      log.error("Timestamp operations are not tested at the moment");
 
       updateVectorTime(jupiterActivity.getTimestamp());
       return new NoOperation();

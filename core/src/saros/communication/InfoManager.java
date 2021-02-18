@@ -38,7 +38,7 @@ public class InfoManager {
 
   private final PacketListener infoListener =
       packet -> {
-        log.debug("received info from " + packet.getFrom());
+        log.error("received info from " + packet.getFrom());
         handleInfo(packet);
       };
 
@@ -115,11 +115,11 @@ public class InfoManager {
 
     InfoExchangeExtension info = InfoExchangeExtension.PROVIDER.getPayload(packet);
     if (info == null) {
-      log.warn("contact: " + contact + ", InfoExchangeExtension packet is malformed");
+      log.error("contact: " + contact + ", InfoExchangeExtension packet is malformed");
       return;
     }
 
-    log.debug("received: " + info.getData());
+    log.error("received: " + info.getData());
     remoteInfo.put(contact.get(), new ClientInfo(info.getData()));
   }
 

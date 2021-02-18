@@ -84,7 +84,7 @@ public class ViewportAdjustmentExecutor extends AbstractLocalEditorStatusChangeH
       editor = ProjectAPI.openEditor(project, virtualFile, false);
 
       if (editor == null) {
-        log.warn(
+        log.error(
             "Failed to apply queued viewport change as no text editor could be obtained for "
                 + virtualFile);
 

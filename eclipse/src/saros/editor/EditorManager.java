@@ -165,7 +165,7 @@ public class EditorManager implements IEditorManager {
 
           User sender = activity.getSource();
           if (!sender.isInSession()) {
-            log.warn(
+            log.error(
                 "skipping execution of activity "
                     + activity
                     + " for user "
@@ -288,7 +288,7 @@ public class EditorManager implements IEditorManager {
                     localViewport.getNumberOfLines(),
                     locallyActiveEditor));
           } else {
-            log.warn("No viewport for locallyActivateEditor: " + locallyActiveEditor);
+            log.error("No viewport for locallyActivateEditor: " + locallyActiveEditor);
           }
 
           if (localSelection != null) {
@@ -296,7 +296,7 @@ public class EditorManager implements IEditorManager {
                 new TextSelectionActivity(localUser, localSelection, locallyActiveEditor));
 
           } else {
-            log.warn("No selection for locallyActivateEditor: " + locallyActiveEditor);
+            log.error("No selection for locallyActivateEditor: " + locallyActiveEditor);
           }
         }
 
@@ -413,7 +413,7 @@ public class EditorManager implements IEditorManager {
     log.trace(".disconnect(" + file + ") invoked");
 
     if (!isManaged(file)) {
-      log.warn(".disconnect(): file " + file + " already disconnected");
+      log.error(".disconnect(): file " + file + " already disconnected");
       return;
     }
 
@@ -432,7 +432,7 @@ public class EditorManager implements IEditorManager {
             }
           });
     } catch (Exception e) {
-      log.warn("Failed to get editor content for " + file, e);
+      log.error("Failed to get editor content for " + file, e);
       return null;
     }
   }
@@ -444,7 +444,7 @@ public class EditorManager implements IEditorManager {
     IDocumentProvider provider = EditorAPI.connect(input);
 
     if (provider == null) {
-      log.warn("Failed to retrieve the content of " + wrappedFile);
+      log.error("Failed to retrieve the content of " + wrappedFile);
       return null;
     }
 
@@ -519,7 +519,7 @@ public class EditorManager implements IEditorManager {
   void generateViewport(IEditorPart part, LineRange viewport) {
 
     if (this.session == null) {
-      log.warn("SharedEditorListener not correctly unregistered!");
+      log.error("SharedEditorListener not correctly unregistered!");
       return;
     }
 
@@ -527,7 +527,7 @@ public class EditorManager implements IEditorManager {
     saros.filesystem.IFile wrappedFile = convertToFile(file);
 
     if (wrappedFile == null) {
-      log.warn("Could not find file for editor " + part.getTitle());
+      log.error("Could not find file for editor " + part.getTitle());
       return;
     }
 
@@ -556,7 +556,7 @@ public class EditorManager implements IEditorManager {
     saros.filesystem.IFile wrappedFile = convertToFile(file);
 
     if (wrappedFile == null) {
-      log.warn("Could not find file for editor " + part.getTitle());
+      log.error("Could not find file for editor " + part.getTitle());
       return;
     }
 
@@ -607,7 +607,7 @@ public class EditorManager implements IEditorManager {
     IFile file = EditorAPI.getEditorResource(changedEditor).getAdapter(IFile.class);
 
     if (file == null) {
-      log.warn("Could not find file for editor " + changedEditor.getTitle());
+      log.error("Could not find file for editor " + changedEditor.getTitle());
       return;
     }
 
@@ -648,7 +648,7 @@ public class EditorManager implements IEditorManager {
        *
        * <p>But watch out for changes because of a consistency check!
        */
-      log.warn(
+      log.error(
           "local user caused text changes: "
               + textEdit
               + " | write access : "
@@ -694,7 +694,7 @@ public class EditorManager implements IEditorManager {
         saveEditor(file);
         break;
       default:
-        log.warn("Unexpected type: " + editorActivity.getType());
+        log.error("Unexpected type: " + editorActivity.getType());
     }
   }
 
@@ -854,7 +854,7 @@ public class EditorManager implements IEditorManager {
     final IResource resource = EditorAPI.getEditorResource(editorPart);
 
     if (!resource.isAccessible()) {
-      log.warn(".partOpened resource: " + resource + " is not accessible");
+      log.error(".partOpened resource: " + resource + " is not accessible");
       return;
     }
 
@@ -919,7 +919,7 @@ public class EditorManager implements IEditorManager {
     saros.filesystem.IFile editorFile = convertToFile(file);
 
     if (Objects.equals(editorFile, locallyActiveEditor)) {
-      log.debug(
+      log.error(
           "ignoring partActivated event for editor file "
               + editorFile
               + " because it is already active");
@@ -936,7 +936,7 @@ public class EditorManager implements IEditorManager {
     LineRange viewport = EditorAPI.getViewport(viewer);
 
     if (viewport == null) {
-      log.warn("Shared Editor does not have a Viewport: " + editorPart);
+      log.error("Shared Editor does not have a Viewport: " + editorPart);
     } else {
       generateViewport(editorPart, viewport);
     }
@@ -963,7 +963,7 @@ public class EditorManager implements IEditorManager {
       // before the move happened) and then simulate it being opened again
       saros.filesystem.IFile file = editorPool.getFile(editorPart);
       if (file == null) {
-        log.warn("Editor was managed but file could not be found: " + editorPart);
+        log.error("Editor was managed but file could not be found: " + editorPart);
       } else {
         partClosedOfFile(editorPart, file);
       }
@@ -975,7 +975,7 @@ public class EditorManager implements IEditorManager {
       User newFollowedUser = followModeManager.getFollowedUser();
       if (oldFollowedUser != null && oldFollowedUser != newFollowedUser) {
         followModeManager.follow(oldFollowedUser);
-        log.debug(
+        log.error(
             "Followed user changed from "
                 + oldFollowedUser
                 + " to "
@@ -1162,7 +1162,7 @@ public class EditorManager implements IEditorManager {
             try {
               isDirty = isDirty(file);
             } catch (FileNotFoundException e) {
-              log.warn("could not save editor: " + file, e);
+              log.error("could not save editor: " + file, e);
             }
 
             if (isDirty) saveEditor(file);
@@ -1210,7 +1210,7 @@ public class EditorManager implements IEditorManager {
     log.trace(".saveEditor (" + file.getName() + ") invoked");
 
     if (!file.exists()) {
-      log.warn("File not found for saving: " + wrappedFile.toString(), new StackTrace());
+      log.error("File not found for saving: " + wrappedFile.toString(), new StackTrace());
       return;
     }
 
@@ -1224,7 +1224,7 @@ public class EditorManager implements IEditorManager {
        * This happens when a file which is already saved is saved again by
        * a user.
        */
-      log.debug(".saveEditor File " + file.getName() + " does not need to be saved");
+      log.error(".saveEditor File " + file.getName() + " does not need to be saved");
       provider.disconnect(input);
       return;
     }
@@ -1252,7 +1252,7 @@ public class EditorManager implements IEditorManager {
 
     try {
       provider.saveDocument(new NullProgressMonitor(), input, doc, true);
-      log.debug("Saved document: " + wrappedFile);
+      log.error("Saved document: " + wrappedFile);
     } catch (CoreException e) {
       log.error("Failed to save document: " + wrappedFile, e);
     }
@@ -1366,7 +1366,7 @@ public class EditorManager implements IEditorManager {
     saros.filesystem.IFile wrappedFile = convertToFile(file);
 
     if (wrappedFile == null) {
-      log.warn("Could not find file for editor " + editorPart.getTitle());
+      log.error("Could not find file for editor " + editorPart.getTitle());
       return;
     }
 
@@ -1439,7 +1439,7 @@ public class EditorManager implements IEditorManager {
    * @param lock if true then editors are locked, otherwise they are unlocked
    */
   private void lockAllEditors(boolean lock) {
-    log.debug(lock ? "locking all editors" : "unlocking all editors");
+    log.error(lock ? "locking all editors" : "unlocking all editors");
 
     editorPool.setEditable(!lock && session.hasWriteAccess());
 
@@ -1522,7 +1522,7 @@ public class EditorManager implements IEditorManager {
     final EditorState activeEditor = userEditorStateManager.getState(jumpTo).getActiveEditorState();
 
     if (activeEditor == null) {
-      log.debug("user " + jumpTo + " has no editor open");
+      log.error("user " + jumpTo + " has no editor open");
 
       // changed waldmann, 22.01.2012: this balloon Notification became
       // annoying as the awareness information, which file is opened is
@@ -1544,7 +1544,7 @@ public class EditorManager implements IEditorManager {
     // TODO So jumping to a user's position based on his/her selection is
     // not an option?
     if (viewport == null) {
-      log.warn("user " + jumpTo + " has no viewport in editor: " + file);
+      log.error("user " + jumpTo + " has no viewport in editor: " + file);
       return;
     }
 
@@ -1555,7 +1555,7 @@ public class EditorManager implements IEditorManager {
           public void run() {
             IEditorPart newEditor = EditorAPI.openEditor(file, true);
             if (newEditor == null) {
-              log.warn("editor for " + file + " couldn't be opened");
+              log.error("editor for " + file + " couldn't be opened");
               return;
             }
 

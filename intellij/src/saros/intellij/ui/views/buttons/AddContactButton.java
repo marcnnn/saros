@@ -71,7 +71,7 @@ public class AddContactButton extends AbstractToolbarButton {
     }
 
     if (jid == null) {
-      log.debug("Adding contact canceled by user during user id entry.");
+      log.error("Adding contact canceled by user during user id entry.");
 
       return;
     }
@@ -89,7 +89,7 @@ public class AddContactButton extends AbstractToolbarButton {
     }
 
     if (nickname == null) {
-      log.debug("Adding contact canceled by user during user nickname entry.");
+      log.error("Adding contact canceled by user during user nickname entry.");
 
       return;
     }
@@ -193,7 +193,7 @@ public class AddContactButton extends AbstractToolbarButton {
       xmppContactsService.addContact(jid, nickname, dialog);
 
     } catch (OperationCanceledException e) {
-      log.debug("Adding contact canceled by user during XMPP request: " + e.getMessage());
+      log.error("Adding contact canceled by user during XMPP request: " + e.getMessage());
     }
   }
 

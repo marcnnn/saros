@@ -37,11 +37,11 @@ public class TwoWayJupiterServerDocument implements NetworkEventHandler, Documen
   public Operation receiveOperation(JupiterActivity jupiterActivity) {
     Operation op = null;
     try {
-      log.debug("Operation before OT:" + jupiterActivity.getOperation().toString());
+      log.error("Operation before OT:" + jupiterActivity.getOperation().toString());
       /* 1. transform operation. */
       op = algorithm.receiveJupiterActivity(jupiterActivity);
 
-      log.debug("Operation after OT: " + op.toString());
+      log.error("Operation after OT: " + op.toString());
       /* 2. execution on server document */
       doc.execOperation(op);
     } catch (TransformationException e) {

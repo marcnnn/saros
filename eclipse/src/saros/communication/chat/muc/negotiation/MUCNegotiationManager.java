@@ -130,7 +130,7 @@ public class MUCNegotiationManager {
    * @param remotePreferences received communication settings
    */
   public void setSessionPreferences(MultiUserChatPreferences remotePreferences) {
-    log.debug(
+    log.error(
         "Got hosts Communication Config: server "
             + remotePreferences.getService()
             + " room "

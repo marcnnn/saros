@@ -141,7 +141,7 @@ public final class XMPPAccountStore {
 
     if (accountFile == null || !accountFile.exists()) return;
 
-    log.debug("loading accounts from file: " + accountFile.getAbsolutePath());
+    log.error("loading accounts from file: " + accountFile.getAbsolutePath());
 
     FileInputStream dataIn = null;
 
@@ -179,7 +179,7 @@ public final class XMPPAccountStore {
       IOUtils.closeQuietly(dataIn);
     }
 
-    log.debug("loaded " + accounts.size() + " account(s)");
+    log.error("loaded " + accounts.size() + " account(s)");
   }
 
   private synchronized void saveAccounts() {
@@ -226,7 +226,7 @@ public final class XMPPAccountStore {
       IOUtils.closeQuietly(dataOut);
     }
 
-    log.debug("saved " + accounts.size() + " account(s)");
+    log.error("saved " + accounts.size() + " account(s)");
   }
 
   private XStream createXStream() {

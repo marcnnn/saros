@@ -408,7 +408,7 @@ abstract class AbstractEditorAnnotation {
     int documentLength = editor.getDocument().getTextLength();
 
     if (documentLength < end) {
-      log.warn(
+      log.error(
           "The creation of a range highlighter with the bounds ("
               + start
               + ", "

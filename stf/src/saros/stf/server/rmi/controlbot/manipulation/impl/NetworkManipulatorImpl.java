@@ -233,7 +233,7 @@ public final class NetworkManipulatorImpl extends StfRemoteObject
     log.trace("unblocking incoming packet transfer from " + jid);
 
     if (blockAllIncomingSessionPackets) {
-      log.warn(
+      log.error(
           "cannot unblock incoming packet transfer from "
               + jid
               + ", because all incoming packet traffic is locked");
@@ -282,7 +282,7 @@ public final class NetworkManipulatorImpl extends StfRemoteObject
     log.trace("unblocking outgoing packet transfer to " + jid);
 
     if (blockAllOutgoingSessionPackets) {
-      log.warn(
+      log.error(
           "cannot unblock outgoing packet transfer to "
               + jid
               + ", because all outgoing packet traffic is locked");
@@ -401,7 +401,7 @@ public final class NetworkManipulatorImpl extends StfRemoteObject
     try {
       if (!swtThreadSync.await(
           SarosSWTBotPreferences.SAROS_DEFAULT_TIMEOUT, TimeUnit.MILLISECONDS)) {
-        log.warn("could not synchronize on the SWT EDT");
+        log.error("could not synchronize on the SWT EDT");
       }
     } catch (InterruptedException e1) {
       Thread.currentThread().interrupt();

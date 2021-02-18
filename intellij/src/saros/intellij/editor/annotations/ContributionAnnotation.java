@@ -123,7 +123,7 @@ class ContributionAnnotation extends AbstractEditorAnnotation {
         annotationRange.addRangeHighlighter(rangeHighlighter);
 
       } else {
-        log.warn(
+        log.error(
             "Could not create range highlighter for range " + annotationRange + " for " + this);
       }
     }

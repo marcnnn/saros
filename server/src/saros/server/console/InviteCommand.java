@@ -41,7 +41,7 @@ public class InviteCommand extends ConsoleCommand {
           args.stream().map(JID::new).collect(partitioningBy(XMPPUtils::validateJID));
 
       for (JID jid : jids.get(false)) {
-        log.warn("Invalid JID skipped: " + jid);
+        log.error("Invalid JID skipped: " + jid);
       }
 
       sessionManager.invite(jids.get(true), "Invitation by server command");

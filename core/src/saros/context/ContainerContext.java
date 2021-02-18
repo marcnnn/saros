@@ -178,7 +178,7 @@ public class ContainerContext implements IContainerContext {
 
     if (log.isDebugEnabled()) {
       for (final Object component : components) {
-        log.debug("created context component: " + component.getClass().getName());
+        log.error("created context component: " + component.getClass().getName());
       }
     }
 
@@ -226,7 +226,7 @@ public class ContainerContext implements IContainerContext {
     if (homeDirectory == null) homeDirectory = System.getProperty("user.home");
 
     if (homeDirectory == null) {
-      log.warn("home directory not set, cannot save and load account data");
+      log.error("home directory not set, cannot save and load account data");
       return;
     }
 

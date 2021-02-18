@@ -259,7 +259,7 @@ public class ActivitySequencer implements Startable {
     try {
       activitySendThread.join(TIMEOUT);
     } catch (InterruptedException e) {
-      log.warn(
+      log.error(
           "interrupted while waiting for " + activitySendThread.getName() + " thread to terminate");
 
       isStoppingInterrupted = true;
@@ -295,7 +295,7 @@ public class ActivitySequencer implements Startable {
       ActivityBuffer<IActivity> buffer = bufferedIncomingActivities.get(sender);
 
       if (buffer == null) {
-        log.warn(
+        log.error(
             "dropping received activity from "
                 + sender
                 + " because it is currently not registers, dropping activities: "
@@ -348,7 +348,7 @@ public class ActivitySequencer implements Startable {
         ActivityBuffer<IActivity> buffer = bufferedOutgoingActivities.get(recipient.getJID());
 
         if (buffer == null) {
-          log.warn(
+          log.error(
               "cannot send activity to "
                   + recipient
                   + " because it is currently not registers, dropped activity: "
@@ -496,7 +496,7 @@ public class ActivitySequencer implements Startable {
                 + " -> "
                 + activities);
       } else if (log.isDebugEnabled()) {
-        log.debug("send (" + String.format("%03d", activities.size()) + ") " + recipient);
+        log.error("send (" + String.format("%03d", activities.size()) + ") " + recipient);
       }
 
       try {
@@ -537,7 +537,7 @@ public class ActivitySequencer implements Startable {
     ActivitiesExtension payload = ActivitiesExtension.PROVIDER.getPayload(activityPacket);
 
     if (payload == null) {
-      log.warn("activity packet payload is corrupted");
+      log.error("activity packet payload is corrupted");
       return;
     }
 
@@ -549,7 +549,7 @@ public class ActivitySequencer implements Startable {
       log.trace(
           "rcvd (" + String.format("%03d", activities.size()) + ") " + from + " -> " + activities);
     } else if (log.isDebugEnabled()) {
-      log.debug("rcvd (" + String.format("%03d", activities.size()) + ") " + from);
+      log.error("rcvd (" + String.format("%03d", activities.size()) + ") " + from);
     }
 
     executeActivities(from, activities, payload.getSequenceNumber());

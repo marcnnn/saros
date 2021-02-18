@@ -108,7 +108,7 @@ class StartSessionContactPopMenu extends JPopupMenu {
       }
 
     } else {
-      log.debug(
+      log.error(
           "No modules shown to user as no modules "
               + (nonCompliantModules.isEmpty()
                   ? ""
@@ -193,7 +193,7 @@ class StartSessionContactPopMenu extends JPopupMenu {
         shownModules.add(moduleItem);
 
       } catch (IllegalArgumentException exception) {
-        log.debug(
+        log.error(
             "Ignoring module "
                 + fullModuleName
                 + " as it has multiple content roots and can't necessarily be completely shared.");

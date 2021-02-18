@@ -216,7 +216,7 @@ abstract class Negotiation {
       isLocalCancellation = true;
     }
 
-    log.debug(
+    log.error(
         "negotiation "
             + this
             + " was canceled by the local side, error: "
@@ -246,7 +246,7 @@ abstract class Negotiation {
       isRemoteCancellation = true;
     }
 
-    log.debug(
+    log.error(
         "negotiation "
             + this
             + " was canceled by the remote side, error: "
@@ -389,11 +389,11 @@ abstract class Negotiation {
     if (status != Status.OK) {
       assert cause != null;
       notifyCancellation(cause);
-      log.debug("executing cancellation for negotiation " + this);
+      log.error("executing cancellation for negotiation " + this);
       executeCancellation();
     }
 
-    log.debug("negotiation " + this + " exit status: " + status);
+    log.error("negotiation " + this + " exit status: " + status);
     return exitStatus;
   }
 
@@ -435,7 +435,7 @@ abstract class Negotiation {
             "Invitation was canceled locally" + " because of an error: " + exceptionMessage;
         log.error("canceled negotiation " + this + ", error: " + exceptionMessage);
       } else {
-        log.debug("negotiation " + this + " was canceled manually by the local user");
+        log.error("negotiation " + this + " was canceled manually by the local user");
       }
 
     } else if (cancellationCause instanceof RemoteCancellationException) {
@@ -452,7 +452,7 @@ abstract class Negotiation {
                 + exceptionMessage);
 
       } else {
-        log.debug("negotiation " + this + " was canceled manually by the remote side");
+        log.error("negotiation " + this + " was canceled manually by the remote side");
       }
     } else {
       log.error(

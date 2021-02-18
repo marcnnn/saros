@@ -48,7 +48,7 @@ public class StartHandle {
    */
   public boolean start() {
 
-    log.debug("Called start on " + user);
+    log.error("Called start on " + user);
 
     if (!startCalled.compareAndSet(false, true))
       throw new IllegalStateException("start can only be called once per StartHandle");
@@ -75,7 +75,7 @@ public class StartHandle {
    */
   public boolean startAndAwait() {
 
-    log.debug("Called startAndAwait on " + user);
+    log.error("Called startAndAwait on " + user);
 
     if (!startCalled.compareAndSet(false, true))
       throw new IllegalStateException("start can only be called once per StartHandle");
@@ -123,7 +123,7 @@ public class StartHandle {
   /** Remember that the stopped user has acknowledged this handle. */
   void acknowledge() {
     if (!acknowledged.compareAndSet(false, true)) {
-      log.warn("Acknowledge should only be called once per handle", new StackTrace());
+      log.error("Acknowledge should only be called once per handle", new StackTrace());
     }
   }
 

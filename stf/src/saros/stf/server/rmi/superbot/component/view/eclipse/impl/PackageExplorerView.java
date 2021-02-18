@@ -185,10 +185,10 @@ public final class PackageExplorerView extends StfRemoteObject implements IPacka
   @Override
   public String getFileContent(String... nodes) throws RemoteException, IOException, CoreException {
     IPath path = new Path(getPath(nodes));
-    log.debug("checking existence of file '" + path + "'");
+    log.error("checking existence of file '" + path + "'");
     final IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
 
-    log.debug("Checking full path: '" + file.getFullPath().toOSString() + "'");
+    log.error("Checking full path: '" + file.getFullPath().toOSString() + "'");
     return convertStreamToString(file.getContents());
   }
 

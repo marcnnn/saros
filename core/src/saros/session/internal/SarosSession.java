@@ -144,7 +144,7 @@ public final class SarosSession implements ISarosSession {
 
             if (resource != null
                 && filteredReferencePoints.contains(resource.getReferencePoint())) {
-              log.debug("Dropped activity for resource of filtered reference point: " + activity);
+              log.error("Dropped activity for resource of filtered reference point: " + activity);
 
               return;
             }
@@ -404,7 +404,7 @@ public final class SarosSession implements ISarosSession {
   public void removeUser(final User user) {
     synchronized (this) {
       if (!user.isInSession()) {
-        log.warn("user " + user + " is already or is currently removed from the session");
+        log.error("user " + user + " is already or is currently removed from the session");
         return;
       }
 
@@ -470,7 +470,7 @@ public final class SarosSession implements ISarosSession {
           user.getJID(),
           KickUserExtension.PROVIDER.create(new KickUserExtension(getID())));
     } catch (IOException e) {
-      log.warn(
+      log.error(
           "could not kick user "
               + user
               + " from the session because the connection to the user is already lost");
@@ -576,7 +576,7 @@ public final class SarosSession implements ISarosSession {
             user.getJID(),
             LeaveSessionExtension.PROVIDER.create(new LeaveSessionExtension(getID())));
       } catch (IOException e) {
-        log.warn("failed to notify user " + user + " about local session stop", e);
+        log.error("failed to notify user " + user + " about local session stop", e);
       }
     }
   }
@@ -656,7 +656,7 @@ public final class SarosSession implements ISarosSession {
     try {
       activitySequencer.sendActivity(recipients, activity);
     } catch (IllegalArgumentException e) {
-      log.warn("could not serialize activity: " + activity, e);
+      log.error("could not serialize activity: " + activity, e);
     }
   }
 

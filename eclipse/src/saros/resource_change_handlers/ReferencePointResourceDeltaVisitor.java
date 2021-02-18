@@ -176,7 +176,7 @@ final class ReferencePointResourceDeltaVisitor implements IResourceDeltaVisitor 
       return;
 
     } else if (!session.isShared(wrappedResource)) {
-      log.debug("Ignoring resource creation of ignored resource " + wrappedResource);
+      log.error("Ignoring resource creation of ignored resource " + wrappedResource);
 
       return;
     }
@@ -275,7 +275,7 @@ final class ReferencePointResourceDeltaVisitor implements IResourceDeltaVisitor 
           new FileActivity(user, Type.REMOVED, Purpose.ACTIVITY, null, oldFile, null, null));
 
     } else {
-      log.debug(
+      log.error(
           "Ignoring file move with both ignored source and target file - old file: "
               + oldFile
               + ", new file: "
@@ -298,7 +298,7 @@ final class ReferencePointResourceDeltaVisitor implements IResourceDeltaVisitor 
       return;
 
     } else if (!session.isShared(removedResource)) {
-      log.debug("Ignoring resource deletion of ignored resource " + removedResource);
+      log.error("Ignoring resource deletion of ignored resource " + removedResource);
 
       return;
     }
@@ -345,7 +345,7 @@ final class ReferencePointResourceDeltaVisitor implements IResourceDeltaVisitor 
       return;
 
     } else if (!session.isShared(wrappedFile)) {
-      log.debug("Ignoring content change of ignored file " + wrappedFile);
+      log.error("Ignoring content change of ignored file " + wrappedFile);
 
       return;
     }

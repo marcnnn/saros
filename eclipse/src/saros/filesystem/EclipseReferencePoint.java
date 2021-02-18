@@ -212,7 +212,7 @@ public class EclipseReferencePoint implements IReferencePoint {
       return getFolder((org.eclipse.core.resources.IFolder) resourceDelegate);
 
     } else {
-      log.debug(
+      log.error(
           "Given resource delegate is not a file or a folder; can't be non-reference-point resource; found type: "
               + delegate.getType()
               + " - "

@@ -180,7 +180,7 @@ public final class ServerSessionTimeoutHandler extends SessionTimeoutHandler {
     try {
       workerThread.join(TIMEOUT);
     } catch (InterruptedException e) {
-      log.warn("interrupted while waiting for " + workerThread.getName() + " thread to terminate");
+      log.error("interrupted while waiting for " + workerThread.getName() + " thread to terminate");
 
       Thread.currentThread().interrupt();
     }

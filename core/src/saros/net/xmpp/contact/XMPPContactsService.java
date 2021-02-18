@@ -85,19 +85,19 @@ public class XMPPContactsService implements Disposable {
       new RosterListener() {
         @Override
         public void entriesAdded(Collection<String> addresses) {
-          log.debug("add " + addresses);
+          log.error("add " + addresses);
           contactsExecutor.execute(() -> contactsAdded(addresses));
         }
 
         @Override
         public void entriesDeleted(Collection<String> addresses) {
-          log.debug("delete " + addresses);
+          log.error("delete " + addresses);
           contactsExecutor.execute(() -> contactsRemoved(addresses));
         }
 
         @Override
         public void entriesUpdated(Collection<String> addresses) {
-          log.debug("update " + addresses);
+          log.error("update " + addresses);
           contactsExecutor.execute(() -> contactsUpdated(addresses));
         }
 
@@ -109,7 +109,7 @@ public class XMPPContactsService implements Disposable {
            * cause this method to be called.
            * https://github.com/igniterealtime/Smack/blob/0cec5713d1f93ee99a2226702d64a963e9981933/source/org/jivesoftware/smack/RosterListener.java#L75-L77
            */
-          log.debug(presence.getFrom() + ": " + presence.getType());
+          log.error(presence.getFrom() + ": " + presence.getType());
           contactsExecutor.execute(() -> contactResourceChangedPresence(presence));
         }
       };
@@ -122,7 +122,7 @@ public class XMPPContactsService implements Disposable {
       new SubscriptionListener() {
         @Override
         public void subscriptionCanceled(JID jid) {
-          log.debug("subscription canceled from " + jid);
+          log.error("subscription canceled from " + jid);
           contactsExecutor.execute(() -> contactCanceledSubscription(jid));
         }
       };
@@ -329,7 +329,7 @@ public class XMPPContactsService implements Disposable {
     for (String address : addresses) {
       XMPPContact removedContact = contacts.remove(address);
       if (removedContact == null) {
-        log.warn("Strange behaviour: Contact for " + address + " not found!");
+        log.error("Strange behaviour: Contact for " + address + " not found!");
         continue;
       }
 
@@ -386,7 +386,7 @@ public class XMPPContactsService implements Disposable {
   private void contactCanceledSubscription(JID jid) {
     XMPPContact contact = contacts.get(jid.getRAW());
     if (contact == null) {
-      log.debug("Strange behaviour: no contact found for canceled subscription from " + jid);
+      log.error("Strange behaviour: no contact found for canceled subscription from " + jid);
       return;
     }
 
@@ -429,7 +429,7 @@ public class XMPPContactsService implements Disposable {
   }
 
   private void notifyListeners(XMPPContact contact, UpdateType updateType) {
-    log.debug("updated " + contact + " - " + updateType);
+    log.error("updated " + contact + " - " + updateType);
     Optional<XMPPContact> optionalContact = Optional.ofNullable(contact);
 
     for (IContactsUpdate listener : updateListeners) {

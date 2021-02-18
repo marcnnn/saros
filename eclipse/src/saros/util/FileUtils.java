@@ -77,7 +77,7 @@ public class FileUtils {
    */
   public static void create(final IFolder folder) throws CoreException {
     if (folder.exists()) {
-      log.warn("folder already exists: " + folder, new StackTrace());
+      log.error("folder already exists: " + folder, new StackTrace());
       return;
     }
 
@@ -94,7 +94,7 @@ public class FileUtils {
    */
   public static void delete(final IResource resource) throws CoreException {
     if (!resource.exists()) {
-      log.warn("file for deletion does not exist: " + resource, new StackTrace());
+      log.error("file for deletion does not exist: " + resource, new StackTrace());
       return;
     }
 
@@ -141,7 +141,7 @@ public class FileUtils {
 
             totalFileSize += filesize;
           } catch (Exception e) {
-            log.warn("failed to retrieve file size of file " + resource.getLocationURI(), e);
+            log.error("failed to retrieve file size of file " + resource.getLocationURI(), e);
           }
           break;
         case IResource.PROJECT:
@@ -159,7 +159,7 @@ public class FileUtils {
             totalFileCount += subFileCountAndSize.getRight();
 
           } catch (Exception e) {
-            log.warn("failed to process container: " + resource, e);
+            log.error("failed to process container: " + resource, e);
           }
           break;
         default:
@@ -184,9 +184,9 @@ public class FileUtils {
       in = localFile.getContents();
       content = IOUtils.toByteArray(in);
     } catch (CoreException e) {
-      log.warn("could not get content of file " + localFile.getFullPath());
+      log.error("could not get content of file " + localFile.getFullPath());
     } catch (IOException e) {
-      log.warn(
+      log.error(
           "could not convert file content to byte array (file: " + localFile.getFullPath() + ")");
     } finally {
       IOUtils.closeQuietly(in);
@@ -213,10 +213,10 @@ public class FileUtils {
       Charset.forName(charset);
 
     } catch (CoreException e) {
-      log.warn("could not get charset of file " + localFile.getFullPath());
+      log.error("could not get charset of file " + localFile.getFullPath());
 
     } catch (IllegalCharsetNameException | UnsupportedCharsetException e) {
-      log.warn("charset for " + localFile.getFullPath() + " not valid - charset name: " + charset);
+      log.error("charset for " + localFile.getFullPath() + " not valid - charset name: " + charset);
 
       return null;
     }

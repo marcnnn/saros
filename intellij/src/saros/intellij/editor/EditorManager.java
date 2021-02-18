@@ -98,7 +98,7 @@ public class EditorManager extends AbstractActivityProducer implements IEditorMa
             return;
           }
 
-          log.debug(file + " editor activity received " + editorActivity);
+          log.error(file + " editor activity received " + editorActivity);
 
           final User user = editorActivity.getSource();
 
@@ -114,19 +114,19 @@ public class EditorManager extends AbstractActivityProducer implements IEditorMa
               localEditorHandler.saveDocument(file);
               break;
             default:
-              log.warn("Unexpected type: " + editorActivity.getType());
+              log.error("Unexpected type: " + editorActivity.getType());
           }
         }
 
         private void execTextEdit(TextEditActivity textEditActivity) {
           IFile file = textEditActivity.getResource();
 
-          log.debug(file + " text edit activity received " + textEditActivity);
+          log.error(file + " text edit activity received " + textEditActivity);
 
           Editor calculationEditor = getCalculationEditor(file);
 
           if (calculationEditor == null) {
-            log.warn(
+            log.error(
                 "Could not apply text edit "
                     + textEditActivity
                     + " as no editor could be obtained for resource "
@@ -180,7 +180,7 @@ public class EditorManager extends AbstractActivityProducer implements IEditorMa
           VirtualFile virtualFile = VirtualFileConverter.convertToVirtualFile(file);
 
           if (virtualFile == null) {
-            log.warn(
+            log.error(
                 "Could not create an editor instance for "
                     + file
                     + " as no virtual file could be obtained for the resource.");
@@ -191,7 +191,7 @@ public class EditorManager extends AbstractActivityProducer implements IEditorMa
           Document document = DocumentAPI.getDocument(virtualFile);
 
           if (document == null) {
-            log.warn(
+            log.error(
                 "Could not create an editor instance for "
                     + virtualFile
                     + " as no document could be obtained for the file.");
@@ -307,7 +307,7 @@ public class EditorManager extends AbstractActivityProducer implements IEditorMa
             return;
           }
 
-          log.debug("Text selection activity received: " + file + ", " + selection);
+          log.error("Text selection activity received: " + file + ", " + selection);
 
           User user = selection.getSource();
 
@@ -320,7 +320,7 @@ public class EditorManager extends AbstractActivityProducer implements IEditorMa
             VirtualFile virtualFile = VirtualFileConverter.convertToVirtualFile(file);
 
             if (virtualFile == null) {
-              log.warn(
+              log.error(
                   "Could not apply selection "
                       + selection
                       + " as no virtual file could be obtained for resource "
@@ -332,7 +332,7 @@ public class EditorManager extends AbstractActivityProducer implements IEditorMa
             Document document = DocumentAPI.getDocument(virtualFile);
 
             if (document == null) {
-              log.warn(
+              log.error(
                   "Could not apply selection "
                       + selection
                       + " as no document could be obtained for resource "
@@ -485,7 +485,7 @@ public class EditorManager extends AbstractActivityProducer implements IEditorMa
     VirtualFile fileForEditor = DocumentAPI.getVirtualFile(editor.getDocument());
 
     if (fileForEditor == null) {
-      log.warn(
+      log.error(
           "Encountered editor without valid virtual file representation - file held in editor pool: "
               + file);
 
@@ -493,7 +493,7 @@ public class EditorManager extends AbstractActivityProducer implements IEditorMa
     }
 
     if (!visibleFilePaths.contains(fileForEditor.getPath())) {
-      log.debug(
+      log.error(
           "Ignoring "
               + file
               + " while sending viewport awareness information as the editor is not currently visible.");
@@ -572,7 +572,7 @@ public class EditorManager extends AbstractActivityProducer implements IEditorMa
           continue;
 
         } else if (file.isIgnored()) {
-          log.debug("Skipping editor for ignored open file " + file);
+          log.error("Skipping editor for ignored open file " + file);
 
           continue;
         }
@@ -679,7 +679,7 @@ public class EditorManager extends AbstractActivityProducer implements IEditorMa
           assert editorPool.getEditors().isEmpty() : "EditorPool was not correctly reset!";
 
           if (!backgroundEditorPool.isEmpty()) {
-            log.warn(
+            log.error(
                 "BackgroundEditorPool already contains entries at session start! Possible memory leak.");
           }
 
@@ -753,7 +753,7 @@ public class EditorManager extends AbstractActivityProducer implements IEditorMa
 
           if (virtualFile == null || !virtualFile.exists() || virtualFile.isDirectory()) {
 
-            log.warn(
+            log.error(
                 "Could not retrieve content of "
                     + file
                     + " as a matching VirtualFile could not be found,"
@@ -885,7 +885,7 @@ public class EditorManager extends AbstractActivityProducer implements IEditorMa
    */
   public void generateViewport(IFile file, LineRange viewport) {
     if (session == null) {
-      log.warn("SharedEditorListener not correctly unregistered!");
+      log.error("SharedEditorListener not correctly unregistered!");
       return;
     }
 
@@ -946,7 +946,7 @@ public class EditorManager extends AbstractActivityProducer implements IEditorMa
        * But watch out for changes because of a consistency check!
        */
 
-      log.warn(
+      log.error(
           "local user caused text changes: "
               + textEdit
               + " | write access : "
@@ -989,7 +989,7 @@ public class EditorManager extends AbstractActivityProducer implements IEditorMa
         selectionEnd = caretPosition;
       }
 
-      log.debug(
+      log.error(
           "Sending selection ("
               + selectionStart
               + ","
@@ -1147,7 +1147,7 @@ public class EditorManager extends AbstractActivityProducer implements IEditorMa
     VirtualFile passedFile = VirtualFileConverter.convertToVirtualFile(file);
 
     if (passedFile == null) {
-      log.warn(
+      log.error(
           "Ignoring request to adjust viewport as no valid VirtualFile could be found for "
               + file
               + " - given range: "
@@ -1168,7 +1168,7 @@ public class EditorManager extends AbstractActivityProducer implements IEditorMa
     }
 
     if (editor == null) {
-      log.warn(
+      log.error(
           "Failed to adjust viewport for "
               + file
               + " as it is not known to the editor pool even though it is currently open");

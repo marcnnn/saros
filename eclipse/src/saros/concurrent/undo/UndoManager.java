@@ -131,7 +131,7 @@ public class UndoManager extends AbstractActivityConsumer implements Disposable 
             return Status.OK_STATUS;
           }
 
-          if (log.isDebugEnabled()) log.debug(opInfo(operation));
+          if (log.isDebugEnabled()) log.error(opInfo(operation));
 
           if (operation.getLabel().equals(TYPING_LABEL)
               || operation.getLabel().equals(NullOperation.LABEL)) {
@@ -144,7 +144,7 @@ public class UndoManager extends AbstractActivityConsumer implements Disposable 
                 new Runnable() {
                   @Override
                   public void run() {
-                    log.debug("redoing operation " + operation);
+                    log.error("redoing operation " + operation);
                     redo(currentActiveEditor);
 
                     /*
@@ -171,7 +171,7 @@ public class UndoManager extends AbstractActivityConsumer implements Disposable 
             return Status.OK_STATUS;
           }
 
-          if (log.isDebugEnabled()) log.debug(opInfo(operation));
+          if (log.isDebugEnabled()) log.error(opInfo(operation));
 
           if (operation.getLabel().equals(TYPING_LABEL)) {
             updateCurrentLocalAtomicOperation(null);
@@ -182,7 +182,7 @@ public class UndoManager extends AbstractActivityConsumer implements Disposable 
                 new Runnable() {
                   @Override
                   public void run() {
-                    log.debug("undoing operation " + operation);
+                    log.error("undoing operation " + operation);
                     undo(currentActiveEditor);
 
                     if (undoHistory.canRedo(currentActiveEditor)) simulateUndo();
@@ -321,7 +321,7 @@ public class UndoManager extends AbstractActivityConsumer implements Disposable 
         currentLocalAtomicOperation =
             transformation.transform(currentLocalAtomicOperation, operation, Boolean.FALSE);
       }
-      log.debug("adding remote " + operation + " to history");
+      log.error("adding remote " + operation + " to history");
       undoHistory.add(textEditActivity.getResource(), Type.REMOTE, operation);
     } else {
       if (!textEditActivity.getResource().equals(currentActiveEditor)) {
@@ -405,7 +405,7 @@ public class UndoManager extends AbstractActivityConsumer implements Disposable 
 
       undoOperation = transformation.transform(undoOperation, operation, Boolean.TRUE);
 
-      log.debug("transformed undo: " + undoOperation);
+      log.error("transformed undo: " + undoOperation);
     }
 
     undoHistory.replaceType(editor, lastLocal, Type.LOCAL, Type.REMOTE);
@@ -435,7 +435,7 @@ public class UndoManager extends AbstractActivityConsumer implements Disposable 
     // it is not relevant any more, so it is set remote
 
     undoHistory.add(editor, Type.LOCAL, redoOperation);
-    log.debug("adding " + lastUndo + " (cause: redo internal)");
+    log.error("adding " + lastUndo + " (cause: redo internal)");
 
     return redoOperation;
   }
@@ -443,16 +443,16 @@ public class UndoManager extends AbstractActivityConsumer implements Disposable 
   private void undo(IFile editor) {
 
     Operation op = calcUndoOperation(editor);
-    log.debug("calculated undo: " + op);
+    log.error("calculated undo: " + op);
 
     // don't waste the network
     if (op instanceof NoOperation) {
-      log.debug("nothing to undo in " + editor);
+      log.error("nothing to undo in " + editor);
       return;
     }
 
     for (TextEditActivity activity : op.toTextEdit(editor, sarosSession.getLocalUser())) {
-      log.debug("undone: " + activity + " in " + editor);
+      log.error("undone: " + activity + " in " + editor);
       fireActivity(activity);
     }
   }
@@ -462,7 +462,7 @@ public class UndoManager extends AbstractActivityConsumer implements Disposable 
     Operation op = calcRedoOperation(editor);
 
     for (TextEditActivity activity : op.toTextEdit(editor, sarosSession.getLocalUser())) {
-      log.debug("redone: " + activity + " in " + editor);
+      log.error("redone: " + activity + " in " + editor);
       fireActivity(activity);
     }
   }
@@ -543,12 +543,12 @@ public class UndoManager extends AbstractActivityConsumer implements Disposable 
   protected void storeCurrentLocalOperation() {
     if (currentLocalCompositeOperation == null) return;
     if (currentActiveEditor == null) {
-      log.warn("Cannot store current local operation. Current active editor is unknown");
+      log.error("Cannot store current local operation. Current active editor is unknown");
       return;
     }
     undoHistory.add(currentActiveEditor, Type.LOCAL, currentLocalCompositeOperation);
     currentLocalCompositeOperation = null;
-    log.debug("stored current local operation");
+    log.error("stored current local operation");
   }
 
   /**

@@ -119,7 +119,7 @@ final class EditorPool {
     final ITextViewer viewer = EditorAPI.getViewer(editorPart);
 
     if (viewer == null) {
-      log.warn("editor part is not a ITextViewer: " + editorPart);
+      log.error("editor part is not a ITextViewer: " + editorPart);
       return;
     }
 
@@ -127,7 +127,7 @@ final class EditorPool {
     final IFile file = ResourceUtil.getFile(input);
 
     if (file == null) {
-      log.warn("editor part does not use a file storage: " + editorPart);
+      log.error("editor part does not use a file storage: " + editorPart);
       return;
     }
 
@@ -238,7 +238,7 @@ final class EditorPool {
     final IDocument document = documentProvider.getDocument(input);
 
     if (document == null) {
-      log.warn("could not disconnect from document: " + file);
+      log.error("could not disconnect from document: " + file);
     } else {
       document.removeDocumentListener(documentListener);
     }
@@ -248,7 +248,7 @@ final class EditorPool {
     boolean wasContained = editorParts.get(wrappedFile).remove(editorPart);
 
     if (!wasContained) {
-      log.warn(
+      log.error(
           "Given file " + wrappedFile + " was not mapped onto given editor part " + editorPart);
     }
   }
@@ -339,7 +339,7 @@ final class EditorPool {
         EditorAPI.getDocumentProvider(editorPart.getEditorInput());
 
     if (!(defaultDocumentProvider instanceof TextFileDocumentProvider)) {
-      log.warn(
+      log.error(
           "The default document provider "
               + defaultDocumentProvider
               + " for editor with title '"
@@ -356,7 +356,7 @@ final class EditorPool {
     final IDocumentProvider editorDocumentProvider = textEditor.getDocumentProvider();
 
     if (!(editorDocumentProvider instanceof TextFileDocumentProvider)) {
-      log.warn(
+      log.error(
           "The document provider "
               + editorDocumentProvider
               + " for editor with title '"

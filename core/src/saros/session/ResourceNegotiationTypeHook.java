@@ -55,7 +55,7 @@ public class ResourceNegotiationTypeHook implements ISessionNegotiationHook {
   @Override
   public Map<String, String> considerClientPreferences(JID client, Map<String, String> input) {
     if (input == null || !input.containsKey(KEY_PREFERRED_TYPE)) {
-      log.warn(
+      log.error(
           "The client did not indicate any transfer type "
               + "preferences. This could be an indication for a version "
               + "mismatch.");
@@ -78,7 +78,7 @@ public class ResourceNegotiationTypeHook implements ISessionNegotiationHook {
       IPreferenceStore hostPreferences,
       IPreferenceStore clientPreferences) {
     if (input == null || !input.containsKey(KEY_TYPE)) {
-      log.warn(
+      log.error(
           "The host did not set any parameters. This may be caused"
               + "if the client did not indicate any transfer type "
               + "preferences to begin with."
@@ -91,7 +91,7 @@ public class ResourceNegotiationTypeHook implements ISessionNegotiationHook {
     try {
       type = TransferType.valueOf(input.get(KEY_TYPE));
     } catch (IllegalArgumentException e) {
-      log.warn(
+      log.error(
           "The client send a unknown transfer type: '"
               + input.get(KEY_TYPE)
               + "'! This could be an indication for a version mismatch.");

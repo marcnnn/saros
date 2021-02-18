@@ -78,7 +78,7 @@ public class SelectedEditorStateSnapshot {
       selectedEditors.set(index, newFile);
 
     } else {
-      log.debug(
+      log.error(
           "Could not replace "
               + oldFile
               + " with "

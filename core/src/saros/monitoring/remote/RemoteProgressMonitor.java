@@ -93,7 +93,7 @@ class RemoteProgressMonitor implements IProgressMonitor {
     worked += work;
 
     if (worked > totalWorked) {
-      log.warn(
+      log.error(
           worked
               + " > "
               + totalWorked

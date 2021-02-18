@@ -46,7 +46,7 @@ public class NetworkingUtils {
       try {
         if (networkInterface.isLoopback() || !networkInterface.isUp()) continue;
       } catch (SocketException e) {
-        log.warn("skipping network interface: " + networkInterface, e);
+        log.error("skipping network interface: " + networkInterface, e);
         continue;
       }
 

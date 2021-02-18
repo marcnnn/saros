@@ -75,7 +75,7 @@ public class LeaveAndKickHandler implements Startable {
     final User user = session.getUser(from);
 
     if (user.equals(session.getLocalUser())) {
-      log.warn("the local user cannot kick itself out of the session");
+      log.error("the local user cannot kick itself out of the session");
       return;
     }
 
@@ -85,7 +85,7 @@ public class LeaveAndKickHandler implements Startable {
   private void leaveReceived(JID from) {
     final User user = session.getUser(from);
     if (user == null) {
-      log.warn(
+      log.error(
           "received leave message from user who" + " is not part of the current session: " + from);
       return;
     }
@@ -96,7 +96,7 @@ public class LeaveAndKickHandler implements Startable {
     }
 
     if (!session.isHost()) {
-      log.warn(
+      log.error(
           "Received leave message from user " + user + " who is not the current session's host");
       return;
     }

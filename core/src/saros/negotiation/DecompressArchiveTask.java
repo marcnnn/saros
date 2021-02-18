@@ -78,7 +78,7 @@ public class DecompressArchiveTask implements IWorkspaceRunnable {
         final int delimiterIdx = entry.getName().indexOf(delimiter);
 
         if (delimiterIdx == -1) {
-          log.warn("skipping zip entry " + entryName + ", entry is not valid");
+          log.error("skipping zip entry " + entryName + ", entry is not valid");
 
           monitor.worked(1);
           continue;
@@ -91,7 +91,7 @@ public class DecompressArchiveTask implements IWorkspaceRunnable {
         final IReferencePoint referencePoint = idToReferencePointMapping.get(id);
 
         if (referencePoint == null) {
-          log.warn("skipping zip entry " + entryName + ", unknown reference point id: " + id);
+          log.error("skipping zip entry " + entryName + ", unknown reference point id: " + id);
 
           monitor.worked(1);
           continue;
@@ -130,7 +130,7 @@ public class DecompressArchiveTask implements IWorkspaceRunnable {
       try {
         if (zipFile != null) zipFile.close();
       } catch (IOException e) {
-        log.warn("failed to close zip file " + zipFile.getName() + " : " + e.getMessage());
+        log.error("failed to close zip file " + zipFile.getName() + " : " + e.getMessage());
       }
     }
   }

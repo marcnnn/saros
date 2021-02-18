@@ -42,7 +42,7 @@ public class UserEditorState {
               closed(file);
               break;
             default:
-              log.warn("Unexpected type: " + editorActivity.getType());
+              log.error("Unexpected type: " + editorActivity.getType());
               assert false;
           }
         }
@@ -52,7 +52,7 @@ public class UserEditorState {
           IFile file = viewportActivity.getResource();
 
           if (!openEditors.containsKey(file)) {
-            log.warn("Viewport for editor which was never activated: " + file);
+            log.error("Viewport for editor which was never activated: " + file);
             return;
           }
 
@@ -67,7 +67,7 @@ public class UserEditorState {
           IFile file = textSelectionActivity.getResource();
 
           if (!openEditors.containsKey(file)) {
-            log.warn("received selection for editor which was never activated: " + file);
+            log.error("received selection for editor which was never activated: " + file);
             return;
           }
 
@@ -108,7 +108,7 @@ public class UserEditorState {
     EditorState state = openEditors.remove(file);
 
     if (state == null) {
-      log.warn("Removing an editor which has never been added: " + file);
+      log.error("Removing an editor which has never been added: " + file);
       return;
     }
 

@@ -159,7 +159,7 @@ public class XMPPConnectionSupport {
     accountToConnect = account != null ? account : store.getDefaultAccount();
 
     if (accountToConnect == null) {
-      log.warn(
+      log.error(
           "unable to establish a connection - no account was provided and no default account could be found");
 
       isConnecting = false;

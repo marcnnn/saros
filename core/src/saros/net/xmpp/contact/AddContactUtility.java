@@ -72,7 +72,7 @@ class AddContactUtility {
           throw new OperationCanceledException("Please make sure you spelled the JID correctly.");
         }
 
-        log.debug(
+        log.error(
             "The contact "
                 + jid
                 + " couldn't be found on the server."
@@ -84,7 +84,7 @@ class AddContactUtility {
       if (!questionDialog.test(dialogContent.dialogTitle, dialogContent.dialogMessage))
         throw new OperationCanceledException(dialogContent.invocationTargetExceptionMessage);
 
-      log.warn(
+      log.error(
           "Problem while adding a contact.CancellationException User decided to add contact anyway. Problem: "
               + e.getMessage());
     }

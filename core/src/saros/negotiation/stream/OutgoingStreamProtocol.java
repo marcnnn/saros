@@ -41,7 +41,7 @@ public class OutgoingStreamProtocol extends AbstractStreamProtocol {
    */
   public void streamFile(IFile file) throws IOException, LocalCancellationException {
     String message = "sending " + displayName(file);
-    log.debug(message);
+    log.error(message);
     monitor.subTask(message);
 
     writeHeader(file, file.getSize());

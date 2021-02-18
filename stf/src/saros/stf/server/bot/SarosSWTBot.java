@@ -105,7 +105,7 @@ public final class SarosSWTBot extends SWTBot {
               public ChatLine run() {
                 ChatLine matchedChatLine = null;
                 for (final ChatLine chatLine : allWidgets) {
-                  log.debug("chatLine's text: " + chatLine.getText());
+                  log.error("chatLine's text: " + chatLine.getText());
                   if (chatLine.getText().matches(regex)) {
                     matchedChatLine = chatLine;
                     break;
@@ -181,7 +181,7 @@ public final class SarosSWTBot extends SWTBot {
     for (Shell shell : shells) {
 
       if (!shell.isDisposed()) result.add(new SWTBotShell(shell));
-      else log.warn("found disposed shell while iterating over all shells");
+      else log.error("found disposed shell while iterating over all shells");
     }
 
     return result.toArray(new SWTBotShell[] {});

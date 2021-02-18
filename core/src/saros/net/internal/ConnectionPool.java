@@ -46,7 +46,7 @@ final class ConnectionPool {
       final IByteStreamConnection connection = entry.getValue();
       connection.close();
 
-      log.debug("closed connection [id=" + id + "]: " + connection);
+      log.error("closed connection [id=" + id + "]: " + connection);
     }
   }
 

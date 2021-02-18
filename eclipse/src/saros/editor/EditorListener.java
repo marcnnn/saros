@@ -61,7 +61,7 @@ public class EditorListener {
     final ITextViewer viewer = EditorAPI.getViewer(part);
 
     if (viewer == null) {
-      log.warn(
+      log.error(
           "could not attach selection listeners to editor part:"
               + part
               + " , could not retrieve text widget");
@@ -204,7 +204,7 @@ public class EditorListener {
       IDocument document = viewer.getDocument();
 
       if (document == null) {
-        log.warn(
+        log.error(
             "Could not calculate selection positions for "
                 + viewer
                 + " as no document could be obtained. Dropped selection: "
@@ -230,7 +230,7 @@ public class EditorListener {
     lastViewport = viewport;
 
     if (log.isDebugEnabled()) {
-      log.debug("Viewport changed: " + viewport.getStartLine() + "+" + viewport.getNumberOfLines());
+      log.error("Viewport changed: " + viewport.getStartLine() + "+" + viewport.getNumberOfLines());
     }
 
     manager.generateViewport(part, viewport);

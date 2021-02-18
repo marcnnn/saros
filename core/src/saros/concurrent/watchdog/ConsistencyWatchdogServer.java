@@ -152,7 +152,7 @@ public class ConsistencyWatchdogServer extends AbstractActivityProducer
       isTerminated =
           checksumCalculationExecutor.awaitTermination(TERMINATION_TIMEOUT, TimeUnit.MILLISECONDS);
     } catch (InterruptedException e) {
-      log.warn("Interrupted while waiting for consistency watchdog to terminate");
+      log.error("Interrupted while waiting for consistency watchdog to terminate");
       terminationWasInterrupted = true;
     }
 
@@ -248,7 +248,7 @@ public class ConsistencyWatchdogServer extends AbstractActivityProducer
      */
     if (checksum.getHash() != DocumentChecksum.NOT_AVAILABLE && !file.exists()) {
 
-      log.debug(
+      log.error(
           "Updating checksum for "
               + file
               + " to correctly "

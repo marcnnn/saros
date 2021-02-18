@@ -379,7 +379,7 @@ public abstract class BaseResourceSelectionComposite extends ViewerComposite<Che
     }
 
     lastSelected.push(new ArrayList<>(selectedBaseContainers));
-    log.debug(
+    log.error(
         "Remembered selected items: "
             + lastSelected.peek().size()
             + " Saved "
@@ -404,7 +404,7 @@ public abstract class BaseResourceSelectionComposite extends ViewerComposite<Che
       }
     }
 
-    log.debug("Read saved selection names: " + namesList.size());
+    log.error("Read saved selection names: " + namesList.size());
 
     return namesList;
   }
@@ -415,13 +415,13 @@ public abstract class BaseResourceSelectionComposite extends ViewerComposite<Che
    * @param name the name to use for the preset
    */
   protected void rememberSelectionName(String name) {
-    log.debug("Remembering new selection name: " + name);
+    log.error("Remembering new selection name: " + name);
     /*
      * Check if name already exists in list (it's more a set than a list),
      * do nothing in that case..
      */
     if (getSavedSelectionNames().contains(name)) {
-      log.debug("Not adding name to list because already exists: " + name);
+      log.error("Not adding name to list because already exists: " + name);
       return;
     }
 
@@ -431,7 +431,7 @@ public abstract class BaseResourceSelectionComposite extends ViewerComposite<Che
 
     namesString.append(name).append(SERIALIZATION_SEPARATOR);
 
-    log.debug("Storing namesString: " + namesString.toString());
+    log.error("Storing namesString: " + namesString.toString());
     saros
         .getPreferenceStore()
         .setValue(SAROS_RESOURCE_SELECTION_PRESET_NAMES, namesString.toString());
@@ -443,10 +443,10 @@ public abstract class BaseResourceSelectionComposite extends ViewerComposite<Che
    * @param name the name of the preset
    */
   protected void removeStoredSelection(String name) {
-    log.debug("Removing stored selection with name: " + name);
+    log.error("Removing stored selection with name: " + name);
     List<String> savedSelectionNames = getSavedSelectionNames();
     if (!savedSelectionNames.contains(name)) {
-      log.debug("cannot remove, name not present in list: " + name);
+      log.error("cannot remove, name not present in list: " + name);
       return;
     }
     // remove
@@ -458,7 +458,7 @@ public abstract class BaseResourceSelectionComposite extends ViewerComposite<Che
       namesString.append(theName).append(SERIALIZATION_SEPARATOR);
     }
     // save string
-    log.debug("Storing namesString: " + namesString.toString());
+    log.error("Storing namesString: " + namesString.toString());
     saros
         .getPreferenceStore()
         .setValue(SAROS_RESOURCE_SELECTION_PRESET_NAMES, namesString.toString());
@@ -491,7 +491,7 @@ public abstract class BaseResourceSelectionComposite extends ViewerComposite<Che
 
     String selectionName = SAROS_RESOURCE_SELECTION_SETTINGS_KEY_PREFIX + name;
 
-    log.debug("Storing selected elements: " + selectedString.toString());
+    log.error("Storing selected elements: " + selectedString.toString());
 
     saros.getPreferenceStore().setValue(selectionName, selectedString.toString());
 
@@ -511,7 +511,7 @@ public abstract class BaseResourceSelectionComposite extends ViewerComposite<Che
     String selected = saros.getPreferenceStore().getString(selectionName);
 
     if (selected.isEmpty()) {
-      log.debug("selection string is empty");
+      log.error("selection string is empty");
       /*
        * No empty selections can be saved, so this means that there is no
        * selection preset with the given name
@@ -606,7 +606,7 @@ public abstract class BaseResourceSelectionComposite extends ViewerComposite<Che
       setSelectedResourcesInternal(newSelectedContainers);
 
     } else {
-      log.debug("Cannot redo, no more snapshots!");
+      log.error("Cannot redo, no more snapshots!");
     }
     // Need to update the controls (if there are any)
     updateRedoUndoControls();

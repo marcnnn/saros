@@ -125,7 +125,7 @@ public class SWTUtils {
     } catch (SWTException e) {
       if (!PlatformUI.getWorkbench().isClosing()) throw e;
 
-      log.warn(
+      log.error(
           "could not execute runnable " + runnable + ", UI thread is not available",
           new StackTrace());
     }
@@ -173,7 +173,7 @@ public class SWTUtils {
     } catch (SWTException e) {
       if (!PlatformUI.getWorkbench().isClosing()) throw e;
 
-      log.warn(
+      log.error(
           "could not execute runnable " + runnable + ", UI thread is not available",
           new StackTrace());
     }

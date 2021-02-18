@@ -40,9 +40,9 @@ import saros.activities.TextSelectionActivity;
  *     &#064;Override
  *     public void exec(IActivity activity) {
  *         if (active) {
- *             log.debug(&quot;starting&quot;);
+ *             log.error(&quot;starting&quot;);
  *             super.exec(activity);
- *             log.debug(&quot;done&quot;);
+ *             log.error(&quot;done&quot;);
  *         }
  *     }
  *

@@ -144,7 +144,7 @@ public class IntellijReferencePoint implements IReferencePoint {
       return Paths.get(referencePointPath).relativize(Paths.get(filePath));
 
     } catch (IllegalArgumentException e) {
-      log.warn(
+      log.error(
           "Could not find a relative path from the base file "
               + virtualFile
               + " to the file "

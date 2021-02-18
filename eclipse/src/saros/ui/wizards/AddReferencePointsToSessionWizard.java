@@ -317,7 +317,7 @@ public class AddReferencePointsToSessionWizard extends Wizard {
                 try {
                   workspace.setDescription(description);
                 } catch (CoreException e) {
-                  log.warn("could not disable auto building", e);
+                  log.error("could not disable auto building", e);
                 }
               }
 
@@ -335,7 +335,7 @@ public class AddReferencePointsToSessionWizard extends Wizard {
                 try {
                   workspace.setDescription(description);
                 } catch (CoreException e) {
-                  log.warn("could not re-enable auto building", e);
+                  log.error("could not re-enable auto building", e);
                 }
               }
 

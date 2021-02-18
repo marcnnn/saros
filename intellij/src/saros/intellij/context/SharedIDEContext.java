@@ -57,7 +57,7 @@ public class SharedIDEContext implements Disposable {
    */
   public static void preregisterProject(@NotNull Project newPreregisteredProject) {
     if (preregisteredProject != null) {
-      log.warn(
+      log.error(
           "Overwriting existing pre-registered project! old project: "
               + preregisteredProject
               + ", new project: "

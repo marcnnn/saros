@@ -45,7 +45,7 @@ public class WizardUtils {
             }
           });
     } catch (Exception e) {
-      log.warn("Error opening wizard " + wizard.getWindowTitle(), e);
+      log.error("Error opening wizard " + wizard.getWindowTitle(), e);
     }
     return null;
   }

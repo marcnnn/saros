@@ -77,7 +77,7 @@ public final class RemoteWorkbenchBot extends RemoteBot implements IRemoteWorkbe
                 IWorkbenchWindow win = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 
                 if (win == null) {
-                  log.warn(
+                  log.error(
                       "no active workbench window available, cannot open view with id: " + viewId);
                   return;
                 }
@@ -146,18 +146,18 @@ public final class RemoteWorkbenchBot extends RemoteBot implements IRemoteWorkbe
                     IPerspectiveDescriptor[] descriptors =
                         wb.getPerspectiveRegistry().getPerspectives();
                     for (IPerspectiveDescriptor per : descriptors) {
-                      log.debug("installed perspective id:" + per.getId());
+                      log.error("installed perspective id:" + per.getId());
                     }
                     final IWorkbenchWindow win = wb.getActiveWorkbenchWindow();
                     try {
                       wb.showPerspective(persID, win);
                     } catch (WorkbenchException e) {
-                      log.debug("couldn't open perspective wit ID" + persID, e);
+                      log.error("couldn't open perspective wit ID" + persID, e);
                     }
                   }
                 });
       } catch (IllegalArgumentException e) {
-        log.debug("Couldn't initialize perspective with ID" + persID, e.getCause());
+        log.error("Couldn't initialize perspective with ID" + persID, e.getCause());
       }
     }
   }
@@ -273,7 +273,7 @@ public final class RemoteWorkbenchBot extends RemoteBot implements IRemoteWorkbe
     SWTBotShell[] shells = swtWorkBenchBot.shells();
     for (SWTBotShell shell : shells) {
       if (shell.getText().matches(".+? - .+")) {
-        log.debug("found workbench " + shell.getText());
+        log.error("found workbench " + shell.getText());
         return shell;
       }
     }
@@ -291,7 +291,7 @@ public final class RemoteWorkbenchBot extends RemoteBot implements IRemoteWorkbe
         swtWorkBenchBot.closeAllShells();
         return;
       } catch (TimeoutException closeAllShellsTimeout) {
-        log.warn(
+        log.error(
             "default SWTWorkbenchBot could not close all shells, trying to resolve the problem",
             closeAllShellsTimeout);
       }
