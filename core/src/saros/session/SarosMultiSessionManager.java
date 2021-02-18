@@ -267,18 +267,9 @@ public class SarosMultiSessionManager implements ISarosSessionManager {
   @Override
   public ISarosSession joinSession(
       String id, JID host, IPreferenceStore hostProperties, IPreferenceStore localProperties) {
-
-    assert session == null;
-
-    JID localUserJID = connectionHandler.getLocalJID();
-
-    session = new SarosSession(id, localUserJID, host, localProperties, hostProperties, context);
-    sessions.add(session);
-    resourceNegotiationFactory = session.getComponent(ResourceNegotiationFactory.class);
-
-    log.info("joined uninitialized Saros session");
-
-    return session;
+      log.error("joinSession() should not be called in Multi-Session-Manager.",
+          new StackTrace());
+    return null;
   }
 
   /** @nonSWT */
@@ -314,44 +305,7 @@ public class SarosMultiSessionManager implements ISarosSessionManager {
       String negotiationID,
       String version,
       String description) {
-
-    INegotiationHandler handler = negotiationHandler;
-
-    if (handler == null) {
-      log.warn("could not accept invitation because no handler is installed");
-      return;
-    }
-
-    IncomingSessionNegotiation negotiation;
-
-    synchronized (this) {
-      if (!startStopSessionLock.tryLock()) {
-        log.warn("could not accept invitation because the current session is about to stop");
-        return;
-      }
-
-      try {
-
-        // should not happen
-        if (negotiationPacketLister.isRejectingSessionNegotiationsRequests()) {
-          log.error("could not accept invitation because there is already a pending invitation");
-          return;
-        }
-
-        negotiationPacketLister.setRejectSessionNegotiationRequests(true);
-
-        negotiation =
-            sessionNegotiationFactory.newIncomingSessionNegotiation(
-                remoteAddress, negotiationID, sessionID, version, this, description);
-
-        negotiation.setNegotiationListener(negotiationListener);
-        currentSessionNegotiations.add(negotiation);
-
-      } finally {
-        startStopSessionLock.unlock();
-      }
-    }
-    handler.handleIncomingSessionNegotiation(negotiation);
+    holderHashMap.get(sessionID).sessionNegotiationRequestReceived(remoteAddress, sessionID, negotiationID, version, description);
   }
 
   public ISarosSession getSessionByID(String sessionID){
