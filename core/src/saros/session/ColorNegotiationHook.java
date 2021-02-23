@@ -53,8 +53,13 @@ public class ColorNegotiationHook implements ISessionNegotiationHook {
 
     if (input == null) return null;
 
-    String hostColor = Integer.toString(sessionManager.getSession().getLocalUser().getColorID());
-
+    String hostColor = "";
+    if (sessionManager.getSession() == null){
+      hostColor = "4";
+      System.out.println("SESSION IS NULL");
+    } else {
+      hostColor = Integer.toString(sessionManager.getSession().getLocalUser().getColorID());
+    }
     String hostFavoriteColor = Integer.toString(preferences.getFavoriteColorID());
 
     Map<String, String> defined = new HashMap<String, String>();
