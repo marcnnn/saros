@@ -3,12 +3,12 @@ package saros.server.console;
 import static java.util.stream.Collectors.partitioningBy;
 
 import java.io.PrintStream;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import org.apache.log4j.Logger;
 import saros.net.util.XMPPUtils;
 import saros.net.xmpp.JID;
-import saros.session.ISarosSessionManager;
 import saros.session.SarosMultiSessionManager;
 
 public class InviteCommand extends ConsoleCommand {
@@ -32,13 +32,18 @@ public class InviteCommand extends ConsoleCommand {
 
   @Override
   public String help() {
-    return "invite <sessionID> <JID>... - Invite users to session";
+    return "invite <sessionID | new> <JID>... - Invite users to session";
   }
 
   @Override
   public void execute(List<String> args, PrintStream out) {
     String sessionID = args.get(0);
+    if (sessionID.equals("new")) {
+      sessionID = sessionManager.startSession(new HashSet<>());
+    }
+
     args = args.subList(1, args.size());
+
     try {
       Map<Boolean, List<JID>> jids =
           args.stream().map(JID::new).collect(partitioningBy(XMPPUtils::validateJID));

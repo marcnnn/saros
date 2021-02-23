@@ -24,7 +24,6 @@ import saros.negotiation.AbstractOutgoingResourceNegotiation;
 import saros.negotiation.IncomingSessionNegotiation;
 import saros.negotiation.NegotiationListener;
 import saros.negotiation.NegotiationTools.CancelOption;
-import saros.negotiation.OutgoingSessionNegotiation;
 import saros.negotiation.ResourceNegotiation;
 import saros.negotiation.ResourceNegotiationCollector;
 import saros.negotiation.ResourceNegotiationData;
@@ -194,9 +193,10 @@ public class SarosMultiSessionManager implements ISarosSessionManager {
    *
    * <p>(At the moment, this separation is invisible to the user. They must share a reference point
    * in order to start a session.)
+   * @return
    */
   @Override
-  public void startSession(final Set<IReferencePoint> referencePoints) {
+  public String startSession(final Set<IReferencePoint> referencePoints) {
 
     /*
      * FIXME split the logic, start a session without anything and then add
@@ -206,18 +206,18 @@ public class SarosMultiSessionManager implements ISarosSessionManager {
       if (!startStopSessionLock.tryLock(LOCK_TIMEOUT, TimeUnit.MILLISECONDS)) {
         log.warn(
             "could not start a new session because another operation still tries to start or stop a session");
-        return;
+        return null;
       }
     } catch (InterruptedException e) {
       Thread.currentThread().interrupt();
-      return;
+      return null;
     }
 
     try {
 
       if (sessionStartup) {
         log.warn("recursive execution detected, ignoring session start request", new StackTrace());
-        return;
+        return null;
       }
 
       if (negotiationPacketLister.isRejectingSessionNegotiationsRequests()) {
@@ -260,6 +260,7 @@ public class SarosMultiSessionManager implements ISarosSessionManager {
       sessionStartup = false;
       startStopSessionLock.unlock();
     }
+    return session.getID();
   }
 
   // FIXME offer a startSession method for the client and host !
@@ -285,6 +286,10 @@ public class SarosMultiSessionManager implements ISarosSessionManager {
   public void stopSession(SessionEndReason reason) {
     log.error("StopSession() should not be called in Multi-Session-Manager. Reason of request: "
         + reason.toString(), new StackTrace());
+  }
+
+  public void stopSessionByID(String sessionID, SessionEndReason reason){
+    holderHashMap.get(sessionID).stopSession(reason);
   }
 
   /**
