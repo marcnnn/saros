@@ -357,7 +357,7 @@ public class SarosMultiSessionManager implements ISarosSessionManager {
     return null;
   }
 
-  public Set<ISarosSession> getSessions(){
+  public final Set<ISarosSession> getSessions(){
     return sessions;
   }
 
@@ -379,8 +379,13 @@ public class SarosMultiSessionManager implements ISarosSessionManager {
   }
 
   public void inviteToSession(String sessionID, Collection<JID> jidsToInvite, String description){
-    ISarosSession s = getSessionByID(sessionID);
-      holderHashMap.get(sessionID).invite(jidsToInvite, description);
+    SarosSessionHolder holder = holderHashMap.get(sessionID);
+
+    if (holder == null){
+      log.error("Unknown Session ID");
+      return;
+    }
+    holder.invite(jidsToInvite, description);
   }
 
   void registerHolder(SarosSessionHolder holder, String sessionID){
