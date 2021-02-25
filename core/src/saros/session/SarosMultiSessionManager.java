@@ -12,6 +12,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import saros.annotations.Component;
 import saros.communication.connection.ConnectionHandler;
@@ -161,6 +162,7 @@ public class SarosMultiSessionManager implements ISarosSessionManager {
       ITransmitter transmitter,
       IReceiver receiver) {
 
+    log.setLevel(Level.ALL);
     this.context = context;
     this.connectionHandler = connectionHandler;
     this.currentSessionNegotiations = new SessionNegotiationObservable();
