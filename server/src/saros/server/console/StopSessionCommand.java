@@ -1,7 +1,6 @@
 package saros.server.console;
 
 import java.io.PrintStream;
-import java.util.HashSet;
 import java.util.List;
 import org.apache.log4j.Logger;
 import saros.session.SarosMultiSessionManager;
@@ -33,11 +32,10 @@ public class StopSessionCommand extends ConsoleCommand {
 
   @Override
   public void execute(List<String> args, PrintStream out) {
-    try{
+    try {
       sessionManager.stopSessionByID(args.get(0), SessionEndReason.HOST_LEFT);
-    } catch (Exception e){
+    } catch (Exception e) {
       log.error("Failed to stop session" + args.get(0), e);
     }
-
   }
 }

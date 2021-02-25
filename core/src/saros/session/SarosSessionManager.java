@@ -185,6 +185,7 @@ public class SarosSessionManager implements ISarosSessionManager {
    *
    * <p>(At the moment, this separation is invisible to the user. They must share a reference point
    * in order to start a session.)
+   *
    * @return
    */
   @Override

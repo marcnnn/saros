@@ -1,6 +1,5 @@
 package saros.session;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -19,16 +18,11 @@ import saros.communication.connection.ConnectionHandler;
 import saros.communication.connection.IConnectionStateListener;
 import saros.context.IContainerContext;
 import saros.filesystem.IReferencePoint;
-import saros.negotiation.AbstractIncomingResourceNegotiation;
-import saros.negotiation.AbstractOutgoingResourceNegotiation;
-import saros.negotiation.IncomingSessionNegotiation;
-import saros.negotiation.NegotiationListener;
 import saros.negotiation.NegotiationTools.CancelOption;
 import saros.negotiation.ResourceNegotiation;
 import saros.negotiation.ResourceNegotiationCollector;
 import saros.negotiation.ResourceNegotiationData;
 import saros.negotiation.ResourceNegotiationFactory;
-import saros.negotiation.ResourceSharingData;
 import saros.negotiation.SessionNegotiation;
 import saros.negotiation.SessionNegotiationFactory;
 import saros.negotiation.hooks.ISessionNegotiationHook;
@@ -41,12 +35,10 @@ import saros.preferences.IPreferenceStore;
 import saros.preferences.PreferenceStore;
 import saros.session.internal.SarosSession;
 import saros.util.StackTrace;
-import saros.util.ThreadUtils;
 
 /**
  * The SessionManager is responsible for initiating new Saros sessions and for reacting to
- * invitations. The user can be only part of one session at most.
- * This is a new version of the
+ * invitations. The user can be only part of one session at most. This is a new version of the
  */
 @Component(module = "core")
 public class SarosMultiSessionManager implements ISarosSessionManager {
@@ -154,6 +146,7 @@ public class SarosMultiSessionManager implements ISarosSessionManager {
    *
    * <p>(At the moment, this separation is invisible to the user. They must share a reference point
    * in order to start a session.)
+   *
    * @return
    */
   @Override
@@ -203,7 +196,6 @@ public class SarosMultiSessionManager implements ISarosSessionManager {
       session = new SarosSession(sessionID, localUserJID, hostProperties, context);
       sessions.add(session);
 
-
       sessionStarting(session);
       session.start();
       sessionStarted(session);
@@ -228,19 +220,20 @@ public class SarosMultiSessionManager implements ISarosSessionManager {
   @Override
   public ISarosSession joinSession(
       String id, JID host, IPreferenceStore hostProperties, IPreferenceStore localProperties) {
-      log.error("joinSession() should not be called in Multi-Session-Manager.",
-          new StackTrace());
+    log.error("joinSession() should not be called in Multi-Session-Manager.", new StackTrace());
     return null;
   }
 
   /** @nonSWT */
   @Override
   public void stopSession(SessionEndReason reason) {
-    log.error("StopSession() should not be called in Multi-Session-Manager. Reason of request: "
-        + reason.toString(), new StackTrace());
+    log.error(
+        "StopSession() should not be called in Multi-Session-Manager. Reason of request: "
+            + reason.toString(),
+        new StackTrace());
   }
 
-  public void stopSessionByID(String sessionID, SessionEndReason reason){
+  public void stopSessionByID(String sessionID, SessionEndReason reason) {
     holderHashMap.get(sessionID).stopSession(reason);
   }
 
@@ -266,18 +259,20 @@ public class SarosMultiSessionManager implements ISarosSessionManager {
       String negotiationID,
       String version,
       String description) {
-    holderHashMap.get(sessionID).sessionNegotiationRequestReceived(remoteAddress, sessionID, negotiationID, version, description);
+    holderHashMap
+        .get(sessionID)
+        .sessionNegotiationRequestReceived(
+            remoteAddress, sessionID, negotiationID, version, description);
   }
 
-  public ISarosSession getSessionByID(String sessionID){
-    for (ISarosSession s : sessions){
-      if(s.getID().equals(sessionID))
-        return s;
+  public ISarosSession getSessionByID(String sessionID) {
+    for (ISarosSession s : sessions) {
+      if (s.getID().equals(sessionID)) return s;
     }
     return null;
   }
 
-  public final Set<ISarosSession> getSessions(){
+  public final Set<ISarosSession> getSessions() {
     return sessions;
   }
 
@@ -298,21 +293,21 @@ public class SarosMultiSessionManager implements ISarosSessionManager {
     log.warn("unexpected use in MultiSessionManager. Use inviteToSession");
   }
 
-  public void inviteToSession(String sessionID, Collection<JID> jidsToInvite, String description){
+  public void inviteToSession(String sessionID, Collection<JID> jidsToInvite, String description) {
     SarosSessionHolder holder = holderHashMap.get(sessionID);
 
-    if (holder == null){
+    if (holder == null) {
       log.error("Unknown Session ID");
       return;
     }
     holder.invite(jidsToInvite, description);
   }
 
-  void registerHolder(SarosSessionHolder holder, String sessionID){
+  void registerHolder(SarosSessionHolder holder, String sessionID) {
     holderHashMap.put(sessionID, holder);
   }
 
-  void unregisterHolder(String sessionID){
+  void unregisterHolder(String sessionID) {
     holderHashMap.remove(sessionID);
     sessions.remove(getSessionByID(sessionID));
   }
@@ -323,22 +318,20 @@ public class SarosMultiSessionManager implements ISarosSessionManager {
    * @param referencePoints to reference points to add
    */
   @Override
-  public synchronized void addReferencePointsToSession(Set<IReferencePoint> referencePoints) {
-  }
+  public synchronized void addReferencePointsToSession(Set<IReferencePoint> referencePoints) {}
 
   public void addReferencePointsToSessionByID(
       String sessionID, Set<IReferencePoint> referencePoints) {
-        holderHashMap.get(sessionID).addReferencePointsToSession(referencePoints);
+    holderHashMap.get(sessionID).addReferencePointsToSession(referencePoints);
   }
-
 
   @Override
   public void startSharingReferencePoints(JID user) {
     log.warn("unexpected use of startSharingReferencePoints");
   }
 
-  public void startSessionSharingReferencePoints(String sessionID, JID user){
-    if(holderHashMap.get(sessionID) == null){
+  public void startSessionSharingReferencePoints(String sessionID, JID user) {
+    if (holderHashMap.get(sessionID) == null) {
       log.warn("No known session with ID: " + sessionID);
       return;
     }

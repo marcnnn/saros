@@ -193,6 +193,7 @@ public class SarosSessionHolder implements ISarosSessionManager {
    *
    * <p>(At the moment, this separation is invisible to the user. They must share a reference point
    * in order to start a session.)
+   *
    * @return
    */
   @Override
@@ -205,7 +206,7 @@ public class SarosSessionHolder implements ISarosSessionManager {
   @Override
   public ISarosSession joinSession(
       String id, JID host, IPreferenceStore hostProperties, IPreferenceStore localProperties) {
-    
+
     log.error("should not have been call in Session Context aka SarosSessionHolder");
     return null;
   }

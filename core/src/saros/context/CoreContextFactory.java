@@ -37,7 +37,6 @@ import saros.repackaged.picocontainer.BindKey;
 import saros.repackaged.picocontainer.MutablePicoContainer;
 import saros.session.ColorNegotiationHook;
 import saros.session.ResourceNegotiationTypeHook;
-import saros.session.SarosSessionManager;
 import saros.versioning.VersionManager;
 
 /**

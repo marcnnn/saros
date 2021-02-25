@@ -32,12 +32,11 @@ public class StartSessionCommand extends ConsoleCommand {
 
   @Override
   public void execute(List<String> args, PrintStream out) {
-    try{
+    try {
       String sessionID = sessionManager.startSession(new HashSet<>());
       out.println("Started new session with ID: " + sessionID);
-    } catch (Exception e){
+    } catch (Exception e) {
       log.error("Failed to start a new session", e);
     }
-
   }
 }

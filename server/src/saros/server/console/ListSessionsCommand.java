@@ -5,9 +5,7 @@ import java.util.List;
 import java.util.Set;
 import org.apache.log4j.Logger;
 import saros.session.ISarosSession;
-import saros.session.ISarosSessionManager;
 import saros.session.SarosMultiSessionManager;
-import saros.session.internal.SarosSession;
 
 public class ListSessionsCommand extends ConsoleCommand {
   private static final Logger log = Logger.getLogger(ListSessionsCommand.class);
@@ -37,7 +35,7 @@ public class ListSessionsCommand extends ConsoleCommand {
   public void execute(List<String> args, PrintStream out) {
     try {
       Set<ISarosSession> sessions = sessionManager.getSessions();
-      for (ISarosSession session:  sessions){
+      for (ISarosSession session : sessions) {
         out.println(session.getID() + " " + session.getRemoteUsers().toString());
       }
     } catch (Exception e) {

@@ -54,7 +54,7 @@ public class ColorNegotiationHook implements ISessionNegotiationHook {
     if (input == null) return null;
 
     String hostColor = "";
-    if (sessionManager.getSession() == null){
+    if (sessionManager.getSession() == null) {
       hostColor = "4";
       System.out.println("SESSION IS NULL");
     } else {
