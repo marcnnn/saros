@@ -36,6 +36,18 @@ public class InviteCommand extends ConsoleCommand {
 
   @Override
   public void execute(List<String> args, PrintStream out) {
+    int i = 0;
+    for (String arg : args) {
+      if (!arg.contains("@")) {
+        args.set(
+            i,
+            arg
+                + "@"
+                + sessionManager.getSessionByID(sessionID).getHost().toString().split("@")[1]);
+      }
+      i++;
+    }
+
     try {
       Map<Boolean, List<JID>> jids =
           args.stream().map(JID::new).collect(partitioningBy(XMPPUtils::validateJID));
